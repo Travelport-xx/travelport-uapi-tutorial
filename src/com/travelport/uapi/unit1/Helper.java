@@ -1,0 +1,303 @@
+package com.travelport.uapi.unit1;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import javax.xml.ws.BindingProvider;
+
+import com.travelport.schema.air_v15_0.AirPricingSolution;
+import com.travelport.schema.air_v15_0.AirSegment;
+import com.travelport.schema.air_v15_0.AirSegmentRef;
+import com.travelport.service.air_v15_0.*;
+import com.travelport.service.system_v8_0.*;
+
+public class Helper {
+
+	/**
+	 * Convenience class for getting access to the WSDL services without needing
+	 * to mess with the parameters and such.
+	 */
+	public static class WSDLService {
+		static protected AirLowFareSearchPortType lowFareSearch;
+		static protected AirAvailabilitySearchPortType availabilitySearch;
+		static protected SystemPingPortType ping;
+		static protected SystemInfoPortType info;
+		static protected SystemTimePortType time;
+
+		static protected SystemService systemService ;
+
+		static protected String URLPREFIX = "file:///Users/iansmith/tport-workspace/uapijava/";
+		static protected String SYSTEM_WSDL = "wsdl/system_v8_0/System.wsdl";
+		static protected String AIR_WSDL = "wsdl/air_v15_0/Air.wsdl";
+
+		static protected String USERNAME_PROP = "travelport.username";
+		static protected String PASSWORD_PROP = "travelport.password";
+		static protected String GDS_PROP = "travelport.gds";
+		static protected String TARGET_BRANCH = "travelport.targetBranch";
+
+		// these endpoint parameters vary based on which region you are
+		// in...check your travelport sign up to see which url you should use...
+		static protected String LOW_FARE_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/AirLowFareSearchService";
+		static protected String AVAILABILITY_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/AirAvailabilitySearchService";
+		static protected String SYSTEM_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/SystemService";
+	
+		/**
+		 * Get access to the low fare object.
+		 * 
+		 * @return the port for low fare search
+		 */
+		public static AirLowFareSearchPortType getLowFareSearch() {
+			if (lowFareSearch != null) {
+				return lowFareSearch;
+			}
+			URL url = getURLForWSDL(AIR_WSDL);
+			checkProperties();
+			AirLowFareSearchService svc = new AirLowFareSearchService(url);
+			lowFareSearch = svc.getAirLowFareSearchPort();
+			addParametersToProvider((BindingProvider) lowFareSearch,
+					AVAILABILITY_ENDPOINT);
+			return lowFareSearch;
+
+		}
+		/**
+		 * Get access to the availability
+		 * 
+		 * @return the port for low fare search
+		 */
+
+		public static AirAvailabilitySearchPortType getAvailabilitySearch() {
+			if (availabilitySearch != null) {
+				return availabilitySearch;
+			}
+			URL url = getURLForWSDL(AIR_WSDL);
+			checkProperties();
+			AirAvailabilitySearch availSvc = new AirAvailabilitySearch(url);
+			availabilitySearch = availSvc.getAirAvailabilitySearchPort();
+			addParametersToProvider((BindingProvider) availabilitySearch,
+					AVAILABILITY_ENDPOINT);
+			return availabilitySearch;
+		}
+		/**
+		 * Get access to the ping object.
+		 * 
+		 * @return the port for low fare search
+		 */
+		public static SystemPingPortType getPing() {
+			if (ping != null) {
+				return ping;
+			}
+			checkProperties();
+			if (systemService==null) {
+				URL url = getURLForWSDL(SYSTEM_WSDL);
+				systemService = new SystemService(url);
+			}
+			ping = systemService.getSystemPingPort();
+			addParametersToProvider((BindingProvider) ping,
+					SYSTEM_ENDPOINT);
+
+			return ping;
+		}
+		/**
+		 * Get access to the time object.
+		 * 
+		 * @return the port for low fare search
+		 */
+		public static SystemTimePortType getTime() {
+			if (time != null) {
+				return time;
+			}
+			checkProperties();
+			if (systemService==null) {
+				URL url = getURLForWSDL(SYSTEM_WSDL);
+				systemService = new SystemService(url);
+			}
+			time = systemService.getSystemtimePort();
+			addParametersToProvider((BindingProvider) time,
+					SYSTEM_ENDPOINT);
+
+			return time;
+		}
+		/**
+		 * Get access to the info object.
+		 * 
+		 * @return the port for low fare search
+		 */
+		public static SystemInfoPortType getInfo() {
+			if (info != null) {
+				return info;
+			}
+			checkProperties();
+			if (systemService==null) {
+				URL url = getURLForWSDL(SYSTEM_WSDL);
+				systemService = new SystemService(url);
+			}
+			info = systemService.getSystemInfoPort();
+			addParametersToProvider((BindingProvider) info,
+					SYSTEM_ENDPOINT);
+
+			return info;
+		}
+
+
+		/**
+		 * Check that all the properties we get through the environment are at
+		 * least present.
+		 */
+		public static void checkProperties() {
+			if ((System.getProperty(USERNAME_PROP) == null)
+					|| (System.getProperty(PASSWORD_PROP) == null)
+					|| (System.getProperty(GDS_PROP) == null)
+					|| (System.getProperty(TARGET_BRANCH) == null)) {
+				throw new RuntimeException(
+						"One or more of your properties "
+								+ "has not been set properly for you to access the travelport "
+								+ "uAPI.  Check your command line arguments or eclipse "
+								+ "run configuration for these properties:"
+								+ USERNAME_PROP + "," + PASSWORD_PROP + ","
+								+ GDS_PROP + "," + TARGET_BRANCH);
+			}
+		}
+
+		/**
+		 * This checks that the path given by a URL is well formed as URL
+		 * despite the fact that this must be a pointer to a file.
+		 * 
+		 * @param wsdlFileInThisProject
+		 *            name of the wsdl file, with dir prefix
+		 * @return the URL that points to the wsdl
+		 */
+		public static URL getURLForWSDL(String wsdlFileInThisProject) {
+			try {
+				URL url = new URL(URLPREFIX + wsdlFileInThisProject);
+				return url;
+			} catch (MalformedURLException e) {
+				throw new RuntimeException(
+						"The URL to access the WSDL was not "
+								+ "well-formed! Check the URLPREFIX value in the class "
+								+ "WSDLService in the file Helper.java.  We tried to "
+								+ "to use this url:\n" + URLPREFIX + AIR_WSDL);
+
+			}
+		}
+
+		/**
+		 * Add the necessary gunk to the BindingProvider to make it work right
+		 * with an authenticated SOAP service.
+		 * 
+		 * @param provider
+		 *            the provider (usually this a port object also)
+		 * @param endpoint
+		 *            the string that is the internet-accessible place to access
+		 *            the service
+		 */
+
+		public static void addParametersToProvider(BindingProvider provider,
+				String endpoint) {
+			provider.getRequestContext().put(
+					BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint);
+			provider.getRequestContext().put(BindingProvider.USERNAME_PROPERTY,
+					System.getProperty("travelport.username"));
+			provider.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY,
+					System.getProperty("travelport.password"));
+		}
+
+	}
+	
+	/**
+	 * Utility class for building a map that knows about all the segments in the
+	 * response.
+	 */
+	public static class SegmentMap extends HashMap<String, AirSegment> {
+		public void add(AirSegment segment) {
+			put(segment.getKey(), segment);
+		}
+	}
+
+	/**
+	 * Utility class for making a decent-looking display out of an itinerary.
+	 */
+	public static class PrintableItinerary {
+		/**
+		 * Conversion of this object to a string is its primary job.
+		 */
+		public String toString() {
+			StringBuilder result = new StringBuilder();
+			Formatter fmt = new Formatter(result, Locale.US);
+			//print out the segments first
+			List<AirSegmentRef> segKeys = solution.getAirSegmentRef();
+			for (Iterator<AirSegmentRef> iterator = segKeys.iterator(); iterator.hasNext();) {
+				AirSegmentRef airSegmentRef = (AirSegmentRef) iterator.next();
+				//looking the leg by its key
+				AirSegment leg = seg.get(airSegmentRef.getKey());
+				printLeg(leg, fmt);
+				if (leg.getDestination().equals(roundTripTurnaround)) {
+					result.append("\n\n");
+				}
+			}
+			
+			fmt.format("Base Price: %s   Total Price %s", 
+					solution.getBasePrice(),
+					solution.getTotalPrice());
+			
+			return result.toString();
+		}
+		protected SegmentMap seg;
+		protected AirPricingSolution solution;
+		protected String roundTripTurnaround;
+		
+		/**
+		 * Create something that can be printed out decently for a human. 
+		 * Pass in the pricing solution and the map of segments that should
+		 * be referred to.  If roundTripTurnaround is not null, it will be
+		 * used in separating the outbound journey from the return
+		 * 
+		 * @param solution the pricing solution that should be displayed
+		 * @param seg segment map of all segments in the result
+		 * @param roundTripTurnaround null or airport name that is destination
+		 */
+		public PrintableItinerary(AirPricingSolution solution, SegmentMap seg,
+				String roundTripTurnaround) {
+			this.seg = seg;
+			this.solution = solution;
+			this.roundTripTurnaround = roundTripTurnaround;
+		}
+		
+		/**
+		 * Print out some details about a segment.  This is far from all
+		 * the available information.
+		 * 
+		 * @param segment the segment to be displayed
+		 * @param fmt the formatter to use to display the data
+		 */
+		public void printLeg(AirSegment segment, Formatter fmt) {
+			Date dep = dateFromISO8601(segment.getDepartureTime());
+			fmt.format("Departing from %3s to %3s on %Tc\n",
+					segment.getOrigin(), 
+					segment.getDestination(), dep);
+			fmt.format("      Flight [%2s]#%4s  Flight time: %s minutes\n", 
+					segment.getCarrier(), 
+					segment.getFlightNumber(), segment.getFlightTime());
+			fmt.format("                        Arrive at %Tc\n", 
+					dateFromISO8601(segment.getArrivalTime()));
+		}
+	}
+	//this is not *quite* a travel port date because tport puts a colon in
+	//the timezone which is not ok with RFC822 timezones
+	public static SimpleDateFormat tportResultFormat =
+			new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
+	//turn a travel port date from a response back into a java object
+	//not as easy to do because java gets confused by the iso 8601 timezone
+	public static Date dateFromISO8601(String iso) {
+		try {
+			String noColon = iso.substring(0,26) +iso.substring(27);
+			return tportResultFormat.parse(noColon);
+		} catch (ParseException e) {
+			throw new RuntimeException("Really unlikely, but it looks like "+
+			"travelport is not using ISO dates anymore! "+e.getMessage());
+		}
+	}
+}
