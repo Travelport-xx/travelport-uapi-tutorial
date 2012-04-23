@@ -24,7 +24,6 @@ public class AirSvcTest {
 		AvailabilitySearchRsp rsp;
 		
 		setupRequestForSearch(request);
-		addPointOfSale(request, MY_APP_NAME);
 		
 		rsp=Helper.WSDLService.getAvailabilitySearch().service(request);
 		//these checks are just sanity that we can make an availability request
@@ -33,15 +32,6 @@ public class AirSvcTest {
 	}
 
 
-	public static void addPointOfSale(AirSearchReq req, String appName ) {
-		BillingPointOfSaleInfo posInfo = new BillingPointOfSaleInfo();
-		posInfo.setOriginApplication(appName);
-		PointOfSale pos = new PointOfSale();
-		pos.setProviderCode(System.getProperty("travelport.gds"));
-		pos.setSourceLocation(pos.sourceLocation());
-		req.setBillingPointOfSaleInfo(posInfo);
-	}
-	
 	
 	@Test
 	public void lowFareSearch() throws ParseException, AirFaultMessage {
@@ -52,7 +42,6 @@ public class AirSvcTest {
 		request.setTraceId(myTraceId);//sanity
 		
 		setupRequestForSearch(request);
-		addPointOfSale(request, MY_APP_NAME);
 
 		//2 adults travelling, needed for a low cost search
 		Lesson3.addAdultPassengers(request, 2);
@@ -78,21 +67,23 @@ public class AirSvcTest {
 		request.setTargetBranch(System.getProperty("travelport.targetBranch"));
 		
 		//set the GDS via a search modifier
-		AirSearchModifiers modifiers = Lesson2.gdsAsModifier(System.getProperty("travelport.gds"));
+		AirSearchModifiers modifiers = AirReq.gdsAsModifier(System.getProperty("travelport.gds"));
+		
+		AirReq.addPointOfSale(request, MY_APP_NAME);
 		
 		//try to limit the size of the return... not supported by 1G!
 		modifiers.setMaxSolutions(BigInteger.valueOf(25));
 		request.setAirSearchModifiers(modifiers);
 		
 		//travel is for paris to portland 2 months from now, one week trip
-		SearchAirLeg outbound = Lesson2.createLeg("CDG", "PDX");
-		Lesson2.addDepartureDate(outbound, Lesson2.daysInFuture(60));
-		Lesson2.addEconomyPreferred(outbound);
+		SearchAirLeg outbound = AirReq.createLeg("CDG", "PDX");
+		AirReq.addDepartureDate(outbound, Helper.daysInFuture(60));
+		AirReq.addEconomyPreferred(outbound);
 
 		//coming back
-		SearchAirLeg ret = Lesson2.createLeg("PDX", "CDG");
-		Lesson2.addDepartureDate(ret, Lesson2.daysInFuture(67));
-		Lesson2.addEconomyPreferred(ret);
+		SearchAirLeg ret = AirReq.createLeg("PDX", "CDG");
+		AirReq.addDepartureDate(ret, Helper.daysInFuture(67));
+		AirReq.addEconomyPreferred(ret);
 
 		//put them in the request
 		List<SearchAirLeg> legs = request.getSearchAirLeg();

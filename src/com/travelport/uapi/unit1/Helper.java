@@ -337,4 +337,20 @@ public class Helper {
 			"travelport is not using ISO dates anymore! "+e.getMessage());
 		}
 	}
+	//this is the format we SEND to travelport
+	public static SimpleDateFormat searchFormat = new SimpleDateFormat(
+			"yyyy-MM-dd");
+
+	// return a date that is n days in future
+	public static String daysInFuture(int n) {
+		Date now = new Date(), future;
+		Calendar calendar = GregorianCalendar.getInstance();
+		calendar.setTime(now);
+		calendar.add(Calendar.DATE, n);
+		future = calendar.getTime();
+		return searchFormat.format(future);
+	}
+
+
+
 }
