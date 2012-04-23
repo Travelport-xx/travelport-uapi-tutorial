@@ -157,7 +157,7 @@ This error indicates that you have not set some "java properties" (often done us
 
 The red boxes show you the tab you need to use to get to this configuration option and where to supply the values. The values are included in your sign-up documents from the TravelPort website.  Note that each of the parameters is of the form -Dxxx="yyy" and are separated by spaces.  The values are always quoted and the names always begin with "travelport".
 
-After you have made the adjustments necessary for your account to this panel, return to [WSDLService](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/WSDLService.java) file one last time.  You'll see the `URLPrefix` value is set like this near the top of the file:
+After you have made the adjustments necessary for your account to this panel, return to the [WSDLService](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/WSDLService.java) file one last time.  You'll see the `URLPrefix` value is set like this near the top of the file:
 
 ```java
 static protected String URLPREFIX = "file:///Users/iansmith/tport-workspace/uapijava/";
@@ -211,8 +211,8 @@ This is a helpful message provided by the CXF framework to tell you it is creati
 
 ### Exercises for the reader
 
-1. Create a run configuration as above but for the [SystemSvcTest](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/SystemServiceTest.java) test code.  This is a JUnit4 style test suite so will require the appropriate configuration type in the Run Configurations menu.
+ 1. Create a run configuration as above but for the [SystemSvcTest](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/SystemServiceTest.java) test code.  This is a JUnit4 style test suite so will require the appropriate configuration type in the Run Configurations menu.
 
-2. Change the ping values in Lesson1 and prove to yourself that the values being returned are the values you supplied.
+ 2. Change the ping values in Lesson1 and prove to yourself that the values being returned are the values you supplied.
 
-3. Modify the code in Lesson1 to use the "time port" (`SystemTimePortType`).  This will require that you discover how to get access to different ports (via the `WSDLService` helper class) and that you supply different request and response types to match the appropriate types for this different function.   The `time port` returns the current time according to TravelPort if you succeed in calling it.
+ 3. Modify the code in Lesson1 to use the "time port" (`SystemTimePortType`).  This will require that you discover how to get access to different ports (via the `WSDLService` helper class) and that you supply different request and response types to match the appropriate types for this different function.   The `time port` returns the current time according to TravelPort if you succeed in calling it.
