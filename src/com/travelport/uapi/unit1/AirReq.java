@@ -1,5 +1,7 @@
 package com.travelport.uapi.unit1;
 
+import java.math.BigInteger;
+
 import com.travelport.schema.air_v18_0.*;
 import com.travelport.schema.air_v18_0.AirLegModifiers.PreferredCabins;
 import com.travelport.schema.air_v18_0.AirSearchModifiers.PreferredProviders;
@@ -27,11 +29,33 @@ public class AirReq {
 		pos.setSourceLocation(pos.sourceLocation());
 		req.setBillingPointOfSaleInfo(posInfo);
 	}
-	// create a leg based on simple origin and destination between two airports
-	// sets the search to prefer economy
+
+	/**
+	 * Add the search passengers to the request.  We only add ADT (adult)
+	 * passengers and this only works for LowFareSearchReq objects.
+	 * @param request the req to add the passenger parameter to
+	 * @param n number of adults to put in the requset
+	 */
+	public static void addAdultPassengers(LowFareSearchReq request, int n) {
+		for (int i = 0; i < n; ++i) {
+			SearchPassenger adult = new SearchPassenger();
+			adult.setCode("ADT");
+			request.getSearchPassenger().add(adult);
+		}
+	}
+
+
+
+	/**
+	 * Create a leg for a search based on simple origin and destination 
+	 * between two airports.
+	 * 
+	 * @param originAirportCode
+	 * @param destAirportCode
+	 * @return  
+	 */
 	public static SearchAirLeg createLeg(String originAirportCode,
 			String destAirportCode) {
-		SearchAirLeg leg = new SearchAirLeg();
 		TypeSearchLocation originLoc = new TypeSearchLocation();
 		TypeSearchLocation destLoc = new TypeSearchLocation();
 
@@ -39,20 +63,63 @@ public class AirReq {
 		Airport origin = new Airport(), dest = new Airport();
 		origin.setCode(originAirportCode);
 		dest.setCode(destAirportCode);
-
+		
 		// search locations can be things other than airports but we are using
 		// the airport version...
 		originLoc.setAirport(origin);
 		destLoc.setAirport(dest);
 
+		return createLeg(originLoc, destLoc);
+	}
+	/**
+	 * Create a leg based on the (more general) TypeSearchLocation which can
+	 * be a variety of different things (such as non-iata named rail stations).
+	 * 
+	 * @param originLoc starting point of leg
+	 * @param destLoc endpoint of leg
+	 * @return
+	 */
+	public static SearchAirLeg createLeg(TypeSearchLocation originLoc,
+			TypeSearchLocation destLoc) {
+		SearchAirLeg leg = new SearchAirLeg();
+
 		// add the origin and dest to the leg
 		leg.getSearchDestination().add(destLoc);
 		leg.getSearchOrigin().add(originLoc);
 
+		
 		return leg;
 	}
 	
-	// modify a search leg to use economy class of service as preferred
+	/**
+	 * Make a search location based on a city or airport code (city is 
+	 * preferred to airport in a conflict) and set the search radius to
+	 * 50mi.
+	 */
+	public static TypeSearchLocation createLocationNear(String cityOrAirportCode) {
+		TypeSearchLocation result = new TypeSearchLocation();
+		
+		//city
+		CityOrAirport place = new CityOrAirport();
+		place.setCode(cityOrAirportCode);
+		place.setPreferCity(true);
+		result.setCityOrAirport(place);
+
+		//distance
+		Distance dist = new Distance();
+		dist.setUnits("mi");
+		dist.setValue(BigInteger.valueOf(50));
+		result.setDistance(dist);
+		
+		return result;
+	}
+	 
+	
+	/**
+	 * Mmodify a search leg to use economy class of service as preferred.
+	 * 
+	 * @param leg the leg to modify
+	 */
 	public static void addEconomyPreferred(SearchAirLeg leg) {
 		AirLegModifiers modifiers = new AirLegModifiers();
 		PreferredCabins cabins = new PreferredCabins();
@@ -64,7 +131,12 @@ public class AirReq {
 		leg.setAirLegModifiers(modifiers);
 	}
 
-	// modify a search leg based on a departure date
+	/**
+	 * Modify a search leg based on a departure date
+	 * 
+	 * @param leg the leg to modify
+	 * @param departureDate the departure date in YYYY-MM-dd
+	 */
 	public static void addDepartureDate(SearchAirLeg leg, String departureDate) {
 		// flexible time spec is flexible in that it allows you to say
 		// days before or days after
@@ -73,15 +145,23 @@ public class AirReq {
 		leg.getSearchDepTime().add(noFlex);
 	}
 
-	// search modifiers
-	public static AirSearchModifiers gdsAsModifier(String gdsCode) {
+	/**
+	 * Search modifiers to create, usually a GDS code plus optionally 
+	 * RCH (Helper.RAIL_PROVIDER) or ACH (Helper.LOW_COST_PROVIDER).
+	 * 
+	 * @param providerCode  one or more provider codes (zero will not work!)
+	 * @return the modifiers object
+	 */
+	public static AirSearchModifiers createModifiersWithProviders(String ... providerCode) {
 		AirSearchModifiers modifiers = new AirSearchModifiers();
 		PreferredProviders providers = new PreferredProviders();
-		Provider myGDS = new Provider();
-		// set the code for the provider
-		myGDS.setCode(gdsCode);
-		// can be many providers, but we just use one
-		providers.getProvider().add(myGDS);
+		for (int i=0; i<providerCode.length;++i) {
+			Provider p = new Provider();
+			// set the code for the provider
+			p.setCode(providerCode[i]);
+			// can be many providers, but we just use one
+			providers.getProvider().add(p);
+		}
 		modifiers.setPreferredProviders(providers);
 		return modifiers;
 	}

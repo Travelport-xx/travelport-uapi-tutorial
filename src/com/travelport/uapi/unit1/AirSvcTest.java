@@ -10,8 +10,6 @@ import java.util.List;
 import org.junit.Test;
 
 import com.travelport.schema.air_v18_0.*;
-import com.travelport.schema.common_v12_0.PointOfSale;
-import com.travelport.schema.common_v15_0.BillingPointOfSaleInfo;
 import com.travelport.service.air_v18_0.AirFaultMessage;
 
 public class AirSvcTest {
@@ -25,7 +23,7 @@ public class AirSvcTest {
 		
 		setupRequestForSearch(request);
 		
-		rsp=Helper.WSDLService.getAvailabilitySearch().service(request);
+		rsp=WSDLService.getAvailabilitySearch().service(request);
 		//these checks are just sanity that we can make an availability request
 		assertThat(rsp.getAirItinerarySolution().size(), is(not(0)));
 		assertThat(rsp.getAirSegmentList().getAirSegment().size(), is(not(0)));
@@ -44,10 +42,10 @@ public class AirSvcTest {
 		setupRequestForSearch(request);
 
 		//2 adults travelling, needed for a low cost search
-		Lesson3.addAdultPassengers(request, 2);
+		AirReq.addAdultPassengers(request, 2);
 
 		//do the work
-		response = Helper.WSDLService.getLowFareSearch().service(request);
+		response = WSDLService.getLowFareSearch().service(request);
 		
 		//sanity cechk
 		assertThat(myTraceId, is(equalTo(request.getTraceId())));
@@ -64,10 +62,12 @@ public class AirSvcTest {
 
 	//different search request types use this different ways
 	public void setupRequestForSearch(AirSearchReq request) {
+		
+		//add in the tport branch code
 		request.setTargetBranch(System.getProperty("travelport.targetBranch"));
 		
 		//set the GDS via a search modifier
-		AirSearchModifiers modifiers = AirReq.gdsAsModifier(System.getProperty("travelport.gds"));
+		AirSearchModifiers modifiers = AirReq.createModifiersWithProviders(System.getProperty("travelport.gds"));
 		
 		AirReq.addPointOfSale(request, MY_APP_NAME);
 		

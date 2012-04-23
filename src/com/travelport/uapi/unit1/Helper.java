@@ -8,7 +8,10 @@ import java.util.*;
 
 import javax.xml.ws.BindingProvider;
 
-import com.travelport.schema.air_v18_0.*;
+import com.travelport.schema.air_v18_0.AirSegment;
+import com.travelport.schema.air_v18_0.FlightDetails;
+import com.travelport.schema.rail_v12_0.RailJourney;
+import com.travelport.schema.rail_v12_0.RailSegment;
 import com.travelport.service.air_v18_0.*;
 import com.travelport.service.system_v8_0.*;
 
@@ -237,7 +240,7 @@ public class Helper {
 	 * Utility class for building a map that knows about all the segments in the
 	 * response.
 	 */
-	public static class SegmentMap extends HashMap<String, AirSegment> {
+	public static class AirSegmentMap extends HashMap<String, AirSegment> {
 		public void add(AirSegment segment) {
 			put(segment.getKey(), segment);
 		}
@@ -252,75 +255,104 @@ public class Helper {
 		}
 	}
 
+	//this is the format we SEND to travelport
+	public static SimpleDateFormat searchFormat = new SimpleDateFormat(
+			"yyyy-MM-dd");
+
+	// return a date that is n days in future
+	public static String daysInFuture(int n) {
+		Date now = new Date(), future;
+		Calendar calendar = GregorianCalendar.getInstance();
+		calendar.setTime(now);
+		calendar.add(Calendar.DATE, n);
+		future = calendar.getTime();
+		return searchFormat.format(future);
+	}
 
 	/**
-	 * Utility class for making a decent-looking display out of an itinerary.
+	 * Build the map from references to flight details to to real flight details.
 	 */
-	public static class PrintableItinerary {
-		/**
-		 * Conversion of this object to a string is its primary job.
-		 */
-		public String toString() {
-			StringBuilder result = new StringBuilder();
-			Formatter fmt = new Formatter(result, Locale.US);
-			//print out the segments first
-			List<AirSegmentRef> segKeys = solution.getAirSegmentRef();
-			for (Iterator<AirSegmentRef> iterator = segKeys.iterator(); iterator.hasNext();) {
-				AirSegmentRef airSegmentRef = (AirSegmentRef) iterator.next();
-				//looking the leg by its key
-				AirSegment leg = seg.get(airSegmentRef.getKey());
-				printLeg(leg, fmt);
-				if (leg.getDestination().equals(roundTripTurnaround)) {
-					result.append("\n\n");
-				}
-			}
-			
-			fmt.format("Base Price: %s   Total Price %s", 
-					solution.getBasePrice(),
-					solution.getTotalPrice());
-			
-			return result.toString();
+	public static FlightDetailsMap createFlightDetailsMap(
+			List<FlightDetails> details) {
+		FlightDetailsMap result = new FlightDetailsMap();
+		for (Iterator<FlightDetails> iterator = details.iterator(); iterator.hasNext();) {
+			FlightDetails deet = (FlightDetails) iterator.next();
+			result.add(deet);
 		}
-		protected SegmentMap seg;
-		protected AirPricingSolution solution;
-		protected String roundTripTurnaround;
+		return result;
+	}
+
+	/**
+	 * Take a air segment list and construct a map of all the segments into
+	 * a segment map.  This makes other parts of the work easier.
+	 */
+	public static AirSegmentMap createAirSegmentMap(
+			List<AirSegment> segments) {
+		//construct a map with all the segments and their keys
+		AirSegmentMap segmentMap = new AirSegmentMap();
 		
-		/**
-		 * Create something that can be printed out decently for a human. 
-		 * Pass in the pricing solution and the map of segments that should
-		 * be referred to.  If roundTripTurnaround is not null, it will be
-		 * used in separating the outbound journey from the return
-		 * 
-		 * @param solution the pricing solution that should be displayed
-		 * @param seg segment map of all segments in the result
-		 * @param roundTripTurnaround null or airport name that is destination
-		 */
-		public PrintableItinerary(AirPricingSolution solution, SegmentMap seg,
-				String roundTripTurnaround) {
-			this.seg = seg;
-			this.solution = solution;
-			this.roundTripTurnaround = roundTripTurnaround;
+		for (Iterator<AirSegment> iterator = segments.iterator(); iterator.hasNext();) {
+			AirSegment airSegment = (AirSegment) iterator.next();
+			segmentMap.add(airSegment);
 		}
-		
-		/**
-		 * Print out some details about a segment.  This is far from all
-		 * the available information.
-		 * 
-		 * @param segment the segment to be displayed
-		 * @param fmt the formatter to use to display the data
-		 */
-		public void printLeg(AirSegment segment, Formatter fmt) {
-			Date dep = dateFromISO8601(segment.getDepartureTime());
-			fmt.format("Departing from %3s to %3s on %Tc\n",
-					segment.getOrigin(), 
-					segment.getDestination(), dep);
-			fmt.format("      Flight [%2s]#%4s  Flight time: %s minutes\n", 
-					segment.getCarrier(), 
-					segment.getFlightNumber(), segment.getFlightTime());
-			fmt.format("                        Arrive at %Tc\n", 
-					dateFromISO8601(segment.getArrivalTime()));
+
+		return segmentMap;
+	}
+
+	public static final String RAIL_PROVIDER = "RCH";
+	public static final String LOW_COST_PROVIDER = "ACH";
+
+	/**
+	 * Convenience class for keeping a mapping from id to rail journey.
+	 * @author iansmith
+	 *
+	 */
+	public static class RailJourneyMap extends HashMap<String, RailJourney>{
+		public void add(RailJourney j) {
+			put(j.getKey(), j);
 		}
 	}
+	/**
+	 * Take a list of rail journeys and put them all into a map.
+	 * @param r  list of rail journeys
+	 * @return the built map from keys to rail segments
+	 */
+	public static RailJourneyMap createRailJourneyMap(
+			List<RailJourney> r) {
+		
+		RailJourneyMap result = new Helper.RailJourneyMap();
+		for (Iterator<RailJourney> iterator = r.iterator(); iterator.hasNext();) {
+			RailJourney seg = (RailJourney) iterator.next();
+			result.add(seg);
+		}
+		return result;
+	}
+
+	/**
+	 * Convenience class for keeping a mapping from id to rail segment.
+	 *
+	 */
+	public static class RailSegmentMap extends HashMap<String, RailSegment>{
+		public void add(RailSegment j) {
+			put(j.getKey(), j);
+		}
+	}
+	/**
+	 * Take a list of rail segments and put them all into a map.
+	 * @param r  list of rail segments
+	 * @return the built map from keys to rail segments
+	 */
+	public static RailSegmentMap createRailSegmentMap(
+			List<RailSegment> r) {
+		
+		RailSegmentMap result = new Helper.RailSegmentMap();
+		for (Iterator<RailSegment> iterator = r.iterator(); iterator.hasNext();) {
+			RailSegment seg = (RailSegment) iterator.next();
+			result.add(seg);
+		}
+		return result;
+	}
+
 	//this is not *quite* a travel port date because tport puts a colon in
 	//the timezone which is not ok with RFC822 timezones
 	public static SimpleDateFormat tportResultFormat =
@@ -337,20 +369,5 @@ public class Helper {
 			"travelport is not using ISO dates anymore! "+e.getMessage());
 		}
 	}
-	//this is the format we SEND to travelport
-	public static SimpleDateFormat searchFormat = new SimpleDateFormat(
-			"yyyy-MM-dd");
-
-	// return a date that is n days in future
-	public static String daysInFuture(int n) {
-		Date now = new Date(), future;
-		Calendar calendar = GregorianCalendar.getInstance();
-		calendar.setTime(now);
-		calendar.add(Calendar.DATE, n);
-		future = calendar.getTime();
-		return searchFormat.format(future);
-	}
-
-
 
 }

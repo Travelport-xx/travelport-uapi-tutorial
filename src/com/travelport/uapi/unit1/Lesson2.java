@@ -17,8 +17,8 @@ public class Lesson2 {
 	public static void main(String[] argv) {
 		
 		try {
-			//make the request... paris to bangkok
-			String from ="CDG",to="BKK";
+			//make the request... paris to chattanooga TN USA
+			String from ="CDG",to="CHA";
 			
 			//staying a week ... two months from now.. roundtrip
 			AvailabilitySearchRsp rsp = search(from, to, 
@@ -26,8 +26,10 @@ public class Lesson2 {
 			
 			//make tables that map the "key" (or a reference) to the proper
 			//segment and the proper flight details
-			Helper.SegmentMap allSegments = buildSegmentMap(rsp);
-			Helper.FlightDetailsMap allDetails = buildFlightDetailsMap(rsp);
+			Helper.AirSegmentMap allSegments = Helper.createAirSegmentMap(
+					rsp.getAirSegmentList().getAirSegment());
+			Helper.FlightDetailsMap allDetails = Helper.createFlightDetailsMap(
+					rsp.getFlightDetailsList().getFlightDetails());
 			
 			//Each "solution" is for a particular part of the journey... on
 			//a round trip there will be two of thes
@@ -115,7 +117,7 @@ public class Lesson2 {
 	 * round trip.
 	 */
 	public static List<AirItinerary> buildRoutings(AirItinerarySolution soln,
-			Helper.SegmentMap segmentMap, Helper.FlightDetailsMap detailMap) {
+			Helper.AirSegmentMap segmentMap, Helper.FlightDetailsMap detailMap) {
 		ArrayList<AirItinerary> result = new ArrayList<AirItinerary>();
 		
 		//walk the list of segments in this itinerary... but convert them from
@@ -189,20 +191,6 @@ public class Lesson2 {
 	}
 	
 	/**
-	 * Build the map from references to to real flight details
-	 */
-	public static Helper.FlightDetailsMap buildFlightDetailsMap(
-			AvailabilitySearchRsp rsp) {
-		Helper.FlightDetailsMap result = new Helper.FlightDetailsMap();
-		List<FlightDetails> details = rsp.getFlightDetailsList().getFlightDetails();
-		for (Iterator<FlightDetails> iterator = details.iterator(); iterator.hasNext();) {
-			FlightDetails deet = (FlightDetails) iterator.next();
-			result.add(deet);
-		}
-		return result;
-	}
-
-	/**
 	 * Create a pricing request for a particular itinerary, evaluate it and
 	 * then display the result (which might be an error).
 	 * 
@@ -254,22 +242,6 @@ public class Lesson2 {
 	}
 
 	/**
-	 * Take a result object and construct a list of all the segments into
-	 * a segment map.  This makes other parts of the work easier.
-	 */
-	public static Helper.SegmentMap buildSegmentMap(AvailabilitySearchRsp rsp) {
-		//construct a map with all the segments and their keys
-		Helper.SegmentMap segmentMap = new Helper.SegmentMap();
-		
-		List<AirSegment> segments = rsp.getAirSegmentList().getAirSegment();
-		for (Iterator<AirSegment> iterator = segments.iterator(); iterator.hasNext();) {
-			AirSegment airSegment = (AirSegment) iterator.next();
-			segmentMap.add(airSegment);
-		}
-	
-		return segmentMap;
-	}
-	/**
 	 * Do a search for availability for a traveller.
 	 * 
 	 * @param origin airport code
@@ -289,7 +261,7 @@ public class Lesson2 {
 		AirReq.addPointOfSale(request, "tutorial-unit1-lesson2");
 		
 		//set the GDS via a search modifier
-		AirSearchModifiers modifiers = AirReq.gdsAsModifier(System.getProperty("travelport.gds"));
+		AirSearchModifiers modifiers = AirReq.createModifiersWithProviders(System.getProperty("travelport.gds"));
 		request.setAirSearchModifiers(modifiers);
 
 		//R/T journey
