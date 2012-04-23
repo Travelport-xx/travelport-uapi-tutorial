@@ -6,3 +6,4 @@ WebContent
 build
 src/com/travelport/schema
 src/com/travelport/service
+.DS_Store
