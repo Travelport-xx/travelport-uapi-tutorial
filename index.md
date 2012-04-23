@@ -95,7 +95,7 @@ With very few exceptions, all the features and functions of the uAPI follow this
 
 ### Lesson 1 Proper
 
-The file [Lesson1.java](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/Lesson1.java) is in the Java package [com.travelport.uapi.unit](https://github.com/iansmith/travelport-uapi-tutorial/tree/master/src/com/travelport/uapi/unit1).  You'll notice that in the web-viewable version of this tutorial, we often make the names of files and packages direct links into the github repository for the tutorial.  This is to make it easy for those that just want to read the tutorial without "playing along at home" and compiling/running all the examples.
+The file [Lesson1.java](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/Lesson1.java) is in the Java package [com.travelport.uapi.unit1](https://github.com/iansmith/travelport-uapi-tutorial/tree/master/src/com/travelport/uapi/unit1).  You'll notice that in the web-viewable version of this tutorial, we often make the names of files and packages direct links into the github repository for the tutorial.  This is to make it easy for those that just want to read the tutorial without "playing along at home" and compiling/running all the examples.
 
 Let's examine the `main` method of Lesson 1:
 
@@ -114,7 +114,7 @@ public static void main(String[] argv) {
 	
 	try {
 		//run the ping request
-		PingRsp rsp = Helper.WSDLService.getPing().service(req);
+		PingRsp rsp = WSDLService.getPing().service(req);
 		//print results.. payload and trace ID are echoed back in response
 		System.out.println(rsp.getPayload());
 		System.out.println(rsp.getTraceId());
@@ -127,7 +127,34 @@ public static void main(String[] argv) {
 }
 ```
 
+This code follows exactly the pattern explained above in the programming model section: we set up a `PingReq` object with the proper parameters and then pass them through to the uAPI via the ping port.  The only unexpected part of this simple example is the call to `WSDLService.getPing()` that returns the ping port object.  This is a helper class that has been provided with the tutorial to simplify things and allow you to focus on the essential parts of the uAPI and not the details...
 
+### The Details
 
+The sad fact is that you will need to configure your copy of the class `WSDLService` slightly to allow you to use the uAPI. You should not need to do this again!  If you look inside `WSDLService`(https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/WSDLService.java) in the package `com.traveloport.uapi.unit1` [com.travelport.uapi.unit1](https://github.com/iansmith/travelport-uapi-tutorial/tree/master/src/com/travelport/uapi/unit1) you will see the things that you may need to change:
+
+```java
+
+// these endpoint parameters vary based on which region you are
+// in...check your travelport sign up to see which url you should use...
+static protected String SYSTEM_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/SystemService";
+static protected String AIR_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/AirService";
+```
+
+The URLs above, called "endpoints" in the parlance of WSDL, may need to be changed if you are not the EMEA (Europe, Middle Easy, Africa) geography.  If you are in North America, your performance will be greatly increased by correcting these to the proper values and avoid sending all your data over the Atlantic ocean on every request!
+
+If you try to run the `Lesson1` code either from the command line or from Eclipe's Run menu you'll get an error like this:
+
+```
+Exception in thread "main" java.lang.RuntimeException: One or more of your properties has not been set properly for you to access the travelport uAPI.  Check your command line arguments or eclipse run configuration for these properties:travelport.username,travelport.password,travelport.gds,travelport.targetBranch
+```
+
+This error indicates that you have not set some "java properties" (using the -D option from the command line) in your Run configuration.  You access run configuration with "Run > Run Configuration..." from the primary eclipse menus.  Here is a screenshot of how to configure your (and Lesson1's) environment via the "Arguments" tab and supplying "VM arguments":
+
+<br/>
+<img src="runconfig.png">
+<br/>
+
+The red boxes show you the tab you need to use to get to this configuration option and where to supply the values. The values are included in your sign-up documents from the TravelPort website.  Note that each of the parameters of the form -Dxxx="yyy" and are separated by spaces.  The values are always quoted and the key names always begin with "travelport".
 
 
