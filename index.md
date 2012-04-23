@@ -10,6 +10,10 @@ After working through the three lessons of Unit 1, you should be able to work wi
 
 Although these lessons are using Java, the lessons' concepts apply to pretty much any programming language.  The _interface_ to the Universal API (uAPI) is defined with [WSDL](http://en.wikipedia.org/wiki/Web_Services_Description_Language) or Web Services Definition Language, pronounced "whiz-dul".  This means that any programming language that knows how to "use web services" can access the APIs and get useful things done.  In practice, this means that you need a _generator_ that can take a file "foo.wsdl" and spit out "foo_client.java", or whatever, in your favorite language.  Different generators have slightly different behaviors (of course, WSDL is a "standard!"); we'll be using [Apache's CXF](http://cxf.apache.org/) to work with the uAPI in Java.  ("CXF" is not an acronym, but is related to the project's origin.)
 
+### Credentials
+
+If you don’t have them already, you’ll need to request a set of 30-day trial credentials for using the uAPI. You can request these [online](http://www.travelportdeveloperdirectory.com/forms/request-test-access.php). However, this web page cannot be navigated to via the menus on [the developer network site](http://developer.travelport.com/app/developer-network/resource-centre-uapi) unless you have already created an account on the [developer site](http://developer.travelport.com). When you request test credentials, you should choose “Galileo” as your preferred GDS.  After you have filled out the form, in a few minutes you’ll receive some email from “webmaster@travelport.com” with the relevant information.
+
 ### Downloading The Tutorial Code
 
 You can download the tutorial code using github to clone the repository. You can use your favorite [git tool](https://git.wiki.kernel.org/articles/i/n/t/Interfaces,_frontends,_and_tools.html) or just use the command line like this:
