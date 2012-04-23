@@ -4,34 +4,44 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 import java.math.BigInteger;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.ParseException;
-import java.util.Iterator;
 import java.util.List;
 
-import javax.xml.ws.BindingProvider;
-
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.travelport.schema.air_v15_0.*;
-import com.travelport.schema.common_v12_0.ResponseMessage;
-import com.travelport.service.air_v15_0.*;
+import com.travelport.schema.air_v18_0.*;
+import com.travelport.schema.common_v12_0.PointOfSale;
+import com.travelport.schema.common_v15_0.BillingPointOfSaleInfo;
+import com.travelport.service.air_v18_0.AirFaultMessage;
 
 public class AirSvcTest {
 
+	public static String MY_APP_NAME="tutorial_tests";
+	
 	@Test
 	public void availability() throws AirFaultMessage {
 		AvailabilitySearchReq request = new AvailabilitySearchReq();
 		AvailabilitySearchRsp rsp;
 		
 		setupRequestForSearch(request);
+		addPointOfSale(request, MY_APP_NAME);
+		
 		rsp=Helper.WSDLService.getAvailabilitySearch().service(request);
 		//these checks are just sanity that we can make an availability request
 		assertThat(rsp.getAirItinerarySolution().size(), is(not(0)));
 		assertThat(rsp.getAirSegmentList().getAirSegment().size(), is(not(0)));
 	}
+
+
+	public static void addPointOfSale(AirSearchReq req, String appName ) {
+		BillingPointOfSaleInfo posInfo = new BillingPointOfSaleInfo();
+		posInfo.setOriginApplication(appName);
+		PointOfSale pos = new PointOfSale();
+		pos.setProviderCode(System.getProperty("travelport.gds"));
+		pos.setSourceLocation(pos.sourceLocation());
+		req.setBillingPointOfSaleInfo(posInfo);
+	}
+	
 	
 	@Test
 	public void lowFareSearch() throws ParseException, AirFaultMessage {
@@ -42,8 +52,10 @@ public class AirSvcTest {
 		request.setTraceId(myTraceId);//sanity
 		
 		setupRequestForSearch(request);
+		addPointOfSale(request, MY_APP_NAME);
+
 		//2 adults travelling, needed for a low cost search
-		Lesson2.addAdultPassengers(request, 2);
+		Lesson3.addAdultPassengers(request, 2);
 
 		//do the work
 		response = Helper.WSDLService.getLowFareSearch().service(request);

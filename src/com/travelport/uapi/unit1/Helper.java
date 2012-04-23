@@ -8,11 +8,10 @@ import java.util.*;
 
 import javax.xml.ws.BindingProvider;
 
-import com.travelport.schema.air_v15_0.AirPricingSolution;
-import com.travelport.schema.air_v15_0.AirSegment;
-import com.travelport.schema.air_v15_0.AirSegmentRef;
-import com.travelport.service.air_v15_0.*;
+import com.travelport.schema.air_v18_0.*;
+import com.travelport.service.air_v18_0.*;
 import com.travelport.service.system_v8_0.*;
+
 
 public class Helper {
 
@@ -23,15 +22,17 @@ public class Helper {
 	public static class WSDLService {
 		static protected AirLowFareSearchPortType lowFareSearch;
 		static protected AirAvailabilitySearchPortType availabilitySearch;
+		static protected AirPricePortType price;
 		static protected SystemPingPortType ping;
 		static protected SystemInfoPortType info;
 		static protected SystemTimePortType time;
 
 		static protected SystemService systemService ;
+		static protected AirService airService ;
 
 		static protected String URLPREFIX = "file:///Users/iansmith/tport-workspace/uapijava/";
 		static protected String SYSTEM_WSDL = "wsdl/system_v8_0/System.wsdl";
-		static protected String AIR_WSDL = "wsdl/air_v15_0/Air.wsdl";
+		static protected String AIR_WSDL = "wsdl/air_v18_0/Air.wsdl";
 
 		static protected String USERNAME_PROP = "travelport.username";
 		static protected String PASSWORD_PROP = "travelport.password";
@@ -42,7 +43,9 @@ public class Helper {
 		// in...check your travelport sign up to see which url you should use...
 		static protected String LOW_FARE_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/AirLowFareSearchService";
 		static protected String AVAILABILITY_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/AirAvailabilitySearchService";
+		static protected String PRICE_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/AirPriceService";
 		static protected String SYSTEM_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/SystemService";
+		static protected String AIR_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/AirService";
 	
 		/**
 		 * Get access to the low fare object.
@@ -55,12 +58,13 @@ public class Helper {
 			}
 			URL url = getURLForWSDL(AIR_WSDL);
 			checkProperties();
-			AirLowFareSearchService svc = new AirLowFareSearchService(url);
-			lowFareSearch = svc.getAirLowFareSearchPort();
+			if (airService==null) {
+				airService = new AirService(url);
+			}
+			lowFareSearch = airService.getAirLowFareSearchPort();
 			addParametersToProvider((BindingProvider) lowFareSearch,
-					AVAILABILITY_ENDPOINT);
+					AIR_ENDPOINT);
 			return lowFareSearch;
-
 		}
 		/**
 		 * Get access to the availability
@@ -74,12 +78,35 @@ public class Helper {
 			}
 			URL url = getURLForWSDL(AIR_WSDL);
 			checkProperties();
-			AirAvailabilitySearch availSvc = new AirAvailabilitySearch(url);
-			availabilitySearch = availSvc.getAirAvailabilitySearchPort();
+			if (airService==null) {
+				airService = new AirService(url);
+			}
+			availabilitySearch = airService.getAirAvailabilitySearchPort();
 			addParametersToProvider((BindingProvider) availabilitySearch,
-					AVAILABILITY_ENDPOINT);
+					AIR_ENDPOINT);
 			return availabilitySearch;
 		}
+		/**
+		 * Get access to the availability
+		 * 
+		 * @return the port for low fare search
+		 */
+
+		public static AirPricePortType getPrice() {
+			if (price != null) {
+				return price;
+			}
+			URL url = getURLForWSDL(AIR_WSDL);
+			checkProperties();
+			if (airService==null) {
+				airService = new AirService(url);
+			}
+			price = airService.getAirPricePort();
+			addParametersToProvider((BindingProvider) price,
+					AIR_ENDPOINT);
+			return price;
+		}
+
 		/**
 		 * Get access to the ping object.
 		 * 
@@ -215,6 +242,16 @@ public class Helper {
 			put(segment.getKey(), segment);
 		}
 	}
+	/**
+	 * Utility class for building a map that knows all the flight details 
+	 * objects and can look them up by their key.
+	 */
+	public static class FlightDetailsMap extends HashMap<String, FlightDetails> {
+		public void add(FlightDetails detail) {
+			put(detail.getKey(), detail);
+		}
+	}
+
 
 	/**
 	 * Utility class for making a decent-looking display out of an itinerary.
