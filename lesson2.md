@@ -58,6 +58,7 @@ At a high level, the class [Lesson2](https://github.com/iansmith/travelport-uapi
   * Display the resulting price
   * Display the segments of the journey
 
+
 As we shall see, the first and third items will prove to be more complex than most people would expect.
 
 ### Preparing the search
@@ -65,6 +66,7 @@ As we shall see, the first and third items will prove to be more complex than mo
 At the beginning of `main()` in the `Lesson2` class are these lines:
 
 ```java
+
 	//make the request... paris to chattanooga TN USA
 	String from ="CDG",to="CHA";
 	//staying a week ... two months from now.. roundtrip
@@ -72,10 +74,11 @@ At the beginning of `main()` in the `Lesson2` class are these lines:
 		Helper.daysInFuture(60), Helper.daysInFuture(67));
 ```
 
-The two calls to the helper method `Helper.daysInFuture()` should be fairly self explanatory.  So, we've setup all we need for a search now, right? We have the origin, destination, and dates of travel, so we are ready, right?  Not by a long shot!  The method `search` is implemented in `Lesson2` and is dozens of lines of code plus uses a number of helper routines.  Why all this extra code, one may wonder.  The reason is that there are hundreds of parameters that can possibly be set on an air search, for too many reasons to go into here.  However, some of these parameters are required to be set in _any_ air travel search done with uAPI such as which class of service should be considered (Economy is our default choice) and what type of passenger is travelling (Adult is our default choice, but there are more than 100 types of passengers such Military Veteran, Member Of The Clergy, etc).
+The two calls to the helper method `Helper.daysInFuture()` should be fairly self explanatory.  So, we've setup all we need for a search now, right? We have the origin, destination, and dates of travel, so we are ready, right?  Not by a long shot!  The method `search` is implemented in `Lesson2` and is dozens of lines of code plus uses a number of helper routines.  "Why all this extra code?", one may wonder.  The reason is that there are hundreds of parameters that can possibly be set on an air search, for far too many reasons than can be explained here.  However, some of these parameters are required to be set in _any_ air travel search done with uAPI such as the (obvious) origin and destination but also which class of service should be considered (Economy is our default choice) and what type of passenger is traveling (Adult is our default choice, but there are more than 100 types of passengers such Military Veteran, Member Of The Clergy, etc).
 
 Here is a snippet from the implementation of the `search()` method:
 ```java
+
 	//R/T journey
 	SearchAirLeg outbound = AirReq.createLeg(origin, dest);
 	AirReq.addDepartureDate(outbound, dateOut);
@@ -86,6 +89,7 @@ Here is a snippet from the implementation of the `search()` method:
 	AirReq.addDepartureDate(ret, dateBack);
 	//put traveller in econ
 	AirReq.addEconomyPreferred(ret);
+	
 ```
 
 The code above creates two "legs" for the search to consider: one outbound from `origin` to `dest` and one for the reverse (`ret`) one week later.  Each leg also has a departure date and what type of seat should be searched for.  Each line of this snippet with code on it uses a method from the [AirReq](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/AirReq.java) helper object.  These helper methods have been provided to try to make it easier to understand the examples or write new code that does similar things.  
@@ -93,6 +97,7 @@ The code above creates two "legs" for the search to consider: one outbound from 
 The `AirReq` class has no "magic," of course.  This class is building various structures from the classes that were generated as part of work with `Air.wsdl`.  For example:
 
 ```java
+
 	public static SearchAirLeg createLeg(String originAirportCode,
 		String destAirportCode) {
 		
@@ -110,10 +115,10 @@ The `AirReq` class has no "magic," of course.  This class is building various st
 		destLoc.setAirport(dest);
 
 		return createLeg(originLoc, destLoc);
-}
+	}
+
 ```
 
 This is the code that creates a single `SearchAirLeg` object that is part of our request to the TravelPort uAPI for an availability search.  You can see from the code above that locations are more complicated objects than one might expect... they _can_ be an airport code as in this example, or they can be more complex entities such as "all locations near a given a city" as we will see in Lesson 3.
 
 It is worth the time look at the implementation of `AirReq` so that you can see, even for the relatively simple searches we are doing here the number of different options, and thus different classes and structures, that are used.
-

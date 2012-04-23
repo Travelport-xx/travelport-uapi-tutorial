@@ -80,23 +80,25 @@ DL#8517 from ATL to CDG at 2012-06-29T17:55:00.000-04:00
 
 <p>At the beginning of <code>main()</code> in the <code>Lesson2</code> class are these lines:</p>
 
-<pre><code class="java">    //make the request... paris to chattanooga TN USA
+<pre><code class="java">
+    //make the request... paris to chattanooga TN USA
     String from =&quot;CDG&quot;,to=&quot;CHA&quot;;
     //staying a week ... two months from now.. roundtrip
     AvailabilitySearchRsp rsp = search(from, to, 
         Helper.daysInFuture(60), Helper.daysInFuture(67));
 </code></pre>
 
-<p>The two calls to the helper method <code>Helper.daysInFuture()</code> should be fairly self explanatory.  So, we&rsquo;ve setup all we need for a search now, right? We have the origin, destination, and dates of travel, so we are ready, right?  Not by a long shot!  The method <code>search</code> is implemented in <code>Lesson2</code> and is dozens of lines of code plus uses a number of helper routines.  Why all this extra code, one may wonder.  The reason is that there are hundreds of parameters that can possibly be set on an air search, for too many reasons to go into here.  However, some of these parameters are required to be set in <em>any</em> air travel search done with uAPI such as which class of service should be considered (Economy is our default choice) and what type of passenger is travelling (Adult is our default choice, but there are more than 100 types of passengers such Military Veteran, Member Of The Clergy, etc).</p>
+<p>The two calls to the helper method <code>Helper.daysInFuture()</code> should be fairly self explanatory.  So, we&rsquo;ve setup all we need for a search now, right? We have the origin, destination, and dates of travel, so we are ready, right?  Not by a long shot!  The method <code>search</code> is implemented in <code>Lesson2</code> and is dozens of lines of code plus uses a number of helper routines.  &ldquo;Why all this extra code?&rdquo;, one may wonder.  The reason is that there are hundreds of parameters that can possibly be set on an air search, for far too many reasons than can be explained here.  However, some of these parameters are required to be set in <em>any</em> air travel search done with uAPI such as the (obvious) origin and destination but also which class of service should be considered (Economy is our default choice) and what type of passenger is traveling (Adult is our default choice, but there are more than 100 types of passengers such Military Veteran, Member Of The Clergy, etc).</p>
 
 <p>Here is a snippet from the implementation of the <code>search()</code> method:
-java
-    //R/T journey
-    SearchAirLeg outbound = AirReq.createLeg(origin, dest);
-    AirReq.addDepartureDate(outbound, dateOut);
-    AirReq.addEconomyPreferred(outbound);</p>
+java</p>
 
-<pre><code>//coming back
+<pre><code>//R/T journey
+SearchAirLeg outbound = AirReq.createLeg(origin, dest);
+AirReq.addDepartureDate(outbound, dateOut);
+AirReq.addEconomyPreferred(outbound);
+
+//coming back
 SearchAirLeg ret = AirReq.createLeg(dest, origin);
 AirReq.addDepartureDate(ret, dateBack);
 //put traveller in econ
@@ -109,6 +111,7 @@ The code above creates two &quot;legs&quot; for the search to consider: one outb
 The `AirReq` class has no &quot;magic,&quot; of course.  This class is building various structures from the classes that were generated as part of work with `Air.wsdl`.  For example:
 
 ```java
+
     public static SearchAirLeg createLeg(String originAirportCode,
         String destAirportCode) {
         
@@ -126,7 +129,8 @@ The `AirReq` class has no &quot;magic,&quot; of course.  This class is building 
         destLoc.setAirport(dest);
 
         return createLeg(originLoc, destLoc);
-}
+    }
+
 </code></pre>
 
 <p>This is the code that creates a single <code>SearchAirLeg</code> object that is part of our request to the TravelPort uAPI for an availability search.  You can see from the code above that locations are more complicated objects than one might expect&hellip; they <em>can</em> be an airport code as in this example, or they can be more complex entities such as &ldquo;all locations near a given a city&rdquo; as we will see in Lesson 3.</p>
