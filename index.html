@@ -14,7 +14,21 @@
 
 <h3>WSDL</h3>
 
-<p>Although these lessons are using Java the lessons concepts apply to pretty much any programming language.  The <em>interface</em> to the Universal API (uAPI) is defined with WSDL or Web Services Definition Language, pronounced &ldquo;whiz-dul&rdquo;.  This means that any programming language that knows how to &ldquo;use web services&rdquo; can access the APIs and get useful things done.  In practice, this means that you need a <em>generator</em> that can take a file &ldquo;foo.wsdl&rdquo; and spit out &ldquo;foo_client.java&rdquo; or whatever your favorite language.  Different generators have slightly different behaviors (of course, WSDL is a &ldquo;standard!&rdquo;); we&rsquo;ll be using <a href="http://cxf.apache.org/">Apache&rsquo;s CXF</a> to work with the uAPI in Java.  (&ldquo;CXF&rdquo; is not really an acronym in this case.)</p>
+<p>Although these lessons are using Java the lessons concepts apply to pretty much any programming language.  The <em>interface</em> to the Universal API (uAPI) is defined with WSDL or Web Services Definition Language, pronounced &ldquo;whiz-dul&rdquo;.  This means that any programming language that knows how to &ldquo;use web services&rdquo; can access the APIs and get useful things done.  In practice, this means that you need a <em>generator</em> that can take a file &ldquo;foo.wsdl&rdquo; and spit out &ldquo;foo_client.java&rdquo; or whatever your favorite language.  Different generators have slightly different behaviors (of course, WSDL is a &ldquo;standard!&rdquo;); we&rsquo;ll be using <a href="http://cxf.apache.org/">Apache&rsquo;s CXF</a> to work with the uAPI in Java.  (&ldquo;CXF&rdquo; is not really an acronym in this case but is related to the project&rsquo;s origin.)</p>
+
+<h3>Downloading the tutorial code</h3>
+
+<p>You can download the tutorial code using github to clone the repository. You can use your favorite <a href="https://git.wiki.kernel.org/articles/i/n/t/Interfaces,_frontends,_and_tools.html">git tool</a> or just use the command line like this:</p>
+
+<pre><code class="bash">&gt; mkdir learn-tport
+&gt; cd learn-tport
+&gt; git clone git@github.com:iansmith/travelport-uapi-tutorial.git
+
+</code></pre>
+
+<h3>Generating A Java Version Of The API</h3>
+
+<p>This last command will create the directory <code>travelport-uapi-tutorial</code> and within that directory you will find the a few files that we will discuss later, plus the directories <code>src</code> and <code>wsdl</code>.  If you explore the <code>wsdl</code> directory, you&rsquo;ll see many WSDL files as well as a number of <a href="http://en.wikipedia.org/wiki/XSD">XML schemas</a>, as <code>xsd</code> files.  We need to generate java code from the WSDL files.</p>
 
 </body>
 </html>
