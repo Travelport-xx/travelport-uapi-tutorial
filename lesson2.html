@@ -88,30 +88,29 @@ DL#8517 from ATL to CDG at 2012-06-29T17:55:00.000-04:00
         Helper.daysInFuture(60), Helper.daysInFuture(67));
 </code></pre>
 
-<p>The two calls to the helper method <code>Helper.daysInFuture()</code> should be fairly self explanatory.  So, we&rsquo;ve setup all we need for a search now, right? We have the origin, destination, and dates of travel, so we are ready, right?  Not by a long shot!  The method <code>search</code> is implemented in <code>Lesson2</code> and is dozens of lines of code plus uses a number of helper routines.  &ldquo;Why all this extra code?&rdquo;, one may wonder.  The reason is that there are hundreds of parameters that can possibly be set on an air search, for far too many reasons than can be explained here.  However, some of these parameters are required to be set in <em>any</em> air travel search done with uAPI such as the (obvious) origin and destination but also which class of service should be considered (Economy is our default choice) and what type of passenger is traveling (Adult is our default choice, but there are more than 100 types of passengers such Military Veteran, Member Of The Clergy, etc).</p>
+<p>The two calls to the helper method <code>Helper.daysInFuture()</code> should be fairly self explanatory.  So, we&rsquo;ve setup all we need for a search now, right? We have the origin, destination, and dates of travel, so we are ready, right?  Not by a long shot!  The method <code>search</code> is implemented in <code>Lesson2</code> and is dozens of lines of code plus uses a number of helper routines.  &ldquo;Why all this extra code?&rdquo;, one may wonder.  The reason is that there are hundreds of parameters that can possibly be set on an air search, for far too many reasons than can be explained here.  However, some of these parameters are required to be set in <em>any</em> air travel search done with uAPI such as the (obvious) origin and destination but also which class of service should be considered (Economy is our default choice) and what type of passenger is traveling (Adult is our default choice, but there are more than 100 types of passengers such as Military Veteran, Member of the Clergy, etc).</p>
 
-<p>Here is a snippet from the implementation of the <code>search()</code> method:
-java</p>
+<p>Here is a snippet from the implementation of the <code>search()</code> method:</p>
 
-<pre><code>//R/T journey
-SearchAirLeg outbound = AirReq.createLeg(origin, dest);
-AirReq.addDepartureDate(outbound, dateOut);
-AirReq.addEconomyPreferred(outbound);
+<pre><code class="java">
+    //R/T journey
+    SearchAirLeg outbound = AirReq.createLeg(origin, dest);
+    AirReq.addDepartureDate(outbound, dateOut);
+    AirReq.addEconomyPreferred(outbound);
 
-//coming back
-SearchAirLeg ret = AirReq.createLeg(dest, origin);
-AirReq.addDepartureDate(ret, dateBack);
-//put traveller in econ
-AirReq.addEconomyPreferred(ret);    
+    //coming back
+    SearchAirLeg ret = AirReq.createLeg(dest, origin);
+    AirReq.addDepartureDate(ret, dateBack);
+    //put traveller in econ
+    AirReq.addEconomyPreferred(ret);
+
 </code></pre>
 
-<pre><code>
-The code above creates two &quot;legs&quot; for the search to consider: one outbound from `origin` to `dest` and one for the reverse (`ret`) one week later.  Each leg also has a departure date and what type of seat should be searched for.  Each line of this snippet with code on it uses a method from the [AirReq](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/AirReq.java) helper object.  These helper methods have been provided to try to make it easier to understand the examples or write new code that does similar things.  
+<p>The code above creates two &ldquo;legs&rdquo; for the search to consider: one outbound from <code>origin</code> to <code>dest</code> and one for the reverse (<code>ret</code>) one week later.  Each leg also has a departure date and what type of seat should be searched for.  Each line of this snippet with code on it uses a method from the <a href="https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/AirReq.java">AirReq</a> helper object.  These helper methods have been provided to try to make it easier to understand the examples or write new code that does similar things.</p>
 
-The `AirReq` class has no &quot;magic,&quot; of course.  This class is building various structures from the classes that were generated as part of work with `Air.wsdl`.  For example:
+<p>The <code>AirReq</code> class has no &ldquo;magic,&rdquo; of course.  This class is building various structures from the classes that were generated as part of work with <code>Air.wsdl</code>.  For example:</p>
 
-```java
-
+<pre><code class="java">
     public static SearchAirLeg createLeg(String originAirportCode,
         String destAirportCode) {
         
