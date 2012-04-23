@@ -88,12 +88,12 @@ The pattern used by the uAPI design is to expose a "port" which has a single met
 
 We now have the logical pieces necessary to understand how to use functionality exposed by the uAPI.  Let's think about this sequence of actions concretely with the ping port as an example:
 
-1. Create an object of type `PingReq`
-2. Fill in the necessary fields of the 'PingReq` using its "setter" methods
-3. Create an instance of the `SystemService`
-4. Access the `SystemService` object to get an object of type `SystemPingPortType`
-5. Call the method `service` on the `SystemPingPortType` instance, passing the `PingReq` object created in step 1
-6. Examine the results of our request by looking at the `PingRsp` object using its "getter" methods
+* Create an object of type `PingReq`
+* Fill in the necessary fields of the 'PingReq` using its "setter" methods
+* Create an instance of the `SystemService`
+* Access the `SystemService` object to get an object of type `SystemPingPortType`
+* Call the method `service` on the `SystemPingPortType` instance, passing the `PingReq` object created in step 1
+* Examine the results of our request by looking at the `PingRsp` object using its "getter" methods
 
 With very few exceptions, all the features and functions of the uAPI follow this pattern of "build the request parameters and use the port object to get the results."
 
@@ -214,11 +214,11 @@ INFO: Creating Service {http://www.travelport.com/service/system_v8_0}SystemServ
 This is a helpful message provided by the CXF framework to tell you it is creating a service based on a WSDL file and giving you some information about the endpoint it is using.  You control the "chattiness" of the CXF infrastructure by adjusting the values in the [logging.properties](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/logging.properties) file, just as with most other java applications.  Most people can safely ignore these messages, unless they are printed out to the `Warning` or `Error` logging levels!
 
 ### Exercises for the reader
-   1. Create a run configuration as above but for the [SystemSvcTest](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/SystemServiceTest.java) test code.  This is a JUnit4 style test suite so will require the appropriate configuration type in the Run Configurations menu.
+ * Create a run configuration as above but for the [SystemSvcTest](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/SystemServiceTest.java) test code.  This is a JUnit4 style test suite so will require the appropriate configuration type in the Run Configurations menu.
 
-   2. Change the ping values in Lesson1 and prove to yourself that the values being returned are the values you supplied.
+ * Change the ping values in Lesson1 and prove to yourself that the values being returned are the values you supplied.
 
-   3. Modify the code in Lesson1 to use the "time port" (`SystemTimePortType`).  This will require that you discover how to get access to different ports (via the `WSDLService` helper class) and that you supply different request and response types to match the appropriate types for this different function.   The `time port` returns the current time according to TravelPort if you succeed in calling it.
+ * Modify the code in Lesson1 to use the "time port" (`SystemTimePortType`).  This will require that you discover how to get access to different ports (via the `WSDLService` helper class) and that you supply different request and response types to match the appropriate types for this different function.   The `time port` returns the current time according to TravelPort if you succeed in calling it.
 
 ----------------------
 

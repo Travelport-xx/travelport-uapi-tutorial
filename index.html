@@ -95,14 +95,14 @@
 
 <p>We now have the logical pieces necessary to understand how to use functionality exposed by the uAPI.  Let&rsquo;s think about this sequence of actions concretely with the ping port as an example:</p>
 
-<ol>
+<ul>
 <li>Create an object of type <code>PingReq</code></li>
 <li>Fill in the necessary fields of the &lsquo;PingReq using its &ldquo;setter&rdquo; methods</li>
 <li>Create an instance of the <code>SystemService</code></li>
 <li>Access the <code>SystemService</code> object to get an object of type <code>SystemPingPortType</code></li>
 <li>Call the method <code>service</code> on the <code>SystemPingPortType</code> instance, passing the <code>PingReq</code> object created in step 1</li>
 <li>Examine the results of our request by looking at the <code>PingRsp</code> object using its &ldquo;getter&rdquo; methods</li>
-</ol>
+</ul>
 
 <p>With very few exceptions, all the features and functions of the uAPI follow this pattern of &ldquo;build the request parameters and use the port object to get the results.&rdquo;</p>
 
@@ -217,13 +217,13 @@ E07E825F0A07580E004DED8EB9130465
 
 <h3>Exercises for the reader</h3>
 
-<ol>
+<ul>
 <li><p>Create a run configuration as above but for the <a href="https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/SystemServiceTest.java">SystemSvcTest</a> test code.  This is a JUnit4 style test suite so will require the appropriate configuration type in the Run Configurations menu.</p></li>
 
 <li><p>Change the ping values in Lesson1 and prove to yourself that the values being returned are the values you supplied.</p></li>
 
 <li><p>Modify the code in Lesson1 to use the &ldquo;time port&rdquo; (<code>SystemTimePortType</code>).  This will require that you discover how to get access to different ports (via the <code>WSDLService</code> helper class) and that you supply different request and response types to match the appropriate types for this different function.   The <code>time port</code> returns the current time according to TravelPort if you succeed in calling it.</p></li>
-</ol>
+</ul>
 
 <hr />
 
