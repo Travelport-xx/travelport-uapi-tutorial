@@ -104,7 +104,36 @@
 
 <h3>Lesson 1 Proper</h3>
 
-<p>The file <a href="https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/Lesson1.java">Lesson1.java</a> is in the Java package <a href="https://github.com/iansmith/travelport-uapi-tutorial/tree/master/src/com/travelport/uapi/unit1">com.travelport.uapi.unit</a>.  You&rsquo;ll notice that in the web-viewable version of this tutorial, we often make the names of files, packages, or even functions direct links into the github repository for the tutorial.  This is to make it easy for those that just want to read the tutorial without &ldquo;playing along at home&rdquo; and compiling/running all the code.</p>
+<p>The file <a href="https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/Lesson1.java">Lesson1.java</a> is in the Java package <a href="https://github.com/iansmith/travelport-uapi-tutorial/tree/master/src/com/travelport/uapi/unit1">com.travelport.uapi.unit</a>.  You&rsquo;ll notice that in the web-viewable version of this tutorial, we often make the names of files and packages direct links into the github repository for the tutorial.  This is to make it easy for those that just want to read the tutorial without &ldquo;playing along at home&rdquo; and compiling/running all the examples.</p>
+
+<p>Let&rsquo;s examine the <code>main</code> method of Lesson 1:</p>
+
+<pre><code class="java">public static void main(String[] argv) {        
+    //
+    // PING REQUEST
+    //
+    String payload= &quot;this my payload; there are many like it but this one is mine&quot;;
+    String someTraceId = &quot;doesntmatter-8176&quot;;
+    
+    //set up the request parameters into a PingReq object
+    PingReq req = new PingReq();
+    req.setPayload(payload);
+    req.setTraceId(someTraceId);
+    
+    try {
+        //run the ping request
+        PingRsp rsp = Helper.WSDLService.getPing().service(req);
+        //print results.. payload and trace ID are echoed back in response
+        System.out.println(rsp.getPayload());
+        System.out.println(rsp.getTraceId());
+        System.out.println(rsp.getTransactionId());
+    } catch (SystemFaultMessage e) {
+        //usually only the error message is useful, not the full stack
+        //trace, since the stack trace in is your address space...
+        System.err.println(&quot;Error making ping request: &quot;+e.getMessage());
+    }
+}
+</code></pre>
 
 </body>
 </html>

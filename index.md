@@ -95,7 +95,38 @@ With very few exceptions, all the features and functions of the uAPI follow this
 
 ### Lesson 1 Proper
 
-The file [Lesson1.java](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/Lesson1.java) is in the Java package [com.travelport.uapi.unit](https://github.com/iansmith/travelport-uapi-tutorial/tree/master/src/com/travelport/uapi/unit1).  You'll notice that in the web-viewable version of this tutorial, we often make the names of files, packages, or even functions direct links into the github repository for the tutorial.  This is to make it easy for those that just want to read the tutorial without "playing along at home" and compiling/running all the code.
+The file [Lesson1.java](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/Lesson1.java) is in the Java package [com.travelport.uapi.unit](https://github.com/iansmith/travelport-uapi-tutorial/tree/master/src/com/travelport/uapi/unit1).  You'll notice that in the web-viewable version of this tutorial, we often make the names of files and packages direct links into the github repository for the tutorial.  This is to make it easy for those that just want to read the tutorial without "playing along at home" and compiling/running all the examples.
+
+Let's examine the `main` method of Lesson 1:
+
+```java
+public static void main(String[] argv) {		
+	//
+	// PING REQUEST
+	//
+	String payload= "this my payload; there are many like it but this one is mine";
+	String someTraceId = "doesntmatter-8176";
+	
+	//set up the request parameters into a PingReq object
+	PingReq req = new PingReq();
+	req.setPayload(payload);
+	req.setTraceId(someTraceId);
+	
+	try {
+		//run the ping request
+		PingRsp rsp = Helper.WSDLService.getPing().service(req);
+		//print results.. payload and trace ID are echoed back in response
+		System.out.println(rsp.getPayload());
+		System.out.println(rsp.getTraceId());
+		System.out.println(rsp.getTransactionId());
+	} catch (SystemFaultMessage e) {
+		//usually only the error message is useful, not the full stack
+		//trace, since the stack trace in is your address space...
+		System.err.println("Error making ping request: "+e.getMessage());
+	}
+}
+```
+
 
 
 
