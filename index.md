@@ -1,10 +1,14 @@
 # Getting Started With The TravelPort Universal API
 
-### Unit 1, Lesson 1
+## Unit 1, Lesson 1
+
+### Objective Of Unit 1
+
+After working through the three lessons of Unit 1, you should be able to work with the TravelPort Universal API to make requests for services and understand the responses.  You will become familiar with "web services" if you are not already.
 
 ### WSDL
 
-Although these lessons are using Java, the lessons' concepts apply to pretty much any programming language.  The _interface_ to the Universal API (uAPI) is defined with [WSDL](http://en.wikipedia.org/wiki/Web_Services_Description_Language) or Web Services Definition Language, pronounced "whiz-dul".  This means that any programming language that knows how to "use web services" can access the APIs and get useful things done.  In practice, this means that you need a _generator_ that can take a file "foo.wsdl" and spit out "foo_client.java", or whatever, in your favorite language.  Different generators have slightly different behaviors (of course, WSDL is a "standard!"); we'll be using [Apache's CXF](http://cxf.apache.org/) to work with the uAPI in Java.  ("CXF" is not really an acronym in this case but is related to the project's origin.)
+Although these lessons are using Java, the lessons' concepts apply to pretty much any programming language.  The _interface_ to the Universal API (uAPI) is defined with [WSDL](http://en.wikipedia.org/wiki/Web_Services_Description_Language) or Web Services Definition Language, pronounced "whiz-dul".  This means that any programming language that knows how to "use web services" can access the APIs and get useful things done.  In practice, this means that you need a _generator_ that can take a file "foo.wsdl" and spit out "foo_client.java", or whatever, in your favorite language.  Different generators have slightly different behaviors (of course, WSDL is a "standard!"); we'll be using [Apache's CXF](http://cxf.apache.org/) to work with the uAPI in Java.  ("CXF" is not an acronym, but is related to the project's origin.)
 
 ### Downloading the tutorial code
 
@@ -48,7 +52,7 @@ When you select that option in eclipse, you'll be presented with a sequence of t
 <img src="images/generate-client-dialog3.png"/>
 <br/>
 
-On the first screenshot in this sequence, the red box indicates a slider.  This slider can be moved to another position if you are the type of person who doesn't like having "errors" on your screen.  The last dialog box in the sequence shows that there are number of checkbox selected that control the generation of the Java code.  The lower set of checkboxes that are checked (such as -Xts and -Xts:multiline) are not crucial to having the tutorial work properly, but do make debugging easier.
+On the first screenshot in this sequence, the red box indicates a slider.  This slider can be moved to another position, non error position, if you are the type of person who doesn't like having "errors" on your screen.  The last dialog box in the sequence shows that there are number of checkboxes selected; these control various options in CXF's generation of the Java code.  The lower set of checkboxes that are checked (such as -Xts and -Xts:multiline) are not crucial to having the tutorial work properly, but do make debugging easier.
 
 #### Command Line Generation Of A Java Client
 
@@ -66,10 +70,30 @@ If you use the WDT viewer for a WSDL file, you will see this image when you open
 <img src="images/SystemService.png"/>
 <br/>
 
-(There are tabs at the bottom of the main editor view to control whether you view this file in "design view" or as a normal source code file.)  This shows you that there are two "Services" exposed by `System` WSDL: `ExternalCacheAccessService` and `SystemService`.  The latter is the one we will be working with the rest of this lesson.  You can see the java code that has been generated for this service in your project's src folder the class `com.travelport.service.system_v8_0.SystemService`.  Although you are welcome to read and explore the source, the good news is that you can *safely ignore* all the implementation details about this service.  This the beauty of WSDL!
+(There are tabs at the bottom of the main editor view to control whether you view this file in "design view" or as a normal source code file.)  This shows you that there are two "Services" exposed by `System` WSDL: `ExternalCacheAccessService` and `SystemService`.  Often we will get a sloppy with the nomenclature and refer to the "system service" as any object that is accessible from objects _generated from the System.wsdl file_.  In this case, the real, concrete class `SystemService` is derived from `System.wsdl` so there is less confusion, but this can become more confusing with WSDL files (like `Air.wsdl`) that expose many "services" as a by-product of generating the code for the "Air service." Whew!
+ 
+We will be working only with `SystemService` for the rest of this lesson.  You can see the java code that has been generated for this service in your project's src folder the class `com.travelport.service.system_v8_0.SystemService`.  Although you are welcome to read and explore the source, the good news is that you can *safely ignore* all the implementation details about this service.  This the beauty of WSDL!
 
-Referring back to the diagram for `SystemService` above, you'll see that there are three "ports" exposed by the `SystemService`: `SystemInfoPortType`, `SystemPingPortType`, and the `SystemTimePortType`.  The pattern used by the uAPI design is to expose a "port" which has a single method, usually we refer to the port object just by its name without the prefix or suffix such as "the ping port."  The ping port's only method is "service" as you can see from the diagram; far more interesting is that the input and output parameters are of type `PingReq` and `PingRsp` for the request and response respectively.  You can find the source code for these classes in the src Java folder with a name like `com.travelport.schema.system_v8_0.PingReq`.  
+Referring back to the diagram for `SystemService` above, you'll see that there are three "ports" exposed by the `SystemService`: `SystemInfoPortType`, `SystemPingPortType`, and the `SystemTimePortType`.  In the code for this lesson, we'll run a simple ping request through the `SystemPingPortType`.
 
 ### The Programming Model
+
+The pattern used by the uAPI design is to expose a "port" which has a single method called, sadly, "service." Usually we refer to the port object just by its name without the prefix or suffix such as "the ping port."  (All the ports exposed from the file `System.wsdl` start with "System" and end with "PortType.")  The ping port's only method is "service," as you can see from the diagram; far more interesting is the fact the diagram shows you the input and output parameters are of type `PingReq` and `PingRsp` for the request and response respectively.  You can find the source code for these classes in the src Java folder with a name like `com.travelport.schema.system_v8_0.PingReq` or you can explore them with design view of `System.wsdl`.  Again, the details of the implementation are not important to you, you can just _use_ these facilities as part of the uAPI.
+
+We now have the logical pieces necessary to understand how to use functionality exposed by the uAPI.  Let's thing about this sequence of actions concretely with the ping port:
+
+1. Create an object of type `PingReq`
+2. Fill in the necessary fields of the 'PingReq` using its "setter" methods
+3. Create an instance of the `SystemService`
+4. Access the `SystemService` object to get an object of type `SystemPingPortType`
+5. Call the method `service` on the `SystemPingPortType` instance, passing the `PingReq` object created in step 1
+6. Examine the results of our request by looking at the `PingRsp` object using its "getter" methods
+
+With very few exceptions, all the features and functions of the uAPI follow this pattern of "build the request parameters and use the port object to get the results."
+
+### Getting a copy of the tutorial code
+
+
+
 
 
