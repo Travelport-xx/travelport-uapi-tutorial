@@ -102,6 +102,8 @@ public class SystemSvcTest {
 	public void testGetSystemInfoPort() throws SystemFaultMessage{
 		SystemInfoReq request = new SystemInfoReq();
 		
+		Helper.setShowXML(WSDLService.getInfo());
+		
 		//no parameters to set on this request! we can take all the defaults??
 		WSDLService.getInfo().service(request);
 		fail("we are expecting the line above to fail.  but still... why is " +

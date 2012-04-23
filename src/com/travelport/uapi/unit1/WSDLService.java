@@ -15,6 +15,7 @@ import com.travelport.service.system_v8_0.*;
  */
 public class WSDLService {
 	static protected AirLowFareSearchPortType lowFareSearch;
+	static protected AirLowFareSearchAsynchPortType lowFareSearchAsynch;
 	static protected AirAvailabilitySearchPortType availabilitySearch;
 	static protected AirPricePortType price;
 	static protected SystemPingPortType ping;
@@ -39,7 +40,7 @@ public class WSDLService {
 	static protected String AIR_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/AirService";
 
 	/**
-	 * Get access to the low fare object.
+	 * Get access to the low fare object -- synchonous version.
 	 * 
 	 * @return the port for low fare search
 	 */
@@ -56,6 +57,25 @@ public class WSDLService {
 		addParametersToProvider((BindingProvider) lowFareSearch,
 				AIR_ENDPOINT);
 		return lowFareSearch;
+	}
+	/**
+	 * Get access to the low fare object -- asynchonous version.
+	 * 
+	 * @return the port for low fare search
+	 */
+	public static AirLowFareSearchAsynchPortType getLowFareSearchAsynch() {
+		if (lowFareSearchAsynch != null) {
+			return lowFareSearchAsynch;
+		}
+		URL url = getURLForWSDL(AIR_WSDL);
+		checkProperties();
+		if (airService==null) {
+			airService = new AirService(url);
+		}
+		lowFareSearchAsynch = airService.getAirLowFareSearchAsynchPort();
+		addParametersToProvider((BindingProvider) lowFareSearchAsynch,
+				AIR_ENDPOINT);
+		return lowFareSearchAsynch;
 	}
 	/**
 	 * Get access to the availability
@@ -214,8 +234,8 @@ public class WSDLService {
 
 	public static void addParametersToProvider(BindingProvider provider,
 			String endpoint) {
-		provider.getRequestContext().put(
-				BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint);
+		provider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, 
+				endpoint);
 		provider.getRequestContext().put(BindingProvider.USERNAME_PROPERTY,
 				System.getProperty("travelport.username"));
 		provider.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY,

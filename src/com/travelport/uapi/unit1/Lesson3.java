@@ -3,19 +3,36 @@ package com.travelport.uapi.unit1;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.endpoint.ClientImpl;
+import org.apache.cxf.frontend.ClientProxy;
+import org.apache.cxf.transport.http.HTTPConduit;
+import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
+
 import com.travelport.schema.air_v18_0.*;
 import com.travelport.schema.rail_v12_0.RailPricingSolution;
 import com.travelport.service.air_v18_0.AirFaultMessage;
+import com.travelport.service.air_v18_0.AirLowFareSearchAsynchPortType;
 
 public class Lesson3 {
 	public static void main(String[] argv) {
-		//pick a pair of cityies that might be better to go via rail
+		//pick a pair of cities that might be better to go via rail and have
+		//low cost carrier options
 		String origin = "GLA", destination = "LON";
-		LowFareSearchReq req = createLowFareSearchWithRail(origin,
+		LowFareSearchAsynchReq req = new LowFareSearchAsynchReq();
+		
+		
+		//a zero timeout means to never time-out... these are in millis
+		//setTimeouts(30 * 1000/*30 secs to connect*/,5 * 60 * 1000 /*wait up to five mins fon read*/);
+
+		//this creates the request parameters... and doesn't care if the request
+		//is synchronous or asynch
+		createLowFareSearchWithRail(req, origin,
 				destination, 30, 32);
 		
 		try {
-			LowFareSearchRsp rsp = Helper.WSDLService.getLowFareSearch().service(req);
+			System.out.println("can take up to one minute for first results...");
+			LowFareSearchAsynchRsp rsp = WSDLService.getLowFareSearchAsynch().service(req);
 			Helper.AirSegmentMap allAirSegments = null;
 			Helper.RailJourneyMap allRailJourneys = null;
 			Helper.RailSegmentMap allRailSegments = null;
@@ -52,9 +69,36 @@ public class Lesson3 {
 		}
 		
 	}
+
+	/**
+	 * We are going to do some munging with the underlying transport to set
+	 * the timeouts since this request may take a long time.
+	 */
+	public static void setTimeouts(int connectTimeout, int receiveTimeout) {
+		//we get the low level object because we need to set some properties
+		//on it... note that these objects are singletons inside the 
+		//WSDL service object because 1) they might as well be and 
+		//2) they are slow to create... so we are modifying the same
+		//object that will be returned to the code in the main() above
+		AirLowFareSearchAsynchPortType lowFareAsynch = WSDLService.getLowFareSearchAsynch();
+		//extract the "client" object inside the communications framework
+		Client cl = ClientProxy.getClient(lowFareAsynch);
+		//now get the conduit built on HTTP
+		HTTPConduit http = (HTTPConduit) cl.getConduit();
+		//now create a policy for this HTTP conduit
+		HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
+		httpClientPolicy.setConnectionTimeout(connectTimeout);
+		httpClientPolicy.setAllowChunking(false);
+		httpClientPolicy.setReceiveTimeout(receiveTimeout);
+		http.setClient(httpClientPolicy);
+		
+		ClientImpl impl = (ClientImpl)cl;
+		impl.setSynchronousTimeout(receiveTimeout);
+		
+	}
 	
 	/**
-	 * Create the low fare request in preparation for doing an asynchronous
+	 * Update the low fare request in preparation for doing an asynchronous
 	 * request.
 	 * 
 	 * @param origin  
@@ -63,9 +107,8 @@ public class Lesson3 {
 	 * @param returnDaysInFuture number of days from "now"
 	 * @return
 	 */
-	public static LowFareSearchReq createLowFareSearchWithRail(String originAirportcode, String destAirportCode,
+	public static void createLowFareSearchWithRail(BaseLowFareSearchReq request, String originAirportcode, String destAirportCode,
 			int departureDaysInFuture, int returnDaysInFuture) {
-		LowFareSearchReq request = new LowFareSearchReq();
 		
 		//add in the tport branch code
 		request.setTargetBranch(System.getProperty("travelport.targetBranch"));
@@ -102,7 +145,5 @@ public class Lesson3 {
 		
 		//one adult passenger
 		AirReq.addAdultPassengers(request, 1);
-		
-		return request;
 	}
 }

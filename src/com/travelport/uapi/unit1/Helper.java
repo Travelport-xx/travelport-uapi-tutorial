@@ -8,6 +8,11 @@ import java.util.*;
 
 import javax.xml.ws.BindingProvider;
 
+import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.frontend.ClientProxy;
+import org.apache.cxf.interceptor.LoggingInInterceptor;
+import org.apache.cxf.interceptor.LoggingOutInterceptor;
+
 import com.travelport.schema.air_v18_0.AirSegment;
 import com.travelport.schema.air_v18_0.FlightDetails;
 import com.travelport.schema.rail_v12_0.RailJourney;
@@ -368,6 +373,18 @@ public class Helper {
 			throw new RuntimeException("Really unlikely, but it looks like "+
 			"travelport is not using ISO dates anymore! "+e.getMessage());
 		}
+	}
+
+	/**
+	 * Turn on the debugging interceptors that display the XML on the console.
+	 * @param info
+	 */
+	public static void setShowXML(Object port) {
+		Client cl = ClientProxy.getClient(port);
+		
+        cl.getInInterceptors().add(new LoggingInInterceptor());
+        cl.getOutInterceptors().add(new LoggingOutInterceptor());
+		
 	}
 
 }

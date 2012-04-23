@@ -36,7 +36,7 @@ public class AirReq {
 	 * @param request the req to add the passenger parameter to
 	 * @param n number of adults to put in the requset
 	 */
-	public static void addAdultPassengers(LowFareSearchReq request, int n) {
+	public static void addAdultPassengers(BaseLowFareSearchReq request, int n) {
 		for (int i = 0; i < n; ++i) {
 			SearchPassenger adult = new SearchPassenger();
 			adult.setCode("ADT");
