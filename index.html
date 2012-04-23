@@ -1,20 +1,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <title></title>
+  <title>Getting Started With The TravelPort Universal API</title>
   <meta name="GENERATOR" content="Blackfriday Markdown Processor v1.1" />
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="stylesheet" type="text/css" href="css/base.css" />
 </head>
 <body>
 
-<p>#Getting Started With The TravelPort Universal API</p>
+<h1>Getting Started With The TravelPort Universal API</h1>
 
-<p>###Unit 1, Lesson 1</p>
+<h3>Unit 1, Lesson 1</h3>
 
 <h3>WSDL</h3>
 
-<p>Although these lessons are using Java the lessons concepts apply to pretty much any programming language.  The <em>interface</em> to the Universal API (uAPI) is defined with WSDL or Web Services Definition Language, pronounced &ldquo;whiz-dul&rdquo;.  This means that any programming language that knows how to &ldquo;use web services&rdquo; can access the APIs and get useful things done.  In practice, this means that you need a <em>generator</em> that can take a file &ldquo;foo.wsdl&rdquo; and spit out &ldquo;foo_client.java&rdquo; or whatever your favorite language.  Different generators have slightly different behaviors (of course, WSDL is a &ldquo;standard!&rdquo;); we&rsquo;ll be using <a href="http://cxf.apache.org/">Apache&rsquo;s CXF</a> to work with the uAPI in Java.  (&ldquo;CXF&rdquo; is not really an acronym in this case but is related to the project&rsquo;s origin.)</p>
+<p>Although these lessons are using Java, the lessons&rsquo; concepts apply to pretty much any programming language.  The <em>interface</em> to the Universal API (uAPI) is defined with <a href="http://en.wikipedia.org/wiki/Web_Services_Description_Language">WSDL</a> or Web Services Definition Language, pronounced &ldquo;whiz-dul&rdquo;.  This means that any programming language that knows how to &ldquo;use web services&rdquo; can access the APIs and get useful things done.  In practice, this means that you need a <em>generator</em> that can take a file &ldquo;foo.wsdl&rdquo; and spit out &ldquo;foo_client.java&rdquo;, or whatever, in your favorite language.  Different generators have slightly different behaviors (of course, WSDL is a &ldquo;standard!&rdquo;); we&rsquo;ll be using <a href="http://cxf.apache.org/">Apache&rsquo;s CXF</a> to work with the uAPI in Java.  (&ldquo;CXF&rdquo; is not really an acronym in this case but is related to the project&rsquo;s origin.)</p>
 
 <h3>Downloading the tutorial code</h3>
 
@@ -25,6 +25,10 @@
 &gt; git clone git@github.com:iansmith/travelport-uapi-tutorial.git
 
 </code></pre>
+
+<h3>Apache CXF</h3>
+
+<p>Apache&rsquo;s CXF is the critical &ldquo;glue&rdquo; for connecting TravelPort&rsquo;s web services to our tutorial code.  (There are plenty of other choices using web services in Java, CXF is just a very popular one.)  You&rsquo;ll need to <a href="http://cxf.apache.org/download.html">download and install</a> the Apache CXF code; this tutorial expects you to be using at least version 2.6.0.  If you are using <a href="http://www.eclipse.org">Eclipse</a> like most Java developers, you can install the CXF directly into Eclipse by going to &ldquo;Preferences &gt; WebServices&rdquo;.  (If you don&rsquo;t have this preference option, you&rsquo;ll need to install the web services plugin for Eclipse.)</p>
 
 <h3>Generating A Java Version Of The API</h3>
 
