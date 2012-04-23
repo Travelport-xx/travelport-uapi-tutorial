@@ -88,8 +88,7 @@ Here is a snippet from the implementation of the `search()` method:
 	SearchAirLeg ret = AirReq.createLeg(dest, origin);
 	AirReq.addDepartureDate(ret, dateBack);
 	//put traveller in econ
-	AirReq.addEconomyPreferred(ret);
-	
+	AirReq.addEconomyPreferred(ret);	
 ```
 
 The code above creates two "legs" for the search to consider: one outbound from `origin` to `dest` and one for the reverse (`ret`) one week later.  Each leg also has a departure date and what type of seat should be searched for.  Each line of this snippet with code on it uses a method from the [AirReq](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/AirReq.java) helper object.  These helper methods have been provided to try to make it easier to understand the examples or write new code that does similar things.  
@@ -116,9 +115,11 @@ The `AirReq` class has no "magic," of course.  This class is building various st
 
 		return createLeg(originLoc, destLoc);
 	}
-
 ```
 
 This is the code that creates a single `SearchAirLeg` object that is part of our request to the TravelPort uAPI for an availability search.  You can see from the code above that locations are more complicated objects than one might expect... they _can_ be an airport code as in this example, or they can be more complex entities such as "all locations near a given a city" as we will see in Lesson 3.
 
 It is worth the time look at the implementation of `AirReq` so that you can see, even for the relatively simple searches we are doing here the number of different options, and thus different classes and structures, that are used.
+
+### Decoding The Result
+
