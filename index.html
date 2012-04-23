@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title></title>
+  <meta name="GENERATOR" content="Blackfriday Markdown Processor v1.1" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="css/base.css" />
+</head>
+<body>
+
+<p>#Getting Started With The TravelPort Universal API</p>
+
+<p>###Unit 1, Lesson 1</p>
+
+<p>##Set-up, understanding the libraries, and Ping!</p>
+
+<p>Downloading the code</p>
+
+<p>So, you want to write an application that uses the Travelport Universal API, the uApi?
+To paraphrase Dennis Richie and Brian Kernighan, “the only way to learn a new API is to write programs with it.”</p>
+
+<p>Let’s get started building the equivalent of “Hello, world.” using the uApi.
+<code>bash
+$ curl http://developer.travelport.com/XXX_TBD_.zip
+$ unzip XXX_TBD_.zip
+</code></p>
+
+<p>The commands above download the zip file for all the lessons in this series, and unpacks that zip into the current directory. You don’t need to use these commands specifically if you prefer to use other ways to download and unpack web content.</p>
+
+<p>After you have unpacked the zip file, you should go into the freshly-created directory <code>lesson1/src/lntport</code>. (In these lessons we use the unix-style forward slashes as the directory separator; on windows you should use backslash, like this \.)</p>
+
+<p>Inside lntport (“learn travelport!”) you’ll see the directories home, transport, and util as well as an empty file <strong>init</strong>.py.
+home contains models and views for use later when we combine the uApi with Facebook.
+transport Contains code to connect to and exchange XML documents with the uApi.
+util Contains a copy of the Facebook App and miscellaneous utility code.</p>
+
+<p>Python needed for the lessons, not for uApi!</p>
+
+<p>If you noticed the .py on the end of the <strong>init</strong>.py file mentioned above, you will have realized that the examples in these lessons will be written in Python. Although you will need to install a python interpreter (http://python.org) that is version 2.7 (not version 3.0) to run the code in these lessons, none of the concepts in these lessons are specific to Python.</p>
+
+<p>The uApi is agnostic about what programming language you develop in.</p>
+
+<p>We’ve used Python for this tutorial because there is a convenient way to interact with Facebook via Python and because it makes the examples quite brief.
+Credentials</p>
+
+<p>If you don’t have them already, you’ll need to request a set of 30-day trial credentials for using the uAPI. You can request these on <a href="http://www.travelportdeveloperdirectory.com/forms/request-test-access.php">http://www.travelportdeveloperdirectory.com/forms/request-test-access.php</a>. However, this web page cannot be navigated to via the menus on <a href="http://developer.travelport.com/app/developer-network/resource-centre-uapi">http://developer.travelport.com/app/developer-network/resource-centre-uapi</a> unless you have already created an account on the website <a href="http://developer.travelport.com">http://developer.travelport.com</a>. When you request test credentials, you should choose “Galileo” as your preferred GDS.
+After you have filled out the form, in a few minutes you’ll receive some email from “webmaster@travelport.com” with the relevant information.
+Starting up</p>
+
+<p>Let’s create a python file for this lesson and call it lesson1.py:
+##</p>
+
+<h2>boilerplate to allow you to run &ldquo;special&rdquo; code only in the case where this</h2>
+
+<h2>is the entry point of a program&hellip; &ldquo;pass&rdquo; in the python function that does</h2>
+
+<h2>nothing.</h2>
+
+<p>##
+if <strong>name</strong> == &lsquo;<strong>main</strong>&lsquo;:
+    pass</p>
+
+<p>##</p>
+
+<h2>This imports the name &ldquo;travelport_proxy&rdquo; into our code so we can access</h2>
+
+<h2>functions on that object.  This code is in</h2>
+
+<h2>src/lntport/transport/travelport_proxy.py if you are curious.</h2>
+
+<p>##
+import transport.travelport_proxy</p>
+
+<p>This is as good a time as any to work out your PYTHONPATH. If you are using a development environment, such as Eclipse, you need to add configuration settings so that python can find the source code inside your project. You should add the src directory of the project to the set of places searched. If you are using the command-line version of python (usually just called “python”), you will need to set the environment variable PYTHONPATH to the full directory path of the src directory in this project.</p>
+
+<p>You will probably still have some imports that cannot be resolved in the project as a whole. To make these go away, follow the instructions for installing “Django 1.3” (https://www.djangoproject.com/) and adding it to your PYTHONPATH. You’ll also need to install “lxml” (http://lxml.de/installation.html). The former is a toolkit for processing web requests–something we will need to handle facebook integration later on–and the latter is a lightning-fast xml processor…. that we’ll use today!
+Credentials in the code</p>
+
+<p>Although it’s better to not put credentials directly in the code, especially if you use a source code control system, we are going to break the rule here in the name of simplicity:
+##</p>
+
+<h2>Per user configuration.  You typically receive this information in your</h2>
+
+<h2>welcome message when you sign up for test credentials with</h2>
+
+<h2>developer.travelport.com  (requires login to website)</h2>
+
+<p>##
+host = &lsquo;emea.universal-api.travelport.com&rsquo;
+url = &lsquo;https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/&rsquo;
+username=&lsquo;Universal API/uAPI0000000000-00000000&rsquo;
+password = &lsquo;XXX&rsquo;
+gds_provider = &lsquo;1P&rsquo;
+target_branch = &lsquo;P100000&rsquo;</p>
+
+<p>Obviously, you should supply the appropriate credentials that you received in email as well as adjusting the host and url to the appropriate values for your location. Getting these latter two values correct improves the performance of the uApi, since it avoids the need to send bits across oceans!
+See the uApi documentation for “Accessing Universal API Services” for a complete list of URLs that includes Americas, Asia-Pacific, and the test and production URLs.
+Services</p>
+
+<p>Be careful that you terminate the url with a slash because internally the code we have supplied will append the name of the “service” to that URL when it actually makes a request over the network.</p>
+
+<p>A service (or, more precisely “service endpoint”) in the terms of the uApi is a URL that starts as above plus has the suffix for the service that implements the call. For example, <a href="https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/AirService">https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/AirService</a> is the needed service URL when searching for air fares.
+Ping</p>
+
+<p>The uApi’s System service has a method called ping that simply tests that the connectivity has been correctly established between your computer and the Travelport system. Here is the code you need to test your connectivity:
+##</p>
+
+<h2>Create the proxy that turns python objects into travelport API calls</h2>
+
+<h2>and vice versa.</h2>
+
+<p>##
+proxy = transport.travelport_proxy.TravelportProxy(url,host,username,password,\
+                                                    target_branch,gds_provider)</p>
+
+<h2>make a ping request</h2>
+
+<p>pingResult = proxy.ping(&lsquo;this is a test of the emergency ping system&rsquo;)
+if pingResult == None:
+    print &ldquo;Ping was successful!&rdquo;
+else:
+    print &ldquo;Ping error:&ldquo;+pingResult</p>
+
+<p>The Role Of The Proxy, Marshalling/Unmarshalling XML</p>
+
+<p>The proxy object created in this bit of code is “bound” to the credentials you have supplied. The proxy’s primary function is turn method calls on itself into XML documents that are sent to the uAPI in the appropriate format. The proxy does the reverse for returned results from the API. You can see this in action with the call proxy.ping() where we supply a sample string–you can use anything for this. The proxy will create the necessary XML for a ping request wrapped around the supplied “payload” (see the ping documentation on <a href="http://developer.travelport.com">http://developer.travelport.com</a> for more on the parts of the ping request). When the result is returned from uAPI, the proxy checks that the correct payload was “pinged back” and it returns None (a python constant similar to null in other languages) on success. If there was an error, the proxy returns an error string to explain the problem.
+It should be clear from this example that the proxy hides the complexity of the XML input and output to and from uApi in method call arguments and return values. This “hiding” can be handled in any programming language; most modern languages have the ability to marshal (“pack”) and unmarshal (“unpack”) XML documents to and from a set of variables, a dictionary or a struct as is appropriate for the language.
+Running</p>
+
+<p>You should now be able to run the whole program from your development environment (the “Run” menu in Eclipse, for example) or the command line. From the command line, you can invoke the python interpreter on this source code like this:
+$ python lesson1.py</p>
+
+<p>and you should see the output:
+Ping was successful!</p>
+
+<p>If you see something starting with “Ping Error” you have a problem with your connectivity–usually it’s a problem with the credentials when ping fails.</p>
+
+<p>In the next lesson, we will discuss how to make more interesting request, such as searching for airfares.</p>
+
+</body>
+</html>
