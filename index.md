@@ -214,9 +214,12 @@ INFO: Creating Service {http://www.travelport.com/service/system_v8_0}SystemServ
 This is a helpful message provided by the CXF framework to tell you it is creating a service based on a WSDL file and giving you some information about the endpoint it is using.  You control the "chattiness" of the CXF infrastructure by adjusting the values in the [logging.properties](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/logging.properties) file, just as with most other java applications.  Most people can safely ignore these messages, unless they are printed out to the `Warning` or `Error` logging levels!
 
 ### Exercises for the reader
+   1. Create a run configuration as above but for the [SystemSvcTest](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/SystemServiceTest.java) test code.  This is a JUnit4 style test suite so will require the appropriate configuration type in the Run Configurations menu.
 
- 1. Create a run configuration as above but for the [SystemSvcTest](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/SystemServiceTest.java) test code.  This is a JUnit4 style test suite so will require the appropriate configuration type in the Run Configurations menu.
+   2. Change the ping values in Lesson1 and prove to yourself that the values being returned are the values you supplied.
 
- 2. Change the ping values in Lesson1 and prove to yourself that the values being returned are the values you supplied.
+   3. Modify the code in Lesson1 to use the "time port" (`SystemTimePortType`).  This will require that you discover how to get access to different ports (via the `WSDLService` helper class) and that you supply different request and response types to match the appropriate types for this different function.   The `time port` returns the current time according to TravelPort if you succeed in calling it.
 
- 3. Modify the code in Lesson1 to use the "time port" (`SystemTimePortType`).  This will require that you discover how to get access to different ports (via the `WSDLService` helper class) and that you supply different request and response types to match the appropriate types for this different function.   The `time port` returns the current time according to TravelPort if you succeed in calling it.
+----------------------
+
+[Proceed To Lesson2](lesson2.html)
