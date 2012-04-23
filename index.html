@@ -163,5 +163,64 @@ static protected String AIR_ENDPOINT = &quot;https://emea.universal-api.travelpo
 
 <p>The red boxes show you the tab you need to use to get to this configuration option and where to supply the values. The values are included in your sign-up documents from the TravelPort website.  Note that each of the parameters of the form -Dxxx=&ldquo;yyy&rdquo; and are separated by spaces.  The values are always quoted and the key names always begin with &ldquo;travelport&rdquo;.</p>
 
+<p>After you have made the adjustments necessary for your account to this panel, return to <code>WSDLService</code>(https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/WSDLService.java) file one last time.  You&rsquo;ll see the <code>URLPrefix</code> value is set like this near the top of the file:</p>
+
+<pre><code class="java">static protected String URLPREFIX = &quot;file:///Users/iansmith/tport-workspace/uapijava/&quot;;
+</code></pre>
+
+<p>This is the path on the tutorial developer&rsquo;s home machine, so not likely to be correct for your local computer!  You should adjust this to be the prefix of a URL; note that URLs start with &ldquo;file:///&rdquo;  and use forward slash (/) to separate directories, even if you are running on the Windows operating system.  You need to be sure to include a trailing slash as well as various other values are derived from <code>URLPREFIX</code> by concatenation.</p>
+
+<p>After you have made this adjustment, you should be able to run Lesson1 via your run configuration created above.  If you see an error like this:</p>
+
+<pre><code>Exception in thread &quot;main&quot; javax.xml.ws.WebServiceException: org.apache.cxf.service.factory.ServiceConstructionException: Failed to create service.
+    at org.apache.cxf.jaxws.ServiceImpl.&lt;init&gt;(ServiceImpl.java:150)
+    at org.apache.cxf.jaxws.spi.ProviderImpl.createServiceDelegate(ProviderImpl.java:97)
+    at javax.xml.ws.Service.&lt;init&gt;(Service.java:56)
+    at com.travelport.service.system_v8_0.SystemService.&lt;init&gt;(SystemService.java:41)
+    at com.travelport.uapi.unit1.WSDLService.getPing(WSDLService.java:133)
+    at com.travelport.uapi.unit1.Lesson1.main(Lesson1.java:23)
+Caused by: org.apache.cxf.service.factory.ServiceConstructionException: Failed to create service.
+    at org.apache.cxf.wsdl11.WSDLServiceFactory.&lt;init&gt;(WSDLServiceFactory.java:94)
+    at org.apache.cxf.jaxws.ServiceImpl.initializePorts(ServiceImpl.java:204)
+    at org.apache.cxf.jaxws.ServiceImpl.&lt;init&gt;(ServiceImpl.java:148)
+    ... 5 more
+Caused by: javax.wsdl.WSDLException: WSDLException: faultCode=PARSER_ERROR: Problem parsing 'file:/xUsers/iansmith/tport-workspace/uapijava/wsdl/system_v8_0/System.wsdl'.: java.io.FileNotFoundException: /xUsers/iansmith/tport-workspace/uapijava/wsdl/system_v8_0/System.wsdl (No such file or directory)
+    at com.ibm.wsdl.xml.WSDLReaderImpl.getDocument(Unknown Source)
+    ...
+</code></pre>
+
+<p>Then you have misconfigured the <code>URLPREFIX</code> above and you should re-check the value you gave for it.</p>
+
+<h3>The Pay-Off</h3>
+
+<p>The final result of all this work&ndash;hopefully the last time you&rsquo;ll need to do this type of thing in this tutorial for a long while&ndash;is when you can run <code>Lesson1</code> and see this output like this:</p>
+
+<pre><code>this my payload; there are many like it but this one is mine
+doesntmatter-8176
+E07E825F0A07580E004DED8EB9130465
+
+</code></pre>
+
+<p>The last value is a transaction ID that is unique to each call on the uAPI so it will differ from what is shown here.  When you see this output, we have run a &ldquo;ping&rdquo; to the TravelPort service and successfully gotten back the values we sent.  Although this seems trivial, this is very good news because it means that all the layers of software (and there are plenty!) between your computer and TravelPort&rsquo;s servers are working as expected!</p>
+
+<h3>The Other Gunk</h3>
+
+<p>You will also probably see some messages (usually in red, because they are directed to the system&rsquo;s default error log) like this in your eclipse console:</p>
+
+<pre><code>INFO: Creating Service {http://www.travelport.com/service/system_v8_0}SystemService from WSDL: file:/Users/iansmith/tport-workspace/uapijava/wsdl/system_v8_0/System.wsdl
+</code></pre>
+
+<p>This is a helpful message provided by the CXF framework to tell you it is creating a service.  You control the &ldquo;chattiness&rdquo; of the CXF infrastructure by adjusting the values in the <a href="(https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/logging.properties">logging.properties</a> file, just as with most other java applications.  Most people can safely ignore these messages, unless they are printed out to the <code>Warning</code> or <code>Error</code> logging levels!</p>
+
+<h3>Exercise for the reader</h3>
+
+<ol>
+<li><p>Create a run configuration as above but for the <a href="(https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/SystemServiceTest.java">SystemSvcTest</a> test code.  This is a JUnit4 style test suite so will require the appropriate configuration type in the Run Configurations menu.</p></li>
+
+<li><p>Change the ping values in Lesson1 and prove to yourself that the values being returned are the values you supplied.</p></li>
+
+<li><p>Modify the code in Lesson1 to use the &ldquo;time port&rdquo; (<code>SystemTimePortType</code>).  This will require that you discover how to get access to different ports (via the <code>WSDLService</code> helper class) and that you supply different request and response types to match the appropriate types for this different function.   The <code>time port</code> returns the current time according to TravelPort if you succeed in calling it.</p></li>
+</ol>
+
 </body>
 </html>
