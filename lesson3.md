@@ -39,6 +39,9 @@ Total Price GBP356.00
 
 In addition, this data was retrieved asynchronously allowing the application to do other things while waiting for the results to be returned.  In our case, the `Lesson3` application just "sleeps" but there is no reason it could not calculate the cube root of pi, the price of tea in China, etc.
 
+### LowFareSearch vs. Availability/Pricing
+
+In the [previous lesson](lesson2.html) we explained that a typical, perhaps even the archetypal, travel industry workflow was to search for availability of flights--the possible itineraries from origin to destination--and then price one or more itineraries that were interesting to the traveller. Well, there is a little secret that we did not mention in the last lesson: this workflow can be done in one step with the uAPI, not the two part process we explained in [lesson2](lesson2.html).
 
 ### Exercises For The Reader
 
