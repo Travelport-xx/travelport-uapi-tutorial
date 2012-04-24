@@ -23,7 +23,7 @@ public class AirSvcTest {
 		
 		setupRequestForSearch(request);
 		
-		rsp=WSDLService.getAvailabilitySearch().service(request);
+		rsp=WSDLService.getAvailabilitySearch(false).service(request);
 		//these checks are just sanity that we can make an availability request
 		assertThat(rsp.getAirItinerarySolution().size(), is(not(0)));
 		assertThat(rsp.getAirSegmentList().getAirSegment().size(), is(not(0)));
@@ -45,7 +45,7 @@ public class AirSvcTest {
 		AirReq.addAdultPassengers(request, 2);
 
 		//do the work
-		response = WSDLService.getLowFareSearch().service(request);
+		response = WSDLService.getLowFareSearch(false).service(request);
 		
 		//sanity cechk
 		assertThat(myTraceId, is(equalTo(request.getTraceId())));

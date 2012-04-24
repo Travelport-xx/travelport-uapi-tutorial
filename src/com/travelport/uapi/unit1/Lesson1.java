@@ -20,7 +20,7 @@ public class Lesson1 {
 		
 		try {
 			//run the ping request
-			PingRsp rsp = Helper.WSDLService.getPing().service(req);
+			PingRsp rsp = WSDLService.getPing(false).service(req);
 			//print results.. payload and trace ID are echoed back in response
 			System.out.println(rsp.getPayload());
 			System.out.println(rsp.getTraceId());

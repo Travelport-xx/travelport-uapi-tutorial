@@ -5,8 +5,12 @@
            http://cxf.apache.org/schemas/configuration/http-conf.xsd
            http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans.xsd">
-
+<!-- 
+    
   <http-conf:conduit name="{http://www.travelport.com/service/air_v18_0}AirLowFareSearchAsynchPort.http-conduit">
       <http-conf:client AllowChunking="false" ConnectionTimeout="0" ReceiveTimeout="0"/>
   </http-conf:conduit>
+ 
+-->
+    
 </beans>

@@ -5,6 +5,11 @@ import java.net.URL;
 
 import javax.xml.ws.BindingProvider;
 
+import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.frontend.ClientProxy;
+import org.apache.cxf.interceptor.LoggingInInterceptor;
+import org.apache.cxf.interceptor.LoggingOutInterceptor;
+
 import com.travelport.service.air_v18_0.*;
 import com.travelport.service.system_v8_0.*;
 
@@ -17,6 +22,7 @@ public class WSDLService {
 	static protected AirLowFareSearchPortType lowFareSearch;
 	static protected AirLowFareSearchAsynchPortType lowFareSearchAsynch;
 	static protected AirAvailabilitySearchPortType availabilitySearch;
+	static protected AirRetrieveLowFareSearchPortType retrieve;
 	static protected AirPricePortType price;
 	static protected SystemPingPortType ping;
 	static protected SystemInfoPortType info;
@@ -44,7 +50,7 @@ public class WSDLService {
 	 * 
 	 * @return the port for low fare search
 	 */
-	public static AirLowFareSearchPortType getLowFareSearch() {
+	public static AirLowFareSearchPortType getLowFareSearch(boolean showXML) {
 		if (lowFareSearch != null) {
 			return lowFareSearch;
 		}
@@ -56,6 +62,9 @@ public class WSDLService {
 		lowFareSearch = airService.getAirLowFareSearchPort();
 		addParametersToProvider((BindingProvider) lowFareSearch,
 				AIR_ENDPOINT);
+		if (showXML) {
+			showXML(lowFareSearch);
+		}
 		return lowFareSearch;
 	}
 	/**
@@ -63,7 +72,7 @@ public class WSDLService {
 	 * 
 	 * @return the port for low fare search
 	 */
-	public static AirLowFareSearchAsynchPortType getLowFareSearchAsynch() {
+	public static AirLowFareSearchAsynchPortType getLowFareSearchAsynch(boolean showXML) {
 		if (lowFareSearchAsynch != null) {
 			return lowFareSearchAsynch;
 		}
@@ -75,6 +84,9 @@ public class WSDLService {
 		lowFareSearchAsynch = airService.getAirLowFareSearchAsynchPort();
 		addParametersToProvider((BindingProvider) lowFareSearchAsynch,
 				AIR_ENDPOINT);
+		if (showXML) {
+			showXML(lowFareSearchAsynch);
+		}
 		return lowFareSearchAsynch;
 	}
 	/**
@@ -83,7 +95,7 @@ public class WSDLService {
 	 * @return the port for low fare search
 	 */
 
-	public static AirAvailabilitySearchPortType getAvailabilitySearch() {
+	public static AirAvailabilitySearchPortType getAvailabilitySearch(boolean showXML) {
 		if (availabilitySearch != null) {
 			return availabilitySearch;
 		}
@@ -95,15 +107,19 @@ public class WSDLService {
 		availabilitySearch = airService.getAirAvailabilitySearchPort();
 		addParametersToProvider((BindingProvider) availabilitySearch,
 				AIR_ENDPOINT);
+		if (showXML) {
+			showXML(availabilitySearch);
+		}
 		return availabilitySearch;
 	}
 	/**
-	 * Get access to the availability
+	 * Get access to the pricing port.
 	 * 
-	 * @return the port for low fare search
+	 * @param showXML true to turn on display of the XML traffic
+	 * @return the port pricing
 	 */
 
-	public static AirPricePortType getPrice() {
+	public static AirPricePortType getPrice(boolean showXML) {
 		if (price != null) {
 			return price;
 		}
@@ -121,9 +137,9 @@ public class WSDLService {
 	/**
 	 * Get access to the ping object.
 	 * 
-	 * @return the port for low fare search
+	 * @return the port for ping service
 	 */
-	public static SystemPingPortType getPing() {
+	public static SystemPingPortType getPing(boolean showXML) {
 		if (ping != null) {
 			return ping;
 		}
@@ -135,15 +151,17 @@ public class WSDLService {
 		ping = systemService.getSystemPingPort();
 		addParametersToProvider((BindingProvider) ping,
 				SYSTEM_ENDPOINT);
-
+		if (showXML) {
+			showXML(ping);
+		}
 		return ping;
 	}
 	/**
 	 * Get access to the time object.
 	 * 
-	 * @return the port for low fare search
+	 * @return the port the time 
 	 */
-	public static SystemTimePortType getTime() {
+	public static SystemTimePortType getTime(boolean showXML) {
 		if (time != null) {
 			return time;
 		}
@@ -155,15 +173,17 @@ public class WSDLService {
 		time = systemService.getSystemtimePort();
 		addParametersToProvider((BindingProvider) time,
 				SYSTEM_ENDPOINT);
-
+		if (showXML) {
+			showXML(time);
+		}
 		return time;
 	}
 	/**
 	 * Get access to the info object.
 	 * 
-	 * @return the port for low fare search
+	 * @return the port for info service
 	 */
-	public static SystemInfoPortType getInfo() {
+	public static SystemInfoPortType getInfo(boolean showXML) {
 		if (info != null) {
 			return info;
 		}
@@ -175,8 +195,32 @@ public class WSDLService {
 		info = systemService.getSystemInfoPort();
 		addParametersToProvider((BindingProvider) info,
 				SYSTEM_ENDPOINT);
-
+		if (showXML) {
+			showXML(info);
+		}
 		return info;
+	}
+	/**
+	 * Get access to the asynch port further retreival object.
+	 * 
+	 * @return the port for getting more info from an asynch request
+	 */
+	public static AirRetrieveLowFareSearchPortType getRetrieve(boolean showXML) {
+		if (retrieve != null) {
+			return retrieve;
+		}
+		checkProperties();
+		if (airService==null) {
+			URL url = getURLForWSDL(AIR_WSDL);
+			airService = new AirService(url);
+		}
+		retrieve = airService.getAirRetrieveLowFareSearchPort();
+		addParametersToProvider((BindingProvider) retrieve,
+				AIR_ENDPOINT);
+		if (showXML) {
+			showXML(retrieve);
+		}
+		return retrieve;
 	}
 
 
@@ -240,6 +284,22 @@ public class WSDLService {
 				System.getProperty("travelport.username"));
 		provider.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY,
 				System.getProperty("travelport.password"));
+	}
+	/**
+	 * Turn on the debugging interceptors that display the XML on the console.
+	 * @param port must be a WSDL port, despite the lack of typing on this parameter
+	 */
+	public static void showXML(Object port) {
+		Client cl = ClientProxy.getClient(port);
+		
+		LoggingInInterceptor in = new LoggingInInterceptor();
+		in.setPrettyLogging(true);
+		LoggingOutInterceptor out = new LoggingOutInterceptor();
+		out.setPrettyLogging(true);
+		
+        cl.getInInterceptors().add(in);
+        cl.getOutInterceptors().add(out);
+		
 	}
 
 }

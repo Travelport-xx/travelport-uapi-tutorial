@@ -24,9 +24,6 @@ public class AirReq {
 	public static void addPointOfSale(BaseReq req, String appName ) {
 		BillingPointOfSaleInfo posInfo = new BillingPointOfSaleInfo();
 		posInfo.setOriginApplication(appName);
-		PointOfSale pos = new PointOfSale();
-		pos.setProviderCode(System.getProperty("travelport.gds"));
-		pos.setSourceLocation(pos.sourceLocation());
 		req.setBillingPointOfSaleInfo(posInfo);
 	}
 

@@ -222,7 +222,7 @@ public class Lesson2 {
 		AirReq.addPointOfSale(priceReq, "tutorial-unit1-lesson2");
 		
 		//make the request to tport
-		priceRsp = Helper.WSDLService.getPrice().service(priceReq);
+		priceRsp = WSDLService.getPrice(false).service(priceReq);
 		
 		//print price result
 		List<AirPriceResult> prices = priceRsp.getAirPriceResult();
@@ -280,7 +280,8 @@ public class Lesson2 {
 		legs.add(outbound);
 		legs.add(ret);
 		
-		response = Helper.WSDLService.getAvailabilitySearch().service(request);
+		//to show the XML you are sendinging and receiving on this port
+		response = WSDLService.getAvailabilitySearch(true).service(request);
 
 		//print out any messages that the GDS sends back
 		for (Iterator<ResponseMessage> iterator = response.getResponseMessage().iterator(); iterator.hasNext();) {

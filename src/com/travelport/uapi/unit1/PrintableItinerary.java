@@ -111,13 +111,13 @@ public class PrintableItinerary {
 		fmt.format("         Flight [%2s]#%4s  Flight time: %s minutes\n", 
 				segment.getCarrier(), 
 				segment.getFlightNumber(), segment.getFlightTime());
-		fmt.format("                           Arrive at %Tc\n", 
+		fmt.format("                           Arrive %Tc\n", 
 				Helper.dateFromISO8601(segment.getArrivalTime()));
 	}
 	public void printJourney(RailJourney journey, Formatter fmt) {
 		Date dep = Helper.dateFromISO8601(journey.getDepartureTime());
 
-		fmt.format("RAIL (%s) Departing from %s to %s on %Tc\n",
+		fmt.format("RAIL (%s) From %s to %s on %Tc\n",
 				journey.getJourneyDirection(),
 				journey.getOriginStationName(),
 				journey.getDestinationStationName(), dep);
@@ -125,17 +125,22 @@ public class PrintableItinerary {
 		List<RailSegmentRef> onThisJourney = journey.getRailSegmentRef();
 		for (Iterator<RailSegmentRef> rsIter = onThisJourney.iterator(); rsIter.hasNext();) {
 			RailSegment railSegment = railSegments.get(rsIter.next().getKey());
-			fmt.format("         %s[%2s] Train #%4s  ",
-					railSegment.getOperatingCompany().getName(),
-					railSegment.getOperatingCompany().getCode(),
-					railSegment.getTrainNumber());
+			if (railSegment.getOperatingCompany()==null) {
+				fmt.format("         METRO");
+			} else {
+				fmt.format("         %s[%2s] Train #%4s  ",
+						railSegment.getOperatingCompany().getName(), 
+						railSegment.getOperatingCompany().getCode(),
+						railSegment.getTrainNumber());
+			}
+			fmt.format(" --- From "+railSegment.getOriginStationName()+" to "+railSegment.getDestinationStationName());
 			if (railSegment.getTravelTime()!=null) {
 				fmt.format("Travel time: %s minutes\n", railSegment.getTravelTime());
 			} else {
 				fmt.format("\n");
 			}
 		}
-		fmt.format("                           Arrive at %Tc\n", 
+		fmt.format("                           Arrive %Tc\n", 
 				Helper.dateFromISO8601(journey.getArrivalTime()));
 	}
 
