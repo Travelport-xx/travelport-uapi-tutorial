@@ -103,6 +103,7 @@ A couple of things to note about `PrintableItinerary` constructors:
 The code for `main` in `Lesson3` is reproduced, edited for size and clarity, below:
 
 ```java
+
 public static void main(String[] argv) {
 	String origin = "GLA", destination = "LGW";
 	LowFareSearchAsynchReq req = new LowFareSearchAsynchReq();
