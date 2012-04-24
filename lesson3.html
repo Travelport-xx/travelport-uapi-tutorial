@@ -14,11 +14,23 @@
 
 <h3>Objective Of Lesson 3</h3>
 
-<p>After this lesson is completed you should know how to use the uAPI facility for &ldquo;shopping&rdquo; for lowest cost transport between two cities, including using rail and low cost air carriers as a means of travel.   You should also understand how get data from the low cost shopping API&rsquo;s asynchronously.</p>
+<p>After this lesson is completed you should know how to use the &ldquo;shopping&rdquo; facility of Travelport&rsquo;s Universal API to find the lowest cost transport between two cities, including using rail and low cost air carriers as a means of travel.   You should also understand after this lesson how get data from the low cost shopping API&rsquo;s asynchronously.</p>
 
-<h3>The Goal</h3>
+<h3>LowFareSearch vs. Availability/Pricing</h3>
 
-<p>The goal of this lesson is produce output that allows the user to compare not only price but means of transport between two locations.  This is a snippet from the <code>Lesson3</code> program show two different itineraries:</p>
+<p>In the <a href="lesson2.html">previous lesson</a> we explained that a typical, perhaps even the archetypal, travel industry workflow was to search for availability of flights&ndash;the possible itineraries from origin to destination&ndash;and then price one or more itineraries that were interesting to the traveller. Well, there is a little secret that we did not mention in the last lesson: this workflow can be done in one step with the uAPI, not the two part process we explained in <a href="lesson2.html">lesson2</a>.  Previously we explained how to use the availability search port to do a search and then pick itineraries to price; our code for <code>Lesson2</code> wasn&rsquo;t particularly clever about choosing what to price&ndash;it tried them all&ndash;but there are many metrics that a program could use to evaluate itineraries prior to calling the air price port.</p>
+
+<p>The Low Cost Search port, yet another port on the <code>AirService</code> object, allows you to combine these two steps by doing a search and having the search results come back already priced.  Further, the Low Cost Search does the work of narrowing down the set of itineraries to those that are the least expensive, since is the common case anyway.  Note that the Low Fare Search algorithm does not guarantee that the price shown is still available and it is advised that you follow-up any &ldquo;good looking&rdquo; result returned from the Low Cost Search with an additional <code>AirPricingRequest</code> to insure that the itinerary can be priced as returned.</p>
+
+<h3>Air, Rail, and Low Cost Carriers</h3>
+
+<p>The TravelPort uAPI supports three different types of providers.  The first one is the one we have been using previously, the &ldquo;gds&rdquo; provider(s) of Travelport such as Galileo(&ldquo;1G&rdquo;), Apollo(&ldquo;1V&rdquo;) and Worldspan(&ldquo;1P&rdquo;).  These provide you with capabilities that one would expect in online shopping and booking of air travel; Lesson 2 was designed to work with this type of provider.  The uAPI also includes the ability search for Rail travel with several different companies, called &ldquo;suppliers&rdquo; in the uAPI language.  The functionality for rail-based travel is accessed in the same general way as we have already seen with air travel, but naturally starting with the <code>RailService</code> that is defined in <code>Rail.wsdl</code> (in the directory <code>wsdl/rail_v12_0</code> in the supplied files with this tutorial.)</p>
+
+<p>The other type of provider that can be accessed through the uAPI is the unfortunately-named &ldquo;Low-Cost Carrier&rdquo; provider; surely all the airlines <em>think</em> they are &ldquo;low cost.&rdquo;  In fact, a &ldquo;Low Cost Carrier&rdquo; in this terminology is a carrier that does not participate in &ldquo;global distribution&rdquo; agreements for their inventory of seats&ndash;and that is the &lsquo;g&rsquo; and &rsquo;d&rsquo; in the acronym G-D-S.  So, gdses (like Galileo, Apollo, and Worldspan) typically do not know about the flight schedules, fares, or availability of seats on these airlines.  Often these airlines sell exclusively via the internet on their own websites.  We mention this type of provider here for completeness, we will focus primarily on the gds and rail providers as their are numerous special issues that must be addressed when working with the &ldquo;low cost provider.&rdquo;</p>
+
+<h3>The Goal Of Lesson 3</h3>
+
+<p>The goal of this lesson is produce output that allows the user to compare not only price but compare means of transport between two locations.  This is a snippet from the <code>Lesson3</code> program show two different itineraries from Glasgow, Scotland, to London&rsquo;s Gatwick Airport:</p>
 
 <pre><code>AIR Departing from GLA to LGW on TUE MAY 01 11:00:00 CEST 2012
          Flight [BA]#2957  Flight time: 85 minutes
@@ -46,11 +58,7 @@ RAIL (RETURN) From Gatwick Airport to Paisley Gilmour Str. on THU MAY 03 05:10:0
 Total Price GBP356.00
 </code></pre>
 
-<p>In addition, this data was retrieved asynchronously allowing the application to do other things while waiting for the results to be returned.  In our case, the <code>Lesson3</code> application just &ldquo;sleeps&rdquo; but there is no reason it could not calculate the cube root of pi, the price of tea in China, etc.</p>
-
-<h3>LowFareSearch vs. Availability/Pricing</h3>
-
-<p>In the <a href="lesson2.html">previous lesson</a> we explained that a typical, perhaps even the archetypal, travel industry workflow was to search for availability of flights&ndash;the possible itineraries from origin to destination&ndash;and then price one or more itineraries that were interesting to the traveller. Well, there is a little secret that we did not mention in the last lesson: this workflow can be done in one step with the uAPI, not the two part process we explained in <a href="lesson2.html">lesson2</a>.</p>
+<p>In addition, this data was retrieved asynchronously allowing the application to do other things while waiting for the results to be returned.  In the case of this tutorial, the <code>Lesson3</code> application just &ldquo;sleeps&rdquo; but there is no reason it could not calculate the cube root of pi, the price of tea in China, the net worth of Sergei Brin, etc.</p>
 
 <h3>Exercises For The Reader</h3>
 
