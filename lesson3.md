@@ -198,15 +198,13 @@ This is a bit more "real" than the idealized output shown at the beginning of th
 
 ### End Of Unit 1
 
-Congratulations! You've managed to get through (or "suffered through"?)  all three of the lessons in this unit.  With these three lessons under your belt, you should be feeling fairly confident of using nearly any feature of the uAPI that involves search for content and displaying it to the user.  In the upcoming unit, we will focus on some other types of common workflows such as booking tickets or searching hotels by their distance from a landmark.  Enjoy using the uAPI!
+Congratulations! You've managed to get through (or "suffered through"?)  all three of the lessons in this unit.  With these three lessons under your belt, you should be feeling fairly confident of using nearly any feature of the uAPI that involves searching for content and then displaying it to the user.  In the upcoming unit, we will focus on some other types of common workflows such as booking tickets or searching hotels by their distance from a landmark.  Enjoy using the uAPI!
 
 
 ### Exercises For The Reader
 
-* Using the low cost search (synchronous or asynchronous) build the necessary tables to keep track of the lowest priced way to travel from origin to destination and print out the lowest five itineraries, whether by rail or air.
+* Using the low cost search (synchronous or asynchronous) build the necessary tables to keep track of the lowest priced way to travel from origin to destination and print out the five lowest-priced itineraries, whether by rail or air.
 
 * Above we discussed Java's type system, `AirSearchRsp` objects and the fact that these may include rail journey information.  By studying the WSDL and XSD files, determine if the same "crossover" applies to searching for availability in train travel.
 
 * Use the `FlightDetails` class to display to the user if any meals are expected on air journeys as well as the particular type of aircraft that will be used.  It may be helpful to build a table to make the set of aircraft easier to understand for those not familiar with the model numbers of aircraft, such as changing "737" into "Boeing 737" or even "Boeing Single-Aisle Jet".
-
-* Add a `toJson()` method for `PrintableItinerary` so it can output data in a different format, suitable for use by another program.
