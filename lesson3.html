@@ -112,57 +112,56 @@ public PrintableItinerary(RailPricingSolution solution, Helper.RailJourneyMap jo
 
 <h3>the main() event</h3>
 
-<p>The code for <code>main</code> in <code>Lesson3</code> is reproduced, edited for size and clarity, below:
-java
-public static void main(String[] argv) {
-    String origin = &ldquo;GLA&rdquo;, destination = &ldquo;LGW&rdquo;;
+<p>The code for <code>main</code> in <code>Lesson3</code> is reproduced, edited for size and clarity, below:</p>
+
+<pre><code class="java">public static void main(String[] argv) {
+    String origin = &quot;GLA&quot;, destination = &quot;LGW&quot;;
     LowFareSearchAsynchReq req = new LowFareSearchAsynchReq();
     //7 days out for departure and 9 days out for return
-    createLowFareSearchWithRail(req, origin, destination, 7, 9);</p>
+    createLowFareSearchWithRail(req, origin, destination, 7, 9);
 
-<pre><code>try {
-    //the actual search request
-    LowFareSearchAsynchRsp lowCostRsp = WSDLService
-            .getLowFareSearchAsynch(false).service(req);
+    try {
+        //the actual search request
+        LowFareSearchAsynchRsp lowCostRsp = WSDLService
+                .getLowFareSearchAsynch(false).service(req);
 
-    [create a HashMap that knows about all the providers and how many 'parts' they have]
+        [create a HashMap that knows about all the providers and how many 'parts' they have]
 
-    //these three parameters are needed as we loop to get each result... they are the
-    //context of our first search above
-    String searchId = lowCostRsp.getSearchId();
-    String currentProvider = lowCostRsp.getProviderCode();
-    long currentPart = lowCostRsp.getPartNumber().longValue();
+        //these three parameters are needed as we loop to get each result... they are the
+        //context of our first search above
+        String searchId = lowCostRsp.getSearchId();
+        String currentProvider = lowCostRsp.getProviderCode();
+        long currentPart = lowCostRsp.getPartNumber().longValue();
+        
+        AirSearchRsp rsp = lowCostRsp; // so we can print it out
+        while (partMap.isEmpty() == false) {
 
-    AirSearchRsp rsp = lowCostRsp; // so we can print it out
-    while (partMap.isEmpty() == false) {
+            printSomeExampleResults(destination, rsp, 2); //2 sample results
 
-        printSomeExampleResults(destination, rsp, 2); //2 sample results
+            [update currentPart and currentProvider for next &quot;retrieve request&quot;]
 
-        [update currentPart and currentProvider for next &quot;retrieve request&quot;]
+            [sleep a few seconds]
+            
+            //run the request for more data...
+            RetrieveLowFareSearchReq retrieve = new RetrieveLowFareSearchReq();
+            //note that these are the &quot;context&quot; parameters that need to be given in
+            //the retreive so we get back &quot;more data&quot; from our search
+            retrieve.setSearchId(searchId);
+            retrieve.setProviderCode(currentProvider);
+            retrieve.setPartNumber(BigInteger.valueOf(currentPart));
 
-        [sleep a few seconds]
-
-        //run the request for more data...
-        RetrieveLowFareSearchReq retrieve = new RetrieveLowFareSearchReq();
-        //note that these are the &quot;context&quot; parameters that need to be given in
-        //the retreive so we get back &quot;more data&quot; from our search
-        retrieve.setSearchId(searchId);
-        retrieve.setProviderCode(currentProvider);
-        retrieve.setPartNumber(BigInteger.valueOf(currentPart));
-
-        //request more data based on the currentPart and currentProvider
-        rsp = WSDLService.getRetrieve(false).service(retrieve);
-
-        checkForErrorMessage(rsp);
+            //request more data based on the currentPart and currentProvider
+            rsp = WSDLService.getRetrieve(false).service(retrieve);
+            
+            checkForErrorMessage(rsp);
+        }
+    } catch (AirFaultMessage e) {
+        System.err.println(&quot;Fault trying send request to travelport:&quot;
+                + e.getMessage());
     }
-} catch (AirFaultMessage e) {
-    System.err.println(&quot;Fault trying send request to travelport:&quot;
-            + e.getMessage());
+
 }
 </code></pre>
-
-<p>}
-</p>
 
 <p>None of the code above should be shocking if you have been following us through the previous two lessons.  The key portion of this <code>main()</code> function is the loop that goes through the set of providers and each of their parts.  A more clever program than the one we have written here would do some useful computation where we have just done &ldquo;[sleep a few seconds]&ldquo;!</p>
 
@@ -204,7 +203,7 @@ Total number solutions: 0 air and 0 rail
 
 </code></pre>
 
-<p>This is a bit more &ldquo;real&rdquo; than the idealized output shown before that included just the itineraries.   A couple of things that the reader be interested in:  The <code>RCH</code> provider is the rail provider and two of its suppliers (Benelux and Deutsche Bahn) have no train service in the United Kingdom so we get the warnings from &ldquo;RCH[BN]&rdquo; and &ldquo;RCH[DB]&ldquo;.  These two providers are listed in the output as having 0 air and 0 rail results.</p>
+<p>This is a bit more &ldquo;real&rdquo; than the idealized output shown at the beginning of this lesson that included just the itineraries.   A couple of things that the reader be interested in:  The <code>RCH</code> provider is the rail provider and two of its suppliers (Benelux and Deutsche Bahn) have no train service in the United Kingdom, so we get the warnings from &ldquo;RCH[BN]&rdquo; and &ldquo;RCH[DB]&rdquo; when doing a Glasgow to London search.  These two providers are also shown in the output as having 0 air and 0 rail results.</p>
 
 <h3>End Of Unit 1</h3>
 

@@ -101,6 +101,7 @@ A couple of things to note about `PrintableItinerary` constructors:
 ### the main() event
 
 The code for `main` in `Lesson3` is reproduced, edited for size and clarity, below:
+
 ```java
 public static void main(String[] argv) {
 	String origin = "GLA", destination = "LGW";
@@ -192,7 +193,7 @@ Total number solutions: 0 air and 0 rail
 
 ```
 
-This is a bit more "real" than the idealized output shown before that included just the itineraries.   A couple of things that the reader be interested in:  The `RCH` provider is the rail provider and two of its suppliers (Benelux and Deutsche Bahn) have no train service in the United Kingdom so we get the warnings from "RCH[BN]" and "RCH[DB]".  These two providers are listed in the output as having 0 air and 0 rail results.
+This is a bit more "real" than the idealized output shown at the beginning of this lesson that included just the itineraries.   A couple of things that the reader be interested in:  The `RCH` provider is the rail provider and two of its suppliers (Benelux and Deutsche Bahn) have no train service in the United Kingdom, so we get the warnings from "RCH[BN]" and "RCH[DB]" when doing a Glasgow to London search.  These two providers are also shown in the output as having 0 air and 0 rail results.
 
 ### End Of Unit 1
 
