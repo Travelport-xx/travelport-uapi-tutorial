@@ -24,7 +24,7 @@
 
 <h3>Air, Rail, and Low Cost Carriers</h3>
 
-<p>The TravelPort uAPI supports three different types of providers.  The first one is the one we have been using previously, the &ldquo;gds&rdquo; provider(s) of Travelport such as Galileo(&ldquo;1G&rdquo;), Apollo(&ldquo;1V&rdquo;) and Worldspan(&ldquo;1P&rdquo;).  These provide you with capabilities that one would expect in online shopping and booking of air travel; Lesson 2 was designed to work with this type of provider.  The uAPI also includes the ability search for Rail travel with several different companies, called &ldquo;suppliers&rdquo; in the uAPI language.  The functionality for rail-based travel is accessed in the same general way as we have already seen with air travel, but naturally starting with the <code>RailService</code> that is defined in <code>Rail.wsdl</code> (in the directory <code>wsdl/rail_v12_0</code> in the supplied files with this tutorial.)</p>
+<p>The TravelPort uAPI supports three different types of providers.  The first one is the one we have been using previously, the &ldquo;gds&rdquo; provider(s) of Travelport such as Galileo(&ldquo;1G&rdquo;), Apollo(&ldquo;1V&rdquo;) and Worldspan(&ldquo;1P&rdquo;).  These provide you with capabilities that one would expect in online shopping and booking of air travel; lesson 2 was designed to work with this type of provider.  The uAPI also includes the ability search for train travel with several different companies, called &ldquo;suppliers&rdquo; in the uAPI language.  The functionality for rail-based travel is accessed in the same general way as we have already seen with air travel, but naturally starting with the <code>RailService</code> that is defined in <code>Rail.wsdl</code> (in the directory <code>wsdl/rail_v12_0</code> in the supplied files with this tutorial.)</p>
 
 <p>The other type of provider that can be accessed through the uAPI is the unfortunately-named &ldquo;Low-Cost Carrier&rdquo; provider; surely all the airlines <em>think</em> they are &ldquo;low cost.&rdquo;  In fact, a &ldquo;Low Cost Carrier&rdquo; in this terminology is a carrier that does not participate in &ldquo;global distribution&rdquo; agreements for their inventory of seats&ndash;and that is the &lsquo;g&rsquo; and &rsquo;d&rsquo; in the acronym G-D-S.  So, gdses (like Galileo, Apollo, and Worldspan) typically do not know about the flight schedules, fares, or availability of seats on these airlines.  Often these airlines sell exclusively via the internet on their own websites.  We mention this type of provider here for completeness, we will focus primarily on the gds and rail providers as their are numerous special issues that must be addressed when working with the &ldquo;low cost provider.&rdquo;</p>
 
@@ -59,6 +59,28 @@ Total Price GBP356.00
 </code></pre>
 
 <p>In addition, this data was retrieved asynchronously allowing the application to do other things while waiting for the results to be returned.  In the case of this tutorial, the <code>Lesson3</code> application just &ldquo;sleeps&rdquo; but there is no reason it could not calculate the cube root of pi, the price of tea in China, the net worth of Sergei Brin, etc.</p>
+
+<h3>Low Cost Searching, The Hard Way</h3>
+
+<p>Since you have already finished <a href="index.html">lesson1</a> and <a href="lesson2.html">lesson2</a>, we&rsquo;ll omit a lot of the details that are present in the <code>Lesson3</code> class&rsquo; source code.  To search using the <code>AirLowFareSearchPortType</code> one simply combines the start of <code>Lesson2</code>, creating a search request, and the end of <code>Lesson2</code>, displaying the resulting pricing solutions.  The intermediate manipulation of various data structures that was a bit complex in the case of <code>Lesson2</code> is now avoided.  (Again, it is best to use the air price port to check that results returned from low cost searching are still valid, but we&rsquo;ll ignore this for now.)  This seems easy, so let&rsquo;s it more difficult by <em>not</em> using the <code>AirLowFareSearchPortType</code> and instead using its brother the <code>AirLowFareSearchAsyncPortType</code>!</p>
+
+<p>Because some of the results from providers can take some time to produce, the uAPI offers you the ability to send a search request and then retrieve the results as your convenience.  So, the flow of such an application looks like this:</p>
+
+<ul>
+<li>Send <code>LowCostSearchAsyncReq</code> via the low cost search async port&rsquo;s <code>service()</code> method</li>
+<li>Consume LowCostSearchAsyncRsp&rsquo; response object to determine what providers have what data</li>
+<li>Looping over all the providers that have results
+** Send a <code>RetrieveLowFareSearchReq</code> to retrieve results from the above search from a specific provider
+** Consume the <code>RetrieveLowFareSearchRsp</code> object to get results</li>
+</ul>
+
+<p>As we have seen in <code>Lesson1</code> and <code>Lesson2</code> a <em>particular</em> request/response pair should be handled synchronously with the uAPI.  However, because of the structure above it is possible to proceed with other actions in between requesting, say, the air results and the rail results of a particular search.</p>
+
+<h3>Java Typing, uAPI, And Low Fare Search Responses</h3>
+
+<p>There are two Java basic Java types that are used in the above approach to handling responses:  <code>LowFareSearchAsyncRsp</code> and <code>RetrieveLowFareSearchRsp</code> as these are the appropriate types returned by the search and &ldquo;get me more data&rdquo; ports, respectively.  Thoughtfully, the designers of the uAPI planned ahead for this and made these two types share a common base type (superclass), <code>AirSearchRsp</code>.  This means that your code can be written, of course with some care, to consume results from the <code>AirSearchRsp</code> class and then it can handle either immediate or later-retrieved results.</p>
+
+<p>With this in mind, the result of the availability requests in <a href="lesson2.html">Lesson2</a> can <em>also</em> be treated as an <code>AirSearchRsp</code> object as the class <code>AvailabilitySearchReq</code> also inherits from this base class.  These types of relationships are present in many places in the uAPI and it is often very useful to use Eclipse&rsquo;s &ldquo;Go To Definition&rdquo; feature (typically bound to the F3 key) to investigate the parent classes in the class hierarchy generated by the uAPI&rsquo;s WSDL.  Looking further up the heirarchy, for example, reveals that all search requests also share a common base class (<code>AirSearchReq</code> and its parent <code>BaseSearchReq</code>).  All requests, without regard to their type, share the base class <code>BaseReq</code> (with the notable exception of ping).  In <code>BaseReq</code> you find those fields that are common to any request, such as &ldquo;TraceId&rdquo;.</p>
 
 <h3>Exercises For The Reader</h3>
 
