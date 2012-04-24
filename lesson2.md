@@ -125,7 +125,7 @@ It is worth the time look at the implementation of `AirReq` so that you can see,
 
 ### Decoding The Result
 
-To understand the decoding taking place in client, it may be useful to examine the XML that is actually returned from the uAPI server to our client.  This is example is slighted edited for space:
+To understand the decoding taking place in the client code of Lesson 2, it may be useful to examine the XML that is actually returned via the network from the uAPI server to our client.  This is example is edited for space:
 
 ```xml
  <?xml version="1.0" encoding="UTF-8"?><SOAP:Envelope xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
@@ -232,13 +232,13 @@ To understand the decoding taking place in client, it may be useful to examine t
 </SOAP:Envelope>
 ```
 
-Let's explain the approach the uAPI is using to encode the results.  Each "type" of entity is detailed once, typically in a "list" of that type, for example the `air:FlightDetailsList` has many `air:FlightDetails` entities within in (and many more were clipped out for space reasons!).  Similarly, the `air:AirSegmentList` contains many `air:AirSegment` encodings (again, we removed many `air:AirSegment` for space).  However, it is important to note that _within_ the `air:AirSegment` it does not repeat the `air:FlightDetails` but instead uses a `air:FlightDetailsRef` to refer to the flight details in question.  The `air:FlightDetailsRef` has a `Key` attribute that matches up with the `Key` attribute in the `air:FlightDetails`  object.  Why do it this way? Primarily, this approach avoids repetition which would bloat the already large requests and responses.  If you look at the last XML objects in the example you will see two "solutions" (`air:AirItinerarySolution`) that clearly indicate that it is possible to have a compact representation... after you have all the definitions above!  Interestingly, a single `air:ItinerarySolution` may encode may possible itineraries (despite the name!) because it "connects" segments with the `air:Connection` entries.  We'll explain more about this later when discuss building "routings."
+Let's explain the approach the uAPI is using to encode the results.  Each "type" of entity is detailed once, typically in a "list" of that type, for example the `air:FlightDetailsList` has many `air:FlightDetails` entities within it (and many more were clipped out for space reasons).  Similarly, the `air:AirSegmentList` contains many `air:AirSegment` encodings (again, we removed many `air:AirSegment` items for space).  However, it is important to note that _within_ the `air:AirSegment`, the response does not repeat the `air:FlightDetails` but instead uses an `air:FlightDetailsRef` to refer to the flight details in question.  The `air:FlightDetailsRef` has a `Key` attribute that matches up with the `Key` attribute in the `air:FlightDetails`  object.  Why do it this way? Primarily, this approach avoids repetition which would bloat the already large requests and responses.  If you look at the last XML objects in the example you will see two "solutions" (`air:AirItinerarySolution`) that clearly indicate that it is possible to have a compact representation... after you have all the definitions above!  Interestingly, a single `air:ItinerarySolution` may encode many possible itineraries (despite the name) because it "connects" segments with the `air:Connection` entries.  We'll explain more about this later when discuss building "routings."
 
-The large size of these messages and the complexity of encoding and decoding them is one of the more serious complaints about SOAP/XML as a transport in systems such as the uAPI.  We will not debate that point here, but just mention that the requests and responses sent to and from the Travelport system to end up being hundreds of lines of XML.
+The large size of these messages and the complexity of encoding and decoding them is one of the more serious complaints about SOAP/XML as a transport in systems such as the uAPI.  We will not debate that point here, but just mention that the requests and responses sent to and from the Travelport system often end up being hundreds of lines of XML.
 
 ### Decoding Part 1: Building Maps
 
-For the tutorial, we have provided you with helper code	to take a list, such as `air:FlightDetailsList` and build a Java `HashMap` that maps all keys to the full `air:FlightDetails` objects.  This is handy to build first so when your are decoding something like the `air:AirItinerarySolution` you can easily get to the "true" objects being worked with.  Here is the part of the `main()` routine in `Lesson2` that builds the maps named `allSegments` and `allDetails` from the response (`rsp`) to our availability search request:
+For the tutorial, we have provided you with helper code	to take a list, such as `air:FlightDetailsList`, and build a Java `HashMap` that maps all keys to the full `air:FlightDetails` objects.  This is handy to build first so when your are decoding something like the `air:AirItinerarySolution` you can easily get to the "true" objects being worked with.  Here is the part of the `main()` routine in `Lesson2` that builds the maps `allSegments` and `allDetails` from the response (`rsp`) to our availability search request:
 
 ```java
 //make tables that map the "key" (or a reference) to the proper
@@ -253,9 +253,9 @@ It's worth noting in this example that to get access to the list of `air:AirSegm
 
 ### Decoding Part 2: Air Solutions
 
-It would be handy if the results returned from an air availability search could be pulled out of the response and directly used as parameters back to the uAPI as all or part of a air price request.  Sadly, no such luck.  The availability search returns _many_ possible solutions and these are encoded in a compact way, see `air:AirItinerarySolution` in the XML example above.  Conversely, the air price port requires that you supply a single itinerary, in the form of an `AirItinerary` object, for pricing.  Some of the pieces of an `AirItinerary` can be constructed from the pieces returned from the server to us, most of the pieces of an `AirItinerary` have to de be _derived_ from the results we have obtained from the `AirAvailabilitySearchRsp`.
+It would be handy if the results returned from an air availability search could be pulled out of the response and directly used as parameters back to the uAPI as all or part of a air price request.  Sadly, no such luck.  The availability search returns _many_ possible solutions and these are encoded in a compact way, see `air:AirItinerarySolution` in the XML example above.  Conversely, the air price port requires that you supply a single itinerary, in the form of an `AirItinerary` object, for pricing.  Some of the pieces of an `AirItinerary` can be constructed from the pieces returned from the server to us, but most of the pieces of an `AirItinerary` have to de be _derived_ from the results we have obtained from the `AirAvailabilitySearchRsp`.
 
-In our XML example above, we displayed exactly two `AirItinerarySolution` objects.  This all that were present in the result because one `AirItinerarySolution` is returned for each "leg" of the journey that has been searched for.  In this case, our search was from CDG (Paris) to CHA (Chattanooga) on the first leg and the reverse for the way back.  The code in `main` that takes care of this small issue is :
+In our XML example above, we displayed exactly two `AirItinerarySolution` objects.  This is all that were present in the result because one `AirItinerarySolution` is returned for each "leg" of the journey that has been searched for.  In this case, our search was from CDG (Paris) to CHA (Chattanooga) on the first leg and the reverse for the way back.  The code in `main` that takes care of this small issue is :
 
 ```java
 //Each "solution" is for a particular part of the journey... on
@@ -267,7 +267,7 @@ AirItinerarySolution inboundSolution = solutions.get(1);
 
 ### Decoding Part 3: Building Routings
 
-The coding for building the final "routings", exactly what is flight is taken in what order and what connection, if any, is needed to get from the origin to the destination, is quite short in `main()` for `Lesson2`:
+A "routing" is a set a flights, in some order, that get the traveller from an origin to a destination.  This set has one element in the case of a direct flight, otherwise it has one or more "connections".  The code for building the final "routings" is quite short in `main()` for `Lesson2`:
 
 ```java			
 //bound the routings by using the connections
@@ -278,7 +278,7 @@ List<AirItinerary> in = buildRoutings(inboundSolution, allSegments, allDetails);
 List<AirItinerary> allItins = mergeOutboundAndInbound(out, in);
 ```
 
-The functions `buildRoutings()` and `mergeOutboundAndInbound()` hide quite a bit of complexity.  Let's start by thinking about how to construct a routing from the XML.  From the example above on the outbound solution:
+The functions `buildRoutings()` and `mergeOutboundAndInbound()` hide quite a bit of complexity.  Let's start by thinking about how to construct a routing from the XML.  From the example above, this is the outbound solution:
 
 ```xml
 <air:AirItinerarySolution Key="60T">
@@ -309,7 +309,7 @@ The functions `buildRoutings()` and `mergeOutboundAndInbound()` hide quite a bit
 </air:AirItinerarySolution>
 ```
 
-It should be clear that this solution has a total of 16 air segments involved... so it's more than just a trip from Paris to Chattanooga via Atlanta!  The connections (`air:Connection`) at the bottom are the key to understanding what path takes one from Paris to Chattanooga.  The first air connection object indicates that index 0 of the list above, the air segment ref with Key "30T" has a connection the the _next_ air segment ref (key "31T").  If we return to the very top of the XML example given above and extract the _air segments_ that are referred to by keys 30T and 31T we have:
+It should be clear that this solution has a total of 16 air segments involved... so it's more than just a trip from Paris to Chattanooga via Atlanta!  The connections (`air:Connection`) at the bottom are the key to understanding what route takes one from Paris to Chattanooga.  The first air connection object indicates that index 0 of the list above, the air segment ref with key "30T" has a connection the the _next_ air segment ref (key "31T").  If we return to the very top of the XML example given previously and extract the _air segments_ that are referred to by keys 30T and 31T we have:
 
 ```xml
 <air:AirSegment Key="30T" Group="0" Carrier="AF" FlightNumber="682" Origin="CDG" Destination="ATL" DepartureTime="2012-06-23T10:55:00.000+02:00" ArrivalTime="2012-06-23T14:20:00.000-04:00" FlightTime="565" TravelTime="722" ETicketability="Yes" Equipment="77W" ChangeOfPlane="false" ParticipantLevel="Secure Sell" LinkAvailability="true" PolledAvailabilityOption="Polled avail used" OptionalServicesIndicator="false" AvailabilitySource="Seamless">
@@ -332,15 +332,15 @@ It should be clear that this solution has a total of 16 air segments involved...
 </air:AirSegment>
 ```
 
-This shows the two flights needed to get from Paris to Chattanooga: Air France flight 682 (Carrier="AF" and FlightNumber="682") from CDG to ATL and then Air France flight 8468.  Looking carefully at the second air segment here, you can see the `air:CodeShare` element that identifies this second flight as a codeshare flight that is being operated by Delta (OperatingCarrier="DL").  So, if you were surprised that Air France had a flight from Atlanta to Chattanooga within the USA, you should feel better now!
+This shows the two flights needed to get from Paris to Chattanooga: Air France flight 682 (Carrier="AF" and FlightNumber="682") from CDG to ATL and then Air France flight 8468.  Looking carefully at the second air segment here, you can see the `air:CodeShareInfo` element that identifies this second flight as a codeshare flight that is being operated by Delta (OperatingCarrier="DL").  So, if you were surprised that Air France had a flight from Atlanta to Chattanooga within the USA, you should feel better now!
 
-This processing of using the `AirSolution` objects' `Connection` objects to figure out the necessary `AirSegment` objects, taken from the maps built in "Decoding Part 1" is the job of the function `buildRoutings()` shown earlier.  The routing result is an `AirItinerary` object with the correct legs in it for the particular outbound or inbound journey.  Since the routings for outbound and inbound are built separately--the `air:AirItinerarySolution` entities in the XML dictate this--we will need to combine the outbound and inbound itineraries (in the right order!) to form full itineraries.  Without this, we would be pricing the one way journeys either from Paris to Chattanooga or the reverse.  
+This processing of using the `AirSolution` objects' `Connection` objects to figure out the necessary `AirSegment` objects, taken from the maps built in "Decoding Part 1", is the job of the function `buildRoutings()` shown earlier.  The routing result is an `AirItinerary` object with the correct legs in it for the particular outbound or inbound journey.  Since the routings for outbound and inbound are built separately--the `air:AirItinerarySolution` entities in the XML dictate this--we will need to combine the outbound and inbound itineraries (in the right order!) to form full itineraries.  Without this, we would be pricing the one way journeys either from Paris to Chattanooga or the reverse.  
 
 In `Lesson2`, the function `mergeOutboundAndInbound()` creates a Java `List` of all the combinations of outbound and return itineraries created by `buildRoutings()`.  This is done by creating every permutation (the cross product) of the two input lists of `AirItinerary` objects.
 
 ### Pricing
 
-After all this, we now have a `List<AirItinerary>` objects, with each element indicating a journey that is suitable for pricing.  As with any port we have discussed in this tutorial one must construct the correct request parameters, in this case `AirPricingReq`.  The `AirPricingReq` object has a few more things that are needed besides the itinerary, such as the cabin preference (in case multiple are available), the type of passenger, etc.  This is the critical part of the function `displayItineraryPrice` that does the work of calling the uAPI to get a price for an `AirItinerary`:
+After all this, we now have a `List<AirItinerary>` objects, with each element indicating a journey that is suitable for pricing.  As with any port we have discussed in this tutorial, we must first construct the correct request parameters, in this case `AirPricingReq`.  The `AirPricingReq` object has a few more things that are needed besides the itinerary, such as the cabin preference (in case multiple are available), the type of passenger, etc.  This is the critical part of the function `displayItineraryPrice` that does the work of calling the uAPI to get a price for an `AirItinerary`:
 	
 ```java
 
@@ -372,8 +372,14 @@ public static void displayItineraryPrice(AirItinerary itin) throws AirFaultMessa
 	priceRsp = WSDLService.getPrice(false).service(priceReq);
 ```
 
+### Woot!
+
+We have now completed the basic workflow that must be done to find a way to travel between two points via Air!  You should be able to run Lesson 2 the same way you ran Lesson 1 and have TravelPort price a few dozen or so possible itineraries for you.    As we will see in Lesson 3, there are other ways to do this work... and other ways to travel besides air!  
+
 
 ### Exercises for the reader
+
+* Try changing the origin and destination airports to ones that you know well.  Look at the displayed itineraries and prices and compare to an online travel website.
 
 * Try using the `displayItineraryPrice` to compare the prices of two one-way journeys from the origin to the destination and the round trip price.  To do this you will need to construct "one way" itineraries (`AirItinerary`) and submit them to the pricing engine.
 
@@ -381,6 +387,7 @@ public static void displayItineraryPrice(AirItinerary itin) throws AirFaultMessa
 
 * Using a debugger, try stopping `Lesson2` around line 27.  Walk down the hierarchy of objects inside the `rsp` and explore what more information about the flights could be displayed for the user.  Similarly, stop the program around line 227 and do the same for the `priceRsp` to see what extra information could be displayed about the price.
 
+----------------------
 
-
+[Proceed To Lesson3](lesson3.html)
 
