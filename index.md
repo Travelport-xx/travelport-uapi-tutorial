@@ -118,7 +118,7 @@ public static void main(String[] argv) {
 	
 	try {
 		//run the ping request
-		PingRsp rsp = WSDLService.getPing().service(req);
+		PingRsp rsp = WSDLService.getPing(false).service(req);
 		//print results.. payload and trace ID are echoed back in response
 		System.out.println(rsp.getPayload());
 		System.out.println(rsp.getTraceId());
@@ -131,7 +131,7 @@ public static void main(String[] argv) {
 }
 ```
 
-The code in `main()` above follows exactly the pattern explained in the programming model section: we set up a `PingReq` object with the proper parameters and then pass them through to the uAPI via the ping port.  The only unexpected part of this simple example is the call to `WSDLService.getPing()` that returns the ping port object.  `WSDLService` is a helper class that has been provided with the tutorial to simplify things and allow you to focus on the essential parts of the uAPI and not the details...
+The code in `main()` above follows exactly the pattern explained in the programming model section: we set up a `PingReq` object with the proper parameters and then pass them through to the uAPI via the ping port.  The only unexpected part of this simple example is the call to `WSDLService.getPing(false)` that returns the ping port object. The false parameter indicates that you do want a copy of the XML input and output sent to the console; setting this to true can often help your understanding of what is happening! `WSDLService` is a helper class that has been provided with the tutorial to simplify things and allow you to focus on the essential parts of the uAPI and not the details...
 
 ### The Details
 

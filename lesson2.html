@@ -137,5 +137,117 @@ DL#8517 from ATL to CDG at 2012-06-29T17:55:00.000-04:00
 
 <h3>Decoding The Result</h3>
 
+<p>To understand the decoding taking place in client, it may be useful to examine the XML that is actually returned from the uAPI server to our client.  This is example is slighted edited for space:</p>
+
+<pre><code class="xml"> &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;SOAP:Envelope xmlns:SOAP=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;&gt;
+  &lt;SOAP:Body&gt;
+    &lt;air:AvailabilitySearchRsp xmlns:air=&quot;http://www.travelport.com/schema/air_v18_0&quot; xmlns:common_v15_0=&quot;http://www.travelport.com/schema/common_v15_0&quot; TransactionId=&quot;E32DF18C0A07581501D13BB0BE67E3C8&quot; ResponseTime=&quot;965&quot; DistanceUnits=&quot;MI&quot;&gt;
+      &lt;common_v15_0:NextResultReference&gt;H4sIAAAAAAAAAJ1UTUzUQBR+W1z5cQ0BlBiMP0SiXmzLwi674kVBEVPxZ4kxEA5DO5TBblums0sxxkQT9aJHYzTRi5HExKgHDxoTE056NMabejBcvHjXE84MrViJbnQPs/Nmvve97/1MH32FdEChbQZVkVphxFEPUormDRKw8NK7bbdfo7t1kBqGdQE5j0MfAJS5dXxt4k77TK+s2tlgjjBzWrWtQEUW8hmmgcpvyp6rHg4ZRSYb9c5h17j8YQdZbllQoGEcNiBKR0kZizgMuscN7qDFVBqnKnsWdrQVGk0gSz42yRQxESOe288ZLOyvMhRrMBxxcEgmHbyWyRBMASOuNBm0GqIUmoNcWysxSlybQ9I29So+g7ZfLoddhm1M+W1j2aNY5jgLFyFtwHqPEpvEVsanXpVYmA5wRdFZmv2Eh36FRhVIFFPqjwu5VveDnWfevrrVd0MBkG0BzlKswfLnKrx/ObF/67WliZgtxdub/z8uZ/zF4uOsflWBlAHNAUbUnJZzMIjmAwbq3xtVSuL7Qwrqv1Xmm3F90fyy9Z4CdQZs9CmewpRiS+AY7EpGj4KKudcGEZPJ8IZmgohQ2KJJzbzJjO9P88Zzlr21x1Ui+0Of17EzoT+SLZ9aHBJWfikF0mOQsfjpiMeGSBW7Y9BM3CpyiNQ/5rmYA4SSGGBAw4xnIcHEYIvhUVsTtiYwiZRY5D+CVlJKiz6LNrdzH1X4qALyU9PzA6E1M/7pu5gICjuSoEkUYPUQX2L08vL3zycm1PsKKMegnhwnjkMC/rTIwDT1XM/x7HkGHb/JW73rl2IK7ffPAle0JxnMlDB1uHRi1aGrxCqTD9+0TM32ndxTJ4Y2WCMy1iaylvgFLXXnQrZjSeLnGqH+MDO1oeOjYegL990150w29emzU0dvdnVekfOV4ePqEP79+GVSmhweOHGSnEJ5yEP6YrOJf1XqBo4e5H/be/QevU/vLup9Ob27kOvWi3m9N6fnsr3FXD4vcINDXKlwUypibZDvXuya5JsVu4xcW2Nzs6jr/icfQRgdkfe2ldi7/YhTxs6vjd1byBaKxWxPPtLohz8AIHKIBC8GAAA=&lt;/common_v15_0:NextResultReference&gt;
+      &lt;air:FlightDetailsList&gt;
+        &lt;air:FlightDetails Key=&quot;0T&quot; Origin=&quot;CDG&quot; Destination=&quot;ATL&quot; DepartureTime=&quot;2012-06-23T10:55:00.000+02:00&quot; ArrivalTime=&quot;2012-06-23T14:20:00.000-04:00&quot; FlightTime=&quot;565&quot; TravelTime=&quot;722&quot; Equipment=&quot;77W&quot; OriginTerminal=&quot;2E&quot; DestinationTerminal=&quot;S&quot;/&gt;
+        &lt;air:FlightDetails Key=&quot;1T&quot; Origin=&quot;ATL&quot; Destination=&quot;CHA&quot; DepartureTime=&quot;2012-06-23T16:05:00.000-04:00&quot; ArrivalTime=&quot;2012-06-23T16:57:00.000-04:00&quot; FlightTime=&quot;52&quot; TravelTime=&quot;722&quot; Equipment=&quot;CRJ&quot; OriginTerminal=&quot;S&quot;/&gt;
+        &lt;air:FlightDetails Key=&quot;2T&quot; Origin=&quot;CDG&quot; Destination=&quot;ATL&quot; DepartureTime=&quot;2012-06-23T10:55:00.000+02:00&quot; ArrivalTime=&quot;2012-06-23T14:20:00.000-04:00&quot; FlightTime=&quot;565&quot; TravelTime=&quot;722&quot; Equipment=&quot;77W&quot; OriginTerminal=&quot;2E&quot; DestinationTerminal=&quot;S&quot;/&gt;
+        &lt;air:FlightDetails Key=&quot;3T&quot; Origin=&quot;ATL&quot; Destination=&quot;CHA&quot; DepartureTime=&quot;2012-06-23T16:05:00.000-04:00&quot; ArrivalTime=&quot;2012-06-23T16:57:00.000-04:00&quot; FlightTime=&quot;52&quot; TravelTime=&quot;722&quot; Equipment=&quot;CRJ&quot; OnTimePerformance=&quot;70&quot; OriginTerminal=&quot;S&quot;/&gt;
+        &lt;air:FlightDetails Key=&quot;4T&quot; Origin=&quot;CDG&quot; Destination=&quot;CLT&quot; DepartureTime=&quot;2012-06-23T11:10:00.000+02:00&quot; ArrivalTime=&quot;2012-06-23T14:35:00.000-04:00&quot; FlightTime=&quot;565&quot; TravelTime=&quot;743&quot; Equipment=&quot;767&quot; OriginTerminal=&quot;1&quot;/&gt;
+        &lt;air:FlightDetails Key=&quot;5T&quot; Origin=&quot;CLT&quot; Destination=&quot;CHA&quot; DepartureTime=&quot;2012-06-23T16:25:00.000-04:00&quot; ArrivalTime=&quot;2012-06-23T17:33:00.000-04:00&quot; FlightTime=&quot;68&quot; TravelTime=&quot;743&quot; Equipment=&quot;CRJ&quot; OnTimePerformance=&quot;-10&quot;/&gt;
+        &lt;air:FlightDetails Key=&quot;6T&quot; Origin=&quot;CDG&quot; Destination=&quot;CLT&quot; DepartureTime=&quot;2012-06-23T11:10:00.000+02:00&quot; ArrivalTime=&quot;2012-06-23T14:35:00.000-04:00&quot; FlightTime=&quot;565&quot; TravelTime=&quot;743&quot; Equipment=&quot;767&quot; OriginTerminal=&quot;1&quot;/&gt;
+        &lt;air:FlightDetails Key=&quot;7T&quot; Origin=&quot;CLT&quot; Destination=&quot;CHA&quot; DepartureTime=&quot;2012-06-23T16:25:00.000-04:00&quot; ArrivalTime=&quot;2012-06-23T17:33:00.000-04:00&quot; FlightTime=&quot;68&quot; TravelTime=&quot;743&quot; Equipment=&quot;CRJ&quot; OnTimePerformance=&quot;-10&quot;/&gt;
+      &lt;/air:FlightDetailsList&gt;
+      &lt;air:AirSegmentList&gt;
+        &lt;air:AirSegment Key=&quot;30T&quot; Group=&quot;0&quot; Carrier=&quot;AF&quot; FlightNumber=&quot;682&quot; Origin=&quot;CDG&quot; Destination=&quot;ATL&quot; DepartureTime=&quot;2012-06-23T10:55:00.000+02:00&quot; ArrivalTime=&quot;2012-06-23T14:20:00.000-04:00&quot; FlightTime=&quot;565&quot; TravelTime=&quot;722&quot; ETicketability=&quot;Yes&quot; Equipment=&quot;77W&quot; ChangeOfPlane=&quot;false&quot; ParticipantLevel=&quot;Secure Sell&quot; LinkAvailability=&quot;true&quot; PolledAvailabilityOption=&quot;Polled avail used&quot; OptionalServicesIndicator=&quot;false&quot; AvailabilitySource=&quot;Seamless&quot;&gt;
+          &lt;air:AirAvailInfo ProviderCode=&quot;1G&quot;&gt;
+            &lt;air:BookingCodeInfo BookingCounts=&quot;J9|ZC|W9|U9|TC|GR&quot;/&gt;
+            &lt;air:BookingCodeInfo CabinClass=&quot;Business&quot; BookingCounts=&quot;C9|D7|IC&quot;/&gt;
+            &lt;air:BookingCodeInfo CabinClass=&quot;Economy&quot; BookingCounts=&quot;OC|S9|Y9|B9|M9|K9|H9|LC|QC|EC|NC|RC|VC|XC&quot;/&gt;
+            &lt;air:BookingCodeInfo CabinClass=&quot;PremiumEconomy&quot; BookingCounts=&quot;A5&quot;/&gt;
+          &lt;/air:AirAvailInfo&gt;
+          &lt;air:FlightDetailsRef Key=&quot;0T&quot;/&gt;
+        &lt;/air:AirSegment&gt;
+        &lt;air:AirSegment Key=&quot;31T&quot; Group=&quot;0&quot; Carrier=&quot;AF&quot; FlightNumber=&quot;8468&quot; Origin=&quot;ATL&quot; Destination=&quot;CHA&quot; DepartureTime=&quot;2012-06-23T16:05:00.000-04:00&quot; ArrivalTime=&quot;2012-06-23T16:57:00.000-04:00&quot; FlightTime=&quot;52&quot; TravelTime=&quot;722&quot; ETicketability=&quot;Yes&quot; Equipment=&quot;CRJ&quot; ChangeOfPlane=&quot;false&quot; ParticipantLevel=&quot;Secure Sell&quot; LinkAvailability=&quot;true&quot; PolledAvailabilityOption=&quot;Polled avail used&quot; OptionalServicesIndicator=&quot;false&quot; AvailabilitySource=&quot;Seamless&quot;&gt;
+          &lt;air:CodeshareInfo OperatingCarrier=&quot;DL&quot;/&gt;
+          &lt;air:AirAvailInfo ProviderCode=&quot;1G&quot;&gt;
+            &lt;air:BookingCodeInfo BookingCounts=&quot;W9|U9|T9&quot;/&gt;
+            &lt;air:BookingCodeInfo CabinClass=&quot;Economy&quot; BookingCounts=&quot;S9|Y9|B9|M9|K9|H9|V9|L9|Q9|N7|R7&quot;/&gt;
+            &lt;air:BookingCodeInfo CabinClass=&quot;PremiumEconomy&quot; BookingCounts=&quot;A9&quot;/&gt;
+          &lt;/air:AirAvailInfo&gt;
+          &lt;air:FlightDetailsRef Key=&quot;1T&quot;/&gt;
+        &lt;/air:AirSegment&gt;
+        &lt;air:AirSegment Key=&quot;32T&quot; Group=&quot;0&quot; Carrier=&quot;DL&quot; FlightNumber=&quot;8504&quot; Origin=&quot;CDG&quot; Destination=&quot;ATL&quot; DepartureTime=&quot;2012-06-23T10:55:00.000+02:00&quot; ArrivalTime=&quot;2012-06-23T14:20:00.000-04:00&quot; FlightTime=&quot;565&quot; TravelTime=&quot;722&quot; ETicketability=&quot;Yes&quot; Equipment=&quot;77W&quot; ChangeOfPlane=&quot;false&quot; ParticipantLevel=&quot;Secure Sell&quot; LinkAvailability=&quot;true&quot; PolledAvailabilityOption=&quot;Polled avail used&quot; OptionalServicesIndicator=&quot;false&quot; AvailabilitySource=&quot;Seamless&quot;&gt;
+          &lt;air:CodeshareInfo OperatingCarrier=&quot;AF&quot;/&gt;
+          &lt;air:AirAvailInfo ProviderCode=&quot;1G&quot;&gt;
+            &lt;air:BookingCodeInfo BookingCounts=&quot;J9|W5|U0|T0&quot;/&gt;
+            &lt;air:BookingCodeInfo CabinClass=&quot;Business&quot; BookingCounts=&quot;C9|D7|I0&quot;/&gt;
+            &lt;air:BookingCodeInfo CabinClass=&quot;Economy&quot; BookingCounts=&quot;S0|Y9|B9|M9|H9|Q9|K0|L0&quot;/&gt;
+          &lt;/air:AirAvailInfo&gt;
+          &lt;air:FlightDetailsRef Key=&quot;2T&quot;/&gt;
+        &lt;/air:AirSegment&gt;
+        &lt;air:AirSegment Key=&quot;33T&quot; Group=&quot;0&quot; Carrier=&quot;DL&quot; FlightNumber=&quot;5542&quot; Origin=&quot;ATL&quot; Destination=&quot;CHA&quot; DepartureTime=&quot;2012-06-23T16:05:00.000-04:00&quot; ArrivalTime=&quot;2012-06-23T16:57:00.000-04:00&quot; FlightTime=&quot;52&quot; TravelTime=&quot;722&quot; ETicketability=&quot;Yes&quot; Equipment=&quot;CRJ&quot; ChangeOfPlane=&quot;false&quot; ParticipantLevel=&quot;Secure Sell&quot; LinkAvailability=&quot;true&quot; PolledAvailabilityOption=&quot;Polled avail used&quot; OptionalServicesIndicator=&quot;false&quot; AvailabilitySource=&quot;Seamless&quot;&gt;
+          &lt;air:AirAvailInfo ProviderCode=&quot;1G&quot;&gt;
+            &lt;air:BookingCodeInfo CabinClass=&quot;Economy&quot; BookingCounts=&quot;Y9|B9|M9|H9|Q9|K9|L9|E3&quot;/&gt;
+            &lt;air:BookingCodeInfo BookingCounts=&quot;U9|T9&quot;/&gt;
+          &lt;/air:AirAvailInfo&gt;
+          &lt;air:FlightDetailsRef Key=&quot;3T&quot;/&gt;
+        &lt;/air:AirSegment&gt;
+      &lt;/air:AirSegmentList&gt;
+      &lt;air:AirItinerarySolution Key=&quot;60T&quot;&gt;
+        &lt;air:AirSegmentRef Key=&quot;30T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;31T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;32T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;33T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;34T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;35T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;36T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;37T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;38T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;39T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;40T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;41T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;42T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;43T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;44T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;45T&quot;/&gt;
+        &lt;air:Connection SegmentIndex=&quot;0&quot;/&gt;
+        &lt;air:Connection SegmentIndex=&quot;2&quot;/&gt;
+        &lt;air:Connection SegmentIndex=&quot;4&quot;/&gt;
+        &lt;air:Connection SegmentIndex=&quot;6&quot;/&gt;
+        &lt;air:Connection SegmentIndex=&quot;8&quot;/&gt;
+        &lt;air:Connection SegmentIndex=&quot;10&quot;/&gt;
+        &lt;air:Connection SegmentIndex=&quot;12&quot;/&gt;
+        &lt;air:Connection SegmentIndex=&quot;14&quot;/&gt;
+      &lt;/air:AirItinerarySolution&gt;
+      &lt;air:AirItinerarySolution Key=&quot;61T&quot;&gt;
+        &lt;air:AirSegmentRef Key=&quot;46T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;47T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;48T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;49T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;50T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;51T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;52T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;53T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;54T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;55T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;56T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;57T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;58T&quot;/&gt;
+        &lt;air:AirSegmentRef Key=&quot;59T&quot;/&gt;
+        &lt;air:Connection SegmentIndex=&quot;0&quot;/&gt;
+        &lt;air:Connection SegmentIndex=&quot;2&quot;/&gt;
+        &lt;air:Connection SegmentIndex=&quot;4&quot;/&gt;
+        &lt;air:Connection SegmentIndex=&quot;6&quot;/&gt;
+        &lt;air:Connection SegmentIndex=&quot;8&quot;/&gt;
+        &lt;air:Connection SegmentIndex=&quot;9&quot;/&gt;
+        &lt;air:Connection SegmentIndex=&quot;11&quot;/&gt;
+        &lt;air:Connection SegmentIndex=&quot;12&quot;/&gt;
+      &lt;/air:AirItinerarySolution&gt;
+    &lt;/air:AvailabilitySearchRsp&gt;
+  &lt;/SOAP:Body&gt;
+&lt;/SOAP:Envelope&gt;
+</code></pre>
+
+<p>Let&rsquo;s explain the approach the uAPI is using to encode the results.  Each &ldquo;type&rdquo; of entity is detailed once, typically in a &ldquo;list&rdquo; of that type, for example the <code>air:FlightDetailsList</code> has many <code>air:FlightDetails</code> entities within in (and many more were clipped out for space reasons!).  Similarly, the <code>air:AirSegmentList</code> contains many <code>air:AirSegment</code> encodings (again, we removed many <code>air:AirSegment</code> for space).  However, it is important to note that <em>within</em> the <code>air:AirSegment</code> it does not repeat the <code>air:FlightDetails</code> but instead uses a <code>air:FlightDetailsRef</code> to refer to the flight details in question.  The <code>air:FlightDetailsRef</code> has a <code>Key</code> attribute that matches up with the <code>Key</code> attribute in the <code>air:FlightDetails</code>  object.  Why do it this way? Primarily, this approach avoids repetition which would bloat the already large requests and responses.  If you look at the last XML objects in the example you will see two &ldquo;solutions&rdquo; (<code>air:AirItinerarySolution</code>) that clearly indicate that it is possible to have a compact representation&hellip; after you have all the definitions above!  Interestingly, a single <code>air:ItinerarySolution</code> may encode may possible itineraries (despite the name!) because it &ldquo;connects&rdquo; segments with the <code>air:Connection</code> entries.  We&rsquo;ll explain more about this later when discuss building &ldquo;routings.&rdquo;</p>
+
+<pre><code>The large size of these messages and the complexity of encoding and decoding them is one of the more serious complaints about SOAP/XML as a transport in systems such as the uAPI.  We will not debate that point here, but just mention that the requests and responses sent to and from the Travelport system to end up being hundreds of lines of XML.
+</code></pre>
+
 </body>
 </html>
