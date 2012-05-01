@@ -50,7 +50,7 @@ When run, the code `Lesson2` will produce a number of these itineraries plus pri
 
 At a high level, the class [Lesson2](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/Lesson2.java) must perform these logical operations:
 
-* Construct the necessary parameters for an availability search, such the origin and destination city as well as the travel dates
+* Construct the necessary parameters for an availability search, such as the origin and destination city as well as the travel dates
 * Make the availability search request
 * Decode the results of the search into proper itineraries
 * Looping over each itinerary
@@ -74,7 +74,7 @@ AvailabilitySearchRsp rsp = search(from, to,
 	Helper.daysInFuture(60), Helper.daysInFuture(67));
 ```
 
-The two calls to the helper method `Helper.daysInFuture()` should be fairly self explanatory.  So, we've setup all we need for a search now, right? We have the origin, destination, and dates of travel, so we are ready, right?  Not by a long shot!  The method `search` is implemented in `Lesson2` and is dozens of lines of code plus uses a number of helper routines.  "Why all this extra code?", one may wonder.  The reason is that there are hundreds of parameters that can possibly be set on an air search, for far too many reasons than can be explained here.  However, some of these parameters are required to be set in _any_ air travel search done with uAPI such as the (obvious) origin and destination but also which class of service should be considered (Economy is our default choice) and what type of passenger is traveling (Adult is our default choice, but there are more than 100 types of passengers such as Military Veteran, Member of the Clergy, etc).
+The two calls to the helper method `Helper.daysInFuture()` should be fairly self explanatory.  So, we've setup all we need for a search now, right? We have the origin, destination, and dates of travel, so we are ready, right?  Not by a long shot!  The method `search` is implemented in `Lesson2` and is dozens of lines of code plus uses a number of helper routines.  "Why all this extra code?", one may wonder.  The reason is that there are hundreds of parameters that can possibly be set on an air search, for far too many reasons than can be explained here.  However, some of these parameters are required to be set in _any_ air travel search done with uAPI such as the (obvious) origin and destination but also other details such as what type of passenger is traveling (Adult is our default choice, but there are more than 100 types of passengers such as Military Veteran, Member of the Clergy, etc).
 
 Here is a snippet from the implementation of the `search()` method:
 
@@ -125,7 +125,7 @@ It is worth the time look at the implementation of `AirReq` so that you can see,
 
 ### Decoding The Result
 
-To understand the decoding taking place in the client code of Lesson 2, it may be useful to examine the XML that is actually returned via the network from the uAPI server to our client.  This is example is edited for space:
+To understand the decoding taking place in the client code of Lesson 2, it may be useful to examine the XML that is actually returned via the network from the uAPI server to our client.  This example is edited for space:
 
 ```xml
  <?xml version="1.0" encoding="UTF-8"?><SOAP:Envelope xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
@@ -234,7 +234,7 @@ To understand the decoding taking place in the client code of Lesson 2, it may b
 
 Let's explain the approach the uAPI is using to encode the results.  Each "type" of entity is detailed once, typically in a "list" of that type, for example the `air:FlightDetailsList` has many `air:FlightDetails` entities within it (and many more were clipped out for space reasons).  Similarly, the `air:AirSegmentList` contains many `air:AirSegment` encodings (again, we removed many `air:AirSegment` items for space).  However, it is important to note that _within_ the `air:AirSegment`, the response does not repeat the `air:FlightDetails` but instead uses an `air:FlightDetailsRef` to refer to the flight details in question.  The `air:FlightDetailsRef` has a `Key` attribute that matches up with the `Key` attribute in the `air:FlightDetails`  object.  Why do it this way? Primarily, this approach avoids repetition which would bloat the already large requests and responses.  If you look at the last XML objects in the example you will see two "solutions" (`air:AirItinerarySolution`) that clearly indicate that it is possible to have a compact representation... after you have all the definitions above!  Interestingly, a single `air:ItinerarySolution` may encode many possible itineraries (despite the name) because it "connects" segments with the `air:Connection` entries.  We'll explain more about this later when discuss building "routings."
 
-The large size of these messages and the complexity of encoding and decoding them is one of the more serious complaints about SOAP/XML as a transport in systems such as the uAPI.  We will not debate that point here, but just mention that the requests and responses sent to and from the Travelport system often end up being hundreds of lines of XML.
+The large size of these messages and the complexity of encoding and decoding them is one of the more serious complaints about SOAP/XML as a transport in systems such as the uAPI.  We will not debate that point here, but just mention that the requests and responses sent to and from the Travelport system often end up being hundreds of lines of XML.  If you are concerned about the size of the data being passed from your client to the TravelPort servers you can enable the gzip compression algorithm in the headers of your web requests with `Accept-Encoding: gzip, deflate`.
 
 ### Decoding Part 1: Building Maps
 
@@ -253,7 +253,7 @@ It's worth noting in this example that to get access to the list of `air:AirSegm
 
 ### Decoding Part 2: Air Solutions
 
-It would be handy if the results returned from an air availability search could be pulled out of the response and directly used as parameters back to the uAPI as all or part of a air price request.  Sadly, no such luck.  The availability search returns _many_ possible solutions and these are encoded in a compact way, see `air:AirItinerarySolution` in the XML example above.  Conversely, the air price port requires that you supply a single itinerary, in the form of an `AirItinerary` object, for pricing.  Some of the pieces of an `AirItinerary` can be constructed from the pieces returned from the server to us, but most of the pieces of an `AirItinerary` have to de be _derived_ from the results we have obtained from the `AirAvailabilitySearchRsp`.
+It would be handy if the results returned from an air availability search could be pulled out of the response and directly used as parameters back to the uAPI as all or part of a air price request.  Sadly, no such luck.  The availability search returns _many_ possible solutions and these are encoded in a compact way, see `air:AirItinerarySolution` in the XML example above.  Conversely, the air price port requires that you supply a single itinerary, in the form of an `AirItinerary` object, for pricing.  Some of the pieces of an `AirItinerary` can be constructed from the pieces returned from the server to us, but most of the pieces of an `AirItinerary` have to be _derived_ from the results we have obtained from the `AirAvailabilitySearchRsp`.
 
 In our XML example above, we displayed exactly two `AirItinerarySolution` objects.  This is all that were present in the result because one `AirItinerarySolution` is returned for each "leg" of the journey that has been searched for.  In this case, our search was from CDG (Paris) to CHA (Chattanooga) on the first leg and the reverse for the way back.  The code in `main` that takes care of this small issue is :
 
@@ -309,7 +309,7 @@ The functions `buildRoutings()` and `mergeOutboundAndInbound()` hide quite a bit
 </air:AirItinerarySolution>
 ```
 
-It should be clear that this solution has a total of 16 air segments involved... so it's more than just a trip from Paris to Chattanooga via Atlanta!  The connections (`air:Connection`) at the bottom are the key to understanding what route takes one from Paris to Chattanooga.  The first air connection object indicates that index 0 of the list above, the air segment ref with key "30T" has a connection the the _next_ air segment ref (key "31T").  If we return to the very top of the XML example given previously and extract the _air segments_ that are referred to by keys 30T and 31T we have:
+It should be clear that this solution has a total of 16 air segments involved... so it's more than just a trip from Paris to Chattanooga via Atlanta!  The connections (`air:Connection`) at the bottom are the key to understanding what route takes one from Paris to Chattanooga.  The first air connection object indicates that index 0 of the list above, the air segment ref with key "30T" has a connection to the _next_ air segment ref (key "31T").  If we return to the very top of the XML example given previously and extract the _air segments_ that are referred to by keys 30T and 31T we have:
 
 ```xml
 <air:AirSegment Key="30T" Group="0" Carrier="AF" FlightNumber="682" Origin="CDG" Destination="ATL" DepartureTime="2012-06-23T10:55:00.000+02:00" ArrivalTime="2012-06-23T14:20:00.000-04:00" FlightTime="565" TravelTime="722" ETicketability="Yes" Equipment="77W" ChangeOfPlane="false" ParticipantLevel="Secure Sell" LinkAvailability="true" PolledAvailabilityOption="Polled avail used" OptionalServicesIndicator="false" AvailabilitySource="Seamless">
