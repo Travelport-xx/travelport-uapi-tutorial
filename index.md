@@ -1,15 +1,27 @@
-# The TravelPort Universal API Tutorial
+---
+layout: page
+title: The TravelPort uAPI Tutorial
+tagline: Making it easy to build travel applications
+---
+{% include JB/setup %}
 
-## The Big Picture
+## The Goals Of The Tutorial
 
-This tutorial is broken into three large pieces called _units_.  Each unit has a large scale goal and three lessons that support the larger objective.  
+The tutorial is broken into three sections, or "units", each of which has a separate objective; each unit is broken into three "lessons" that take you part of the way towards the goal of the unit.
 
-The first unit familiarizes the reader with how to work with TravelPort API, including setting up to use it, and how to make some basic API calls.  These API calls are ones involving searching for flights (or trains) and include getting availability, schedules, and prices.  
+The first unit will teach you how to setup and configure the TravelPort Universal Api (uAPI) and how to make some basic requests through that API.  With this section complete, you can ask TravelPort for information about rail and air travel--such as schedules and availability--and of course get the prices associated with that travel.  The second lesson is about the common "agency workflows" or actions that travel agents have to perform regularly.  These include creating a booking for a passenger, finding hotel accommodation in an area, and manipulating the agents queue of tasks to perform.  The final unit will help you build a working [Facebook](http://www.facebook.com) application that uses the uAPI to determine things like, "How much would it cost for me to visit my friend Joe on his birthday next month?".
 
-The second unit gives the reader some experience with more advanced functionality in the TravelPort Universal API (uAPI) such as the ability to make and cancel bookings as well as other typical "workflow" associated with travel applications such as manipulating an agency queue.
+## Blog Posts
 
-The final unit constructs a [Facebook](http://www.facebook.com) application that uses the uAPI to perform functions that make sense in a social setting and integrate them with Facebook. These include the ability to perform functions like, "show me the cheapest way to go visit Joe for his birthday" or other such travel-and-social features.
+<ul class="posts">
+  {% for post in site.posts %}
+    <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ BASE_PATH }}{{ post.url }}">{{ post.title }}</a></li>
+  {% endfor %}
+</ul>
 
-----------------------
+## This Website
 
-[Proceed To Lesson1](lesson1.html)
+This website is part of a larger system, [GitHub](http://www.github.com), that allows to make your own copy of this website and the tutorial code, raise issues or comment about the code or documentation, make your own changes and have the "pulled" into this tutorial by the authors, and read the work of many others who are using the site.
+
+
+
