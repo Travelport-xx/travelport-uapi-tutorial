@@ -1,3 +1,10 @@
+---
+layout: page
+title: "Lesson3: Complex Travel Shopping"
+description: "Understanding shopping and using LowFareSearch requests."
+---
+{% include JB/setup %}
+
 # Complex Travel Shopping
 
 ## Unit 1, Lesson 3
@@ -22,17 +29,16 @@ The other type of provider that can be accessed through the uAPI is the unfortun
 
 The goal of this lesson is to produce output that allows the user to compare not only price but compare means of transport between two locations.  This is a snippet from the [Lesson3](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/Lesson3.java) program show two different itineraries from Glasgow, Scotland, to London's Gatwick Airport:
 
-```
+{% highlight console %}
+
 AIR Departing from GLA to LGW on TUE MAY 01 11:00:00 CEST 2012
          Flight [BA]#2957  Flight time: 85 minutes
                            Arrive TUE MAY 01 12:25:00 CEST 2012
-
 
 AIR Departing from LGW to GLA on THU MAY 03 12:25:00 CEST 2012
          Flight [BA]#2960  Flight time: 80 minutes
                            Arrive THU MAY 03 13:45:00 CEST 2012
 Base Price: GBP80.00   Total Price GBP160.10
-
 
 RAIL (OUTWARD) From Paisley Gilmour Str. to Gatwick Airport on TUE MAY 01 07:04:00 CEST 2012
          SCOTRAIL[SR] Train #SR7989   --- From Paisley Gilmour Str. to Glasgow
@@ -47,7 +53,8 @@ RAIL (RETURN) From Gatwick Airport to Paisley Gilmour Str. on THU MAY 03 05:10:0
          SCOTRAIL[SR] Train #SR5718   --- From Glasgow to Paisley Gilmour Str.
                            Arrive THU MAY 03 12:10:00 CEST 2012
 Total Price GBP356.00
-```
+
+{% endhighlight %}
 
 In addition, this data was retrieved asynchronously allowing the application to do other things while waiting for the results to be returned.  In the case of this tutorial, the `Lesson3` application just "sleeps" but there is no reason it could not calculate the cube root of pi, the price of tea in China, the net worth of Sergei Brin, etc.
 
@@ -58,7 +65,7 @@ Since you have already finished [lesson1](index.html) and [lesson2](lesson2.html
 Because some of the results from providers can take some time to produce, the uAPI offers you the ability to send a search request and then retrieve the results at your convenience.  So, the flow of such an application looks like this:
 
 * Send `LowCostSearchAsyncReq` via the low cost search async port's `service()` method
-* Consume `LowCostSearchAsyncRsp' response object to determine what providers have what data
+* Consume `LowCostSearchAsyncRsp` response object to determine what providers have what data
 * Looping over all the providers that have results
 	** Send a `RetrieveLowFareSearchReq` to retrieve results from the above search from but from a specific provider
 	** Consume the `RetrieveLowFareSearchRsp` object to get results
@@ -79,14 +86,14 @@ One has to be a bit "flexible" with the naming and use of some of the methods th
 
 The class [PrintableItinerary](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/PrintableItinerary.java) is included with the code for this unit.  It is intended to be used as part of this lesson.  Instances of this class can be constructed in one of two ways:
 
-```java
+{% highlight java %}
 public PrintableItinerary(AirPricingSolution solution, Helper.AirSegmentMap seg,
 		String roundTripTurnaround)
 
 public PrintableItinerary(RailPricingSolution solution, Helper.RailJourneyMap jour,
 				Helper.RailSegmentMap seg)
 
-```
+{% endhighlight %}
 
 These two constructors are the air and rail versions of this class, so that once constructed it is possible to simply call "toString()" on the `PrintableItinerary` object and have something reasonably understandable to a human being get printed out. 
 
@@ -102,7 +109,7 @@ A couple of things to note about `PrintableItinerary` constructors:
 
 The code for `main` in `Lesson3` is reproduced, edited for size and clarity, below:
 
-```java
+{% highlight java %}
 
 public static void main(String[] argv) {
 	String origin = "GLA", destination = "LGW";
@@ -151,15 +158,17 @@ public static void main(String[] argv) {
 	}
 
 }
-```
+{% endhighlight %}
 
-None of the code above should be shocking if you have been following us through the previous two lessons.  The key portion of this `main()` function is the loop that goes through the set of providers and each of their parts.  A more clever program than the one we have written here would do some useful computation where we have just done "[sleep a few seconds]"!
+
+None of the code above should be shocking if you have been following us through the previous two lessons.  The key portion of this `main()` function is the loop that goes through the set of providers and each of their parts.  A more clever program than the one we have written here would do some useful computation where we have just done "\[sleep a few seconds\]"!
 
 ### Output
 
 When you run `Lesson3` you will seem some itineraries such as the ones presented at the first of the lesson.  With those elided for clarity, the output of the program will look like much like this:
 
-```
+{% highlight console %}
+
 waiting for first response from a provider...
 Provider ACH has a total of 1 parts
 Provider 1G has a total of 1 parts
@@ -192,9 +201,10 @@ Response Message From Provider RCH[DB]  : Warning : No available rail suppliers 
 Response is from provider RCH: part 3 of 3
 Total number solutions: 0 air and 0 rail
 
-```
+{% endhighlight %}
 
-This is a bit more "real" than the idealized output shown at the beginning of this lesson that included just the itineraries.   A couple of things that the reader be interested in:  The `RCH` provider is the rail provider and two of its suppliers (Benelux and Deutsche Bahn) have no train service in the United Kingdom, so we get the warnings from "RCH[BN]" and "RCH[DB]" when doing a Glasgow to London search.  These two providers are also shown in the output as having 0 air and 0 rail results.
+
+This is a bit more "real" than the idealized output shown at the beginning of this lesson that included just the itineraries.   A couple of things that the reader be interested in:  The `RCH` provider is the rail provider and two of its suppliers (Benelux and Deutsche Bahn) have no train service in the United Kingdom, so we get the warnings from "RCH\[BN\]" and "RCH\[DB\]" when doing a Glasgow to London search.  These two providers are also shown in the output as having 0 air and 0 rail results.
 
 ### End Of Unit 1
 
