@@ -1,25 +1,25 @@
 ---
 layout: page
-title: "Lesson2: Basic Air Travel Requests"
+title: "Lesson 2 : Basic air travel requests"
 description: "Making requests to find schedules and prices."
 ---
 {% include JB/setup %}
 
 ## Unit 1, Lesson 2
 
-### Objective Of Lesson 2
+### Objective of Lesson 2
 
-After this lesson is completed you should know how to search for available flights and price itineraries using the Travelport Universal API.
+After this lesson is completed, you should know how to search for available seats and price itineraries using the Travelport Universal API.
 
 ### Workflow
 
-This lesson, building on the [previous one](index.html), will allow you to do what most travel agents did in the past and what many still do today.  Their objective is to sell a trip to a customer, but to do that they need to do two basic tasks:
+This lesson, building on [Lesson 1](lesson_1-1.html), will allow you to do what most travel agents did in the past and what many engines still do today.  The objective is to book a trip to a customer, but to do that they need to do two basic tasks:
 
-* Find a set of available flights that get the traveller from origin to destination (and often back)
+* Find a set of available flights to get the traveller from origin to destination (and often back)
 
-* Given the set of flights, determine the price of that itinerary
+* Given the set of flights, determine the current price of that itinerary
 
-Given the terminology we explained in [lesson 1](index.html), there are two ports that are needed to accomplish this workflow, unsurprisingly called the "Availabilty Search" port and the "Price" port.  Both of these can be accessed from the `AirService` object.
+Given the terminology we explained in [Lesson 1](lesson_1-1.html), there are two ports that are needed to accomplish this workflow: the "Availability Search" port and the "Price" port.  Both of these can be accessed from the `AirService` object.
 
 ### Generating The Client
 
@@ -50,7 +50,7 @@ DL#8517 from ATL to CDG at 2012-06-29T17:55:00.000-04:00
 
 Itineraries are separated by the dashed lines.  This output, one must admit, is a bit terse and quite specific to the airline industry.  The first itinerary has a price of 941.70 Great British Pounds (GBP) and involves two Air France (AF) flights on June 22nd and two Delta (DL) flights on the way back to Paris on June 29th.  The next itinerary is (shocking!) about four times as expensive, 3594.70 GBP, and involves three carriers this time, UA (United Airlines), US (US Airways), and again Delta on the return.  Note that this outbound air journey has a connection in Charlotte, North Carolina, USA (CLT) instead of Atlanta, Georgia (ATL).
 
-When run, the code `Lesson2` will produce a number of these itineraries plus prices for them--typically about 20.  There will be a pause at the time the program starts while it waits for the proposed, available itineraries to be returned from a TravelPort GDS.  At the time each itinerary is displayed there will also be a pause as that particular itinerary is priced.
+When run, the code `Lesson2` will produce a number of these itineraries plus prices for them--typically about 20.  There will be a pause at the time the program starts while it waits for the proposed, available itineraries to be returned from a Travelport GDS.  At the time each itinerary is displayed there will also be a pause as that particular itinerary is priced.
 
 ### Outline 
 
@@ -126,7 +126,7 @@ public static SearchAirLeg createLeg(String originAirportCode,
 {% endhighlight %}
 
 
-This is the code that creates a single `SearchAirLeg` object that is part of our request to the TravelPort uAPI for an availability search.  You can see from the code above that locations are more complicated objects than one might expect... they _can_ be an airport code as in this example, or they can be more complex entities such as "all locations near a given a city" as we will see in Lesson 3.
+This is the code that creates a single `SearchAirLeg` object that is part of our request to the Travelport uAPI for an availability search.  You can see from the code above that locations are more complicated objects than one might expect... they _can_ be an airport code as in this example, or they can be more complex entities such as "all locations near a given a city" as we will see in Lesson 3.
 
 It is worth the time look at the implementation of `AirReq` so that you can see, even for the relatively simple searches we are doing here the number of different options, and thus different classes and structures, that are used.
 
@@ -243,7 +243,7 @@ To understand the decoding taking place in the client code of Lesson 2, it may b
 
 Let's explain the approach the uAPI is using to encode the results.  Each "type" of entity is detailed once, typically in a "list" of that type, for example the `air:FlightDetailsList` has many `air:FlightDetails` entities within it (and many more were clipped out for space reasons).  Similarly, the `air:AirSegmentList` contains many `air:AirSegment` encodings (again, we removed many `air:AirSegment` items for space).  However, it is important to note that _within_ the `air:AirSegment`, the response does not repeat the `air:FlightDetails` but instead uses an `air:FlightDetailsRef` to refer to the flight details in question.  The `air:FlightDetailsRef` has a `Key` attribute that matches up with the `Key` attribute in the `air:FlightDetails`  object.  Why do it this way? Primarily, this approach avoids repetition which would bloat the already large requests and responses.  If you look at the last XML objects in the example you will see two "solutions" (`air:AirItinerarySolution`) that clearly indicate that it is possible to have a compact representation... after you have all the definitions above!  Interestingly, a single `air:ItinerarySolution` may encode many possible itineraries (despite the name) because it "connects" segments with the `air:Connection` entries.  We'll explain more about this later when discuss building "routings."
 
-The large size of these messages and the complexity of encoding and decoding them is one of the more serious complaints about SOAP/XML as a transport in systems such as the uAPI.  We will not debate that point here, but just mention that the requests and responses sent to and from the Travelport system often end up being hundreds of lines of XML.  If you are concerned about the size of the data being passed from your client to the TravelPort servers you can enable the gzip compression algorithm in the headers of your web requests with `Accept-Encoding: gzip, deflate`.
+The large size of these messages and the complexity of encoding and decoding them is one of the more serious complaints about SOAP/XML as a transport in systems such as the uAPI.  We will not debate that point here, but just mention that the requests and responses sent to and from the Travelport system often end up being hundreds of lines of XML.  If you are concerned about the size of the data being passed from your client to the Travelport servers you can enable the gzip compression algorithm in the headers of your web requests with `Accept-Encoding: gzip, deflate`.
 
 ### Decoding Part 1: Building Maps
 
@@ -389,7 +389,7 @@ public static void displayItineraryPrice(AirItinerary itin) throws AirFaultMessa
 
 ### Woot!
 
-We have now completed the basic workflow that must be done to find a way to travel between two points via Air!  You should be able to run Lesson 2 the same way you ran Lesson 1 and have TravelPort price a few dozen or so possible itineraries for you.    As we will see in Lesson 3, there are other ways to do this work... and other ways to travel besides air!  
+We have now completed the basic workflow that must be done to find a way to travel between two points via Air!  You should be able to run Lesson 2 the same way you ran Lesson 1 and have Travelport price a few dozen or so possible itineraries for you.    As we will see in Lesson 3, there are other ways to do this work... and other ways to travel besides air!  
 
 
 ### Exercises for the reader
@@ -404,5 +404,5 @@ We have now completed the basic workflow that must be done to find a way to trav
 
 ----------------------
 
-[Proceed To Lesson3](lesson3.html)
+[Proceed To Unit 1, Lesson3](lesson_1-3.html)
 

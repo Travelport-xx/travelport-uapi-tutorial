@@ -1,33 +1,31 @@
 ---
 layout: page
-title: "Lesson3: Complex Travel Shopping"
+title: Lesson 3 Complex travel shopping
 description: "Understanding shopping and using LowFareSearch requests."
 ---
 {% include JB/setup %}
 
-# Complex Travel Shopping
-
 ## Unit 1, Lesson 3
 
-### Objective Of Lesson 3
+### Objective of Lesson 3
 
 After this lesson is completed you should know how to use the "shopping" facility of Travelport's Universal API to find the lowest cost transport between two cities, including using rail and low cost air carriers as a means of travel.   You should also understand after this lesson how to get data from the low cost shopping API's asynchronously.
 
 ### LowFareSearch vs. Availability/Pricing
 
-In the [previous lesson](lesson2.html) we explained that a typical, perhaps even the archetypal, travel industry workflow was to search for availability of flights--the possible itineraries from origin to destination--and then price one or more itineraries that were interesting to the traveller. Well, there is a little secret that we did not mention in the last lesson: this workflow can be done in one step with the uAPI, not the two part process we explained in [lesson2](lesson2.html).  Previously we explained how to use the availability search port to do a search and then pick itineraries to price; our code for `Lesson2` wasn't particularly clever about choosing what to price--it tried them all--but there are many metrics that a program could use to evaluate itineraries prior to calling the air price port.
+In the [previous lesson](lesson_1-2.html) we explained that a typical, perhaps even the archetypal, travel industry workflow was to search for availability of flights--the possible itineraries from origin to destination--and then price one or more itineraries that were interesting to the traveller. Well, there is a little secret that we did not mention in the last lesson: this workflow can be done in one step with the uAPI, not the two part process we explained in [lesson2](lesson_1-2.html).  Previously we explained how to use the availability search port to do a search and then pick itineraries to price; our code for `Lesson 2` wasn't particularly clever about choosing what to price--it tried them all--but there are many metrics that a program could use to evaluate itineraries prior to calling the air price port.
 
 The Low Cost Search port, yet another port on the `AirService` object, allows you to combine these two steps by doing a search and having the search results come back already priced.  Further, the Low Cost Search does the work of narrowing down the set of itineraries to those that are the least expensive, since searching for the lowest price is the most common case.  Note that the Low Fare Search algorithm does not guarantee that the price shown is still available and it is advised that you follow-up any "good looking" result returned from the Low Cost Search with an additional `AirPricingRequest` to insure that the itinerary can be priced as returned.  
 
 ### Air, Rail, and Low Cost Carriers
 
-The TravelPort uAPI supports three different types of providers.  The first is the one we have been using previously, the "gds" provider(s) of Travelport such as Galileo("1G"), Apollo("1V") and Worldspan("1P").  These provide you with capabilities that one would expect in online shopping and booking of air travel; lesson 2 was designed to work with this type of provider.  The uAPI also includes the ability search for train travel with several different companies, called "suppliers" in the uAPI language.  The functionality for rail-based travel is accessed in the same general way as we have already seen with air travel, but naturally starting with the `RailService` that is defined in `Rail.wsdl` (in the directory `wsdl/rail_v12_0` in the supplied files with this tutorial.)  
+The Travelport uAPI supports three different types of providers.  The first is the one we have been using previously, the "gds" provider(s) of Travelport such as Galileo("1G"), Apollo("1V") and Worldspan("1P").  These provide you with capabilities that one would expect in online shopping and booking of air travel; lesson 2 was designed to work with this type of provider.  The uAPI also includes the ability search for train travel with several different companies, called "suppliers" in the uAPI language.  The functionality for rail-based travel is accessed in the same general way as we have already seen with air travel, but naturally starting with the `RailService` that is defined in `Rail.wsdl` (in the directory `wsdl/rail_v12_0` in the supplied files with this tutorial.)  
 
 The other type of provider that can be accessed through the uAPI is the unfortunately-named "Low-Cost Carrier" provider; surely all the airlines _think_ they are "low cost."  In fact, a "Low Cost Carrier" in this terminology is a carrier that does not participate in "global distribution" agreements for their inventory of seats--and that is the 'g' and 'd' in the acronym G-D-S.  So, gdses (like Galileo, Apollo, and Worldspan) typically do not know about the fares or availability of seats on these airlines.  Often these airlines sell exclusively via the internet on their own websites.  We mention this type of provider here for completeness, we will focus primarily on the gds and rail providers as their are numerous special issues that must be addressed when working with the "low cost provider."
   
 ### The Goal Of Lesson 3
 
-The goal of this lesson is to produce output that allows the user to compare not only price but compare means of transport between two locations.  This is a snippet from the [Lesson3](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/Lesson3.java) program show two different itineraries from Glasgow, Scotland, to London's Gatwick Airport:
+The goal of this lesson is to produce output that allows the user to compare not only price but compare means of transport between two locations.  This is a snippet from the [Lesson3](https://github.com/iansmith/Travelport-uapi-tutorial/blob/master/src/com/Travelport/uapi/unit1/Lesson3.java) program show two different itineraries from Glasgow, Scotland, to London's Gatwick Airport:
 
 {% highlight console %}
 
@@ -60,7 +58,7 @@ In addition, this data was retrieved asynchronously allowing the application to 
 
 ### Low Cost Searching, The Hard Way
 
-Since you have already finished [lesson1](index.html) and [lesson2](lesson2.html), we'll omit a lot of the details that are present in the `Lesson3` class' source code.  To search using the `AirLowFareSearchPortType` one simply combines the start of `Lesson2`, creating a search request, and the end of `Lesson2`, displaying the resulting pricing solutions.  The intermediate manipulation of various data structures that was a bit complex in the case of `Lesson2` is now avoided.  (Again, it is best to use the air price port to check that results returned from low cost searching are still valid, but we'll ignore this for now.)  This seems easy, so let's make low cost searching *more* difficult by _not_ using the `AirLowFareSearchPortType` and instead using its brother, the `AirLowFareSearchAsyncPortType`!  
+Since you have already finished [lesson1](index.html) and [lesson2](lesson2.html), we'll omit a lot of the details that are present in the Lesson 3 class' source code.  To search using the `AirLowFareSearchPortType` one simply combines the start of Lesson 2, creating a search request, and the end of Lesson 2, displaying the resulting pricing solutions.  The intermediate manipulation of various data structures that was a bit complex in the case of Lesson 2 is now avoided.  (Again, it is best to use the air price port to check that results returned from low cost searching are still valid, but we'll ignore this for now.)  This seems easy, so let's make low cost searching *more* difficult by _not_ using the `AirLowFareSearchPortType` and instead using its brother, the `AirLowFareSearchAsyncPortType`!  
 
 Because some of the results from providers can take some time to produce, the uAPI offers you the ability to send a search request and then retrieve the results at your convenience.  So, the flow of such an application looks like this:
 
@@ -70,7 +68,7 @@ Because some of the results from providers can take some time to produce, the uA
 	** Send a `RetrieveLowFareSearchReq` to retrieve results from the above search from but from a specific provider
 	** Consume the `RetrieveLowFareSearchRsp` object to get results
 
-As we have seen in `Lesson1` and `Lesson2` a _particular_ request/response pair should be handled synchronously with the uAPI.  However, because of the structure above, it is possible to proceed with other actions in between requesting, say, the air results and the rail results of a particular search.
+As we have seen in *Lesson 1* and *Lesson 2* a _particular_ request/response pair should be handled synchronously with the uAPI.  However, because of the structure above, it is possible to proceed with other actions in between requesting, say, the air results and the rail results of a particular search.
 
 ### Java Typing, uAPI, And Low Fare Search Responses
 
@@ -84,7 +82,7 @@ One has to be a bit "flexible" with the naming and use of some of the methods th
 
 ### PrintableItinerary
 
-The class [PrintableItinerary](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/PrintableItinerary.java) is included with the code for this unit.  It is intended to be used as part of this lesson.  Instances of this class can be constructed in one of two ways:
+The class [PrintableItinerary](https://github.com/iansmith/Travelport-uapi-tutorial/blob/master/src/com/Travelport/uapi/unit1/PrintableItinerary.java) is included with the code for this unit.  It is intended to be used as part of this lesson.  Instances of this class can be constructed in one of two ways:
 
 {% highlight java %}
 public PrintableItinerary(AirPricingSolution solution, Helper.AirSegmentMap seg,
@@ -153,7 +151,7 @@ public static void main(String[] argv) {
 			checkForErrorMessage(rsp);
 		}
 	} catch (AirFaultMessage e) {
-		System.err.println("Fault trying send request to travelport:"
+		System.err.println("Fault trying send request to Travelport:"
 				+ e.getMessage());
 	}
 
@@ -218,3 +216,7 @@ Congratulations! You've managed to get through all three of the lessons in this 
 * Above we discussed Java's type system, `AirSearchRsp` objects and the fact that these may include rail journey information.  By studying the WSDL and XSD files, determine if the same "crossover" applies to searching for availability in train travel.
 
 * Use the `FlightDetails` class to display to the user if any meals are expected on air journeys as well as the particular type of aircraft that will be used.  It may be helpful to build a table to make the set of aircraft easier to understand for those not familiar with the model numbers of aircraft, such as changing "737" into "Boeing 737" or even "Boeing Single-Aisle Jet".
+
+----------------------
+
+[Proceed To Unit 2, Lesson1](lesson_2-1.html)
