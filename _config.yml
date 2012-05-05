@@ -10,8 +10,8 @@ markdown: maruku
 # Themes are encouraged to use these universal variables 
 # so be sure to set them if your theme uses them.
 #
-title : The TravelPort Universal API Tutorial
-tagline: Making It Easy To Write Travel Apps
+title : Travelport Universal API Tutorial
+tagline: Making it easy to write travel apps
 author : 
   name : Ian Smith
   email : iansmith@acm.org

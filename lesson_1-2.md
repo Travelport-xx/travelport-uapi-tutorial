@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Lesson 2 : Basic air travel requests"
+title: "Basic air travel requests"
 description: "Making requests to find schedules and prices."
 ---
 {% include JB/setup %}
@@ -21,11 +21,11 @@ This lesson, building on [Lesson 1](lesson_1-1.html), will allow you to do what 
 
 Given the terminology we explained in [Lesson 1](lesson_1-1.html), there are two ports that are needed to accomplish this workflow: the "Availability Search" port and the "Price" port.  Both of these can be accessed from the `AirService` object.
 
-### Generating The Client
+### Generating the client
 
-As with the `Service.wsdl` in the previous lesson, we will need to generate the Java code to access uAPI services, this time from `Air.wsdl` in the directory `wsdl/air_v18_0`.  After you have generated the code, you will have many more packages in your project (hitting "refresh" or "F5" on your `src` folder is probably a good idea).  The [AirService](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/service/air_v18_0/AirService.java) object's (generated) implementation is part of the package [com.travelport.service.air_v18_0]((https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/service/air_v18_0/).  
+As with the `Service.wsdl` in the previous lesson, we will need to generate the Java code to access uAPI services, this time from `Air.wsdl` in the directory `wsdl/air_v18_0`.  After you have generated the code, you will have many more packages in your project (hitting "refresh" or "F5" on your `src` folder is probably a good idea).  The [AirService object's](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/service/air_v18_0/AirService.java) (generated) implementation is part of the package [com.travelport.service.air_v18_0]((https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/service/air_v18_0/).  
 
-### Why All The Packages And Code?
+### Why all the packages and code?
 
 The reason for all the generated code--tens of thousands of lines of it--resulting running "generate client" on `Air.wsdl` is that WSDL files may reference other WSDL files as well as schema files (in XSD files).  The `Air.wsdl` is the top of a large pyramid of different objects and since they all can be referenced in a chain that starts from `Air.wsdl` the CXF framework is obligated to generate code for them. CXF must generate Java code for all _reachable_ types starting at `Air.wsdl` and proceeding through any number of requests and responses; in this specific case, the set of reachable types includes classes describing the amenities available in a particular hotel and the details of the taxes on a particular rail journey!
 
@@ -130,7 +130,7 @@ This is the code that creates a single `SearchAirLeg` object that is part of our
 
 It is worth the time look at the implementation of `AirReq` so that you can see, even for the relatively simple searches we are doing here the number of different options, and thus different classes and structures, that are used.
 
-### Decoding The Result
+### Decoding the result
 
 To understand the decoding taking place in the client code of Lesson 2, it may be useful to examine the XML that is actually returned via the network from the uAPI server to our client.  This example is edited for space:
 
@@ -245,7 +245,7 @@ Let's explain the approach the uAPI is using to encode the results.  Each "type"
 
 The large size of these messages and the complexity of encoding and decoding them is one of the more serious complaints about SOAP/XML as a transport in systems such as the uAPI.  We will not debate that point here, but just mention that the requests and responses sent to and from the Travelport system often end up being hundreds of lines of XML.  If you are concerned about the size of the data being passed from your client to the Travelport servers you can enable the gzip compression algorithm in the headers of your web requests with `Accept-Encoding: gzip, deflate`.
 
-### Decoding Part 1: Building Maps
+### Decoding part 1: building maps
 
 For the tutorial, we have provided you with helper code	to take a list, such as `air:FlightDetailsList`, and build a Java `HashMap` that maps all keys to the full `air:FlightDetails` objects.  This is handy to build first so when your are decoding something like the `air:AirItinerarySolution` you can easily get to the "true" objects being worked with.  Here is the part of the `main()` routine in `Lesson2` that builds the maps `allSegments` and `allDetails` from the response (`rsp`) to our availability search request:
 
@@ -262,7 +262,7 @@ Helper.FlightDetailsMap allDetails = Helper.createFlightDetailsMap(
 
 It's worth noting in this example that to get access to the list of `air:AirSegment` objects in the result, the Java code is `getAirSegments().getAirSegment()`.  This peculiarity is tied to the way that CXF encodes the types expressed in the Air.wsdl file into a Java representation.  
 
-### Decoding Part 2: Air Solutions
+### Decoding part 2: air solutions
 
 It would be handy if the results returned from an air availability search could be pulled out of the response and directly used as parameters back to the uAPI as all or part of a air price request.  Sadly, no such luck.  The availability search returns _many_ possible solutions and these are encoded in a compact way, see `air:AirItinerarySolution` in the XML example above.  Conversely, the air price port requires that you supply a single itinerary, in the form of an `AirItinerary` object, for pricing.  Some of the pieces of an `AirItinerary` can be constructed from the pieces returned from the server to us, but most of the pieces of an `AirItinerary` have to be _derived_ from the results we have obtained from the `AirAvailabilitySearchRsp`.
 
@@ -277,7 +277,7 @@ AirItinerarySolution inboundSolution = solutions.get(1);
 {% endhighlight %}
 
 
-### Decoding Part 3: Building Routings
+### Decoding part 3: building routings
 
 A "routing" is a set a flights, in some order, that get the traveller from an origin to a destination.  This set has one element in the case of a direct flight, otherwise it has one or more "connections".  The code for building the final "routings" is quite short in `main()` for `Lesson2`:
 
@@ -404,5 +404,5 @@ We have now completed the basic workflow that must be done to find a way to trav
 
 ----------------------
 
-[Proceed To Unit 1, Lesson3](lesson_1-3.html)
+[Proceed to Unit 1, Lesson 3](lesson_1-3.html)
 

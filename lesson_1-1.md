@@ -118,24 +118,24 @@ Referring back to the diagram for `SystemService` above, you'll see that there a
 
 ### The programming model
 
-The pattern used by the uAPI design is to expose a "port" which has a single method called "service".
+The pattern used by the uAPI design is to expose a *port* which has a single method called *service*.
 
-Usually we refer to the port object just by its name without the prefix or suffix such as "the ping port", or just "ping". All the ports exposed from the file `System.wsdl` start with "System" and end with "PortType".
+Usually we refer to the port object just by its name without the prefix or suffix such as "the ping port", or just "ping". All the ports exposed from the file `System.wsdl` start with `System` and end with `PortType`.
 
-The ping port's only method is "service," as you can see from the diagram. Far more interesting: the diagram shows you the input and output parameters are of type `PingReq` and `PingRsp`, for the request and response respectively.  You can find the source code for these classes in the `src` Java folder with the name `com.travelport.schema.system_v8_0.PingReq`, or you can explore them with design view of `System.wsdl`.  
+The ping port's only method is `service`, as you can see from the diagram. Far more interesting: the diagram shows you the input and output parameters are of type `PingReq` and `PingRsp`, for the request and response respectively.  You can find the source code for these classes in the `src` Java folder with the name `com.travelport.schema.system_v8_0.PingReq`, or you can explore them with design view of `System.wsdl`.  
 
 Again, the details of the implementation are not important to you, you can just _use_ these facilities as part of the uAPI.
 
-We now have the logical pieces necessary to understand how to use functionality exposed by the uAPI.  Let's think about this sequence of actions concretely with the ping port as an example:
+We now have the logical pieces necessary to understand how to use functionality exposed by the uAPI.  Let's think about this sequence of actions with the ping port as an example:
 
-* Create an object of type `PingReq`
-* Fill in the necessary fields of the `PingReq` using its "setter" methods
-* Create an instance of the `SystemService`
-* Access the `SystemService` object to get an object of type `SystemPingPortType`
-* Call the method `service` on the `SystemPingPortType` instance, passing the `PingReq` object created in step 1
-* Examine the results of our request by looking at the `PingRsp` object using its "getter" methods
+1. Create an object of type `PingReq`
+2. Fill in the necessary fields of the `PingReq` using its "setter" methods
+3. Create an instance of `SystemService`
+4. Access the `SystemService` object to get an object of type `SystemPingPortType`
+5. Call the method `service` on the `SystemPingPortType` instance, passing the `PingReq` object created in step 1
+6. Examine the results of our request by looking at the `PingRsp` object using its "getter" methods
 
-With very few exceptions, all the features and functions of the uAPI follow this pattern of "build the request parameters and use the port object to get the results."
+With very few exceptions, all the features and functions of the uAPI follow this pattern of "first build the request parameters and then use the port object to get the results."
 
 ### Lesson 1 proper
 
