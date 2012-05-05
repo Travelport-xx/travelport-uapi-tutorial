@@ -7,7 +7,7 @@ description: "Understanding hotel searches and how to search based on a point of
 
 ### Objective Of Unit 2
 
-After you have worked your way through the three lessons in this unit you'll be able to do searching for multiple types travel-related items (hotels and cars) in addition to the transportation we covered in the last unit.  In addition, we are going to focus on creating bookings for hotels, air travel, etc. so you can complete the entire purchase cycle.  We'll finish by putting it all together with a "Universal Record" --- a part of the Universal API that pulls together all the information about trips and travellers.
+After you have worked your way through the three lessons in this unit, you'll be able to do searching for multiple types travel-related items (hotels and cars) in addition to the transportation we covered in the last unit.  In addition, we are going to focus on creating bookings for hotels, air travel, etc. so you can complete the entire purchase cycle.  We'll finish by putting it all together with a "Universal Record" --- a part of the Universal API that pulls together all the information about trips and travellers.
 
 ### Hotel Searching
 
@@ -34,7 +34,7 @@ As we explored previously, you'll need to go through the process of generating t
 
 ### Getting "More" Data
 
-In the interest of clarity of exposition, we did not discuss in the previous lesson exactly how many search results were available, to be expected, and, perhaps most importantly, how to request more results if the provider of search results can provide them.  In the case of any kind of search, the Universal API will signal in its responses if more results are available.  At the Java level, you use the method `getNextResultReference` to get access to a "token" that you can use later to tell Travelport what data you have already been returned.  
+In the interest of clarity of exposition, we did not discuss in the previous lesson exactly how many search results were available, to be expected, and, perhaps most importantly, how to request more results if the provider of search results can deliver them.  In the case of any kind of search, the Universal API will signal in its responses if more results are available.  At the Java level, you use the method `getNextResultReference` to get access to a "token" that you can use later to tell Travelport what data you have already been returned.  
 
 Historically, the GDSes provided data on "green-screen", character-based terminals. These systems had the notion of a screenful of information--the number of lines of text that the user could see before the top lines scrolled off-screen.  Some APIs to various GDSes have also used, or perhaps "kept", the notion of a "screenful" of information to represent a partial list of results.  In homage to this tradition, we will keep the nomenclature of "a screen" to indicate one _burst_ of information returned.
 
@@ -70,7 +70,7 @@ do {
 
 A few things are worth talking about from this snippet.  The value returned by `getNextResultReference` is not meaningful other than as a marker to a follow-up request to indicate what part of the full result set has already been seen. Second, the _same_ request object is re-used for each pass around the loop.  The request parameters should be the same each time, with the full requests differing only by the next result reference.  Finally, the loop here keeps track of how many screens have been read and it stops when `MAX_REQUESTS` has been reached.  This is both good policy and safe.  It is good policy because the total list of results may be _far_ larger than you might expect, search for any hotel in Paris, France can yield a great many results! It is safe because this protects you from launching a large, or even infinite, number of requests if you have a bug in your program.
 
->>>>It's not clear why there can be more than one next result reference in a response or a request.  Some experimentation with the did not reveal it be used by responses or useful in requests.
+>>>>It's not clear why there can be more than one next result reference in a response or a request.  Some experimentation with the API did not reveal it be used by responses or useful in requests.
 
 
 ### Searching By Location
