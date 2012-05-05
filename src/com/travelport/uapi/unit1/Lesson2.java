@@ -1,6 +1,5 @@
 package com.travelport.uapi.unit1;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -8,6 +7,7 @@ import java.util.List;
 import com.travelport.schema.air_v18_0.*;
 import com.travelport.schema.common_v15_0.*;
 import com.travelport.service.air_v18_0.AirFaultMessage;
+import com.travelport.tutorial.support.WSDLService;
 
 
 public class Lesson2 {
@@ -38,8 +38,8 @@ public class Lesson2 {
 			AirItinerarySolution inboundSolution = solutions.get(1);
 			
 			//bound the routings by using the connections
-			List<AirItinerary> out = buildRoutings(outboundSolution, allSegments, allDetails);
-			List<AirItinerary> in = buildRoutings(inboundSolution, allSegments, allDetails);
+			List<AirItinerary> out = buildRoutings(outboundSolution, 0, allSegments, allDetails);
+			List<AirItinerary> in = buildRoutings(inboundSolution, 1, allSegments, allDetails);
 			
 			//merge in and out itins so we can get pricing for whole deal
 			List<AirItinerary> allItins = mergeOutboundAndInbound(out, in);
@@ -117,6 +117,7 @@ public class Lesson2 {
 	 * round trip.
 	 */
 	public static List<AirItinerary> buildRoutings(AirItinerarySolution soln,
+			int resultingGroupNumber,
 			Helper.AirSegmentMap segmentMap, Helper.FlightDetailsMap detailMap) {
 		ArrayList<AirItinerary> result = new ArrayList<AirItinerary>();
 		
@@ -128,8 +129,8 @@ public class Lesson2 {
 		//go for use in a pricing request... 
 		for (Iterator<AirSegmentRef> segIter = legs.iterator(); segIter.hasNext();) {
 			AirSegmentRef ref = segIter.next();
-			AirSegment realSegment = segmentMap.get(ref.getKey());
-			segs.add(cloneAndFixFlightDetails(realSegment, detailMap));
+			AirSegment realSegment = segmentMap.getByRef(ref);
+			segs.add(cloneAndFixFlightDetails(realSegment, resultingGroupNumber, detailMap));
 		}
 		
 		//a connection indicates that elements in the list of segs have to
@@ -168,7 +169,8 @@ public class Lesson2 {
 	 * @return a clone of the input segment, with any reference to flight
 	 * details adjusted to be the actual details
 	 */
-	public static AirSegment cloneAndFixFlightDetails(AirSegment orig, Helper.FlightDetailsMap detailMap) {
+	public static AirSegment cloneAndFixFlightDetails(AirSegment orig, 
+			int resultingGroupNumber, Helper.FlightDetailsMap detailMap) {
 		AirSegment result = new AirSegment();
 		result.setCarrier(orig.getCarrier());
 		result.setClassOfService(orig.getClassOfService());
@@ -179,12 +181,13 @@ public class Lesson2 {
 		result.setDestination(orig.getDestination());
 		result.setOrigin(orig.getOrigin());
 		result.setProviderCode(System.getProperty("travelport.gds"));
+		result.setGroup(resultingGroupNumber);
 		
 		//adjust flight detail references to be REAL flight details
 		List<FlightDetailsRef> refs = orig.getFlightDetailsRef();
 		for (Iterator<FlightDetailsRef> refsIter = refs.iterator(); refsIter.hasNext();) {
 			FlightDetailsRef ref = (FlightDetailsRef) refsIter.next();
-			FlightDetails deets = detailMap.get(ref);
+			FlightDetails deets = detailMap.getByRef(ref);
 			result.getFlightDetails().add(deets);
 		}
 		return result;
@@ -198,31 +201,7 @@ public class Lesson2 {
 	 * @throws AirFaultMessage
 	 */
 	public static void displayItineraryPrice(AirItinerary itin) throws AirFaultMessage {
-		//now lets try to price it
-		AirPriceReq priceReq = new AirPriceReq();
-		AirPriceRsp priceRsp;
-		
-		//price the itinerary provided
-		priceReq.setAirItinerary(itin);
-		
-		//set cabin
-		AirPricingCommand command = new AirPricingCommand();
-		command.setCabinClass(TypeCabinClass.ECONOMY);
-		priceReq.getAirPricingCommand().add(command);
-		
-		//our branch
-		priceReq.setTargetBranch(System.getProperty("travelport.targetBranch"));
-		
-		//one adult passenger
-		SearchPassenger adult = new SearchPassenger();
-		adult.setCode("ADT");
-		priceReq.getSearchPassenger().add(adult);
-		
-		//add point of sale (v18_0)
-		AirReq.addPointOfSale(priceReq, "tutorial-unit1-lesson2");
-		
-		//make the request to tport
-		priceRsp = WSDLService.getPrice(false).service(priceReq);
+		AirPriceRsp priceRsp = priceItinerary(itin);
 		
 		//print price result
 		List<AirPriceResult> prices = priceRsp.getAirPriceResult();
@@ -240,6 +219,39 @@ public class Lesson2 {
 			}
 		}
 	}
+
+	/**
+	 * This just does the price computation so it is easy to re-use.
+	 * 
+	 * @param itin
+	 * @return
+	 * @throws AirFaultMessage 
+	 */
+	public static AirPriceRsp priceItinerary(AirItinerary itin) throws AirFaultMessage {
+		//now lets try to price it
+		AirPriceReq priceReq = new AirPriceReq();
+		
+		//price the itinerary provided
+		priceReq.setAirItinerary(itin);
+		
+		//set cabin
+		AirPricingCommand command = new AirPricingCommand();
+		command.setCabinClass(TypeCabinClass.ECONOMY);
+		priceReq.getAirPricingCommand().add(command);
+		
+		//our branch
+		priceReq.setTargetBranch(System.getProperty("travelport.targetBranch"));
+		//one adult passenger
+		SearchPassenger adult = new SearchPassenger();
+		adult.setCode("ADT");
+		priceReq.getSearchPassenger().add(adult);
+		
+		//add point of sale (v18_0)
+		AirReq.addPointOfSale(priceReq, "tutorial-unit1-lesson2");
+		
+		//make the request to tport
+		return WSDLService.getPrice(true).service(priceReq);
+}
 
 	/**
 	 * Do a search for availability for a traveller.

@@ -28,7 +28,7 @@ public class PrintableItinerary {
 	 * @param seg segment map of all segments in the result
 	 * @param roundTripTurnaround null or airport name that is destination
 	 */
-	public PrintableItinerary(AirPricingSolution solution, AirSegmentMap seg,
+	public PrintableItinerary(AirPricingSolution solution, Helper.AirSegmentMap seg,
 			String roundTripTurnaround) {
 		this.airSegs = seg;
 		this.airSolution = solution;
@@ -69,7 +69,7 @@ public class PrintableItinerary {
 		for (Iterator<RailJourneyRef> iterator =journeyKeys.iterator(); iterator.hasNext();) {
 			RailJourneyRef journeyRef = (RailJourneyRef) iterator.next();
 			//looking the journey by its key
-			RailJourney j = railJourneys.get(journeyRef.getKey());
+			RailJourney j = railJourneys.getByRef(journeyRef);
 			printJourney(j, fmt);
 			if (j.getDestination().equals(roundTripTurnaround)) {
 				fmt.format("%s","\n\n");
@@ -84,7 +84,7 @@ public class PrintableItinerary {
 		for (Iterator<AirSegmentRef> iterator = segKeys.iterator(); iterator.hasNext();) {
 			AirSegmentRef airSegmentRef = (AirSegmentRef) iterator.next();
 			//looking the leg by its key
-			AirSegment leg = airSegs.get(airSegmentRef.getKey());
+			AirSegment leg = airSegs.getByRef(airSegmentRef);
 			printLeg(leg, fmt);
 			if (leg.getDestination().equals(roundTripTurnaround)) {
 				fmt.format("%s","\n\n");

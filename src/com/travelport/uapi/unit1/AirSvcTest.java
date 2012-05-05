@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import com.travelport.schema.air_v18_0.*;
 import com.travelport.service.air_v18_0.AirFaultMessage;
+import com.travelport.tutorial.support.WSDLService;
 
 public class AirSvcTest {
 

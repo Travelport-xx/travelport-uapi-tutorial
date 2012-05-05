@@ -3,6 +3,7 @@ package com.travelport.uapi.unit1;
 import com.travelport.schema.system_v8_0.PingReq;
 import com.travelport.schema.system_v8_0.PingRsp;
 import com.travelport.service.system_v8_0.SystemFaultMessage;
+import com.travelport.tutorial.support.WSDLService;
 
 public class Lesson1 {
 

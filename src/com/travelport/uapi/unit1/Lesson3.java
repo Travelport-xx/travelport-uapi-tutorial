@@ -17,6 +17,7 @@ import com.travelport.schema.common_v15_0.ResponseMessage;
 import com.travelport.schema.rail_v12_0.RailPricingSolution;
 import com.travelport.service.air_v18_0.AirFaultMessage;
 import com.travelport.service.air_v18_0.AirLowFareSearchAsynchPortType;
+import com.travelport.tutorial.support.WSDLService;
 
 public class Lesson3 {
 	public static final String MYAPP = "tut";
@@ -26,11 +27,6 @@ public class Lesson3 {
 		// low cost carrier options
 		String origin = "GLA", destination = "LGW";
 		LowFareSearchAsynchReq req = new LowFareSearchAsynchReq();
-
-		// a zero timeout means to never time-out... these are in millis
-		// setTimeouts(30 * 1000/*30 secs to connect*/,5 * 60 * 1000 /*wait up
-		// to five mins fon read*/);
-
 		// this creates the request parameters... and doesn't care if the
 		// request is synchronous or asynch
 		createLowFareSearchWithRail(req, origin, destination, 7, 9);
@@ -181,7 +177,7 @@ public class Lesson3 {
 		Helper.RailJourneyMap allRailJourneys = null;
 		Helper.RailSegmentMap allRailSegments = null;
 
-		// saves time if you don't care about seeing the exmaples
+		// saves time if you don't care about seeing the examples
 		if (numberSamplesToShow == 0) {
 			return;
 		}
@@ -298,7 +294,6 @@ public class Lesson3 {
 		
 		PointOfSale lccPOS = new PointOfSale();
 		lccPOS.setProviderCode(Helper.LOW_COST_PROVIDER);
-		//lccPOS.setPseudoCityCode(originAirportcode);
 		lccPOS.setPseudoCityCode(originAirportcode);
 		
 		request.getPointOfSale().add(gdsPOS);

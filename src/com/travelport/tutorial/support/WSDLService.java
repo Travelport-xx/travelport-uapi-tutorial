@@ -1,4 +1,4 @@
-package com.travelport.uapi.unit1;
+package com.travelport.tutorial.support;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -10,8 +10,15 @@ import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.interceptor.LoggingInInterceptor;
 import org.apache.cxf.interceptor.LoggingOutInterceptor;
 
+import com.travelport.schema.vehicle_v17_0.VehicleSearchAvailabilityReq;
 import com.travelport.service.air_v18_0.*;
+import com.travelport.service.hotel_v17_0.HotelMediaLinksServicePortType;
+import com.travelport.service.hotel_v17_0.HotelSearchServicePortType;
+import com.travelport.service.hotel_v17_0.HotelService;
 import com.travelport.service.system_v8_0.*;
+import com.travelport.service.vehicle_v17_0.VehicleCancelServicePortType;
+import com.travelport.service.vehicle_v17_0.VehicleSearchServicePortType;
+import com.travelport.service.vehicle_v17_0.VehicleService;
 
 /**
  * Convenience class for getting access to the WSDL services without needing
@@ -24,16 +31,27 @@ public class WSDLService {
 	static protected AirAvailabilitySearchPortType availabilitySearch;
 	static protected AirRetrieveLowFareSearchPortType retrieve;
 	static protected AirPricePortType price;
+	static protected AirCreateReservationPortType createResv;
+	
 	static protected SystemPingPortType ping;
 	static protected SystemInfoPortType info;
 	static protected SystemTimePortType time;
 
+    static protected HotelSearchServicePortType hotelSearch;
+    static protected HotelMediaLinksServicePortType mediaLinks;
+    
+    static protected VehicleSearchServicePortType vehicleSearch;
+	
 	static protected SystemService systemService ;
-	static protected AirService airService ;
+    static protected AirService airService ;
+    static protected HotelService hotelService ;
+    static protected VehicleService vehicleService ;
 
 	static protected String URLPREFIX = "file:///Users/iansmith/tport-workspace/uapijava/";
 	static protected String SYSTEM_WSDL = "wsdl/system_v8_0/System.wsdl";
-	static protected String AIR_WSDL = "wsdl/air_v18_0/Air.wsdl";
+    static protected String AIR_WSDL = "wsdl/air_v18_0/Air.wsdl";
+    static protected String HOTEL_WSDL = "wsdl/hotel_v17_0/Hotel.wsdl";
+    static protected String VEHICLE_WSDL = "wsdl/vehicle_v17_0/Vehicle.wsdl";
 
 	static protected String USERNAME_PROP = "travelport.username";
 	static protected String PASSWORD_PROP = "travelport.password";
@@ -43,7 +61,9 @@ public class WSDLService {
 	// these endpoint parameters vary based on which region you are
 	// in...check your travelport sign up to see which url you should use...
 	static protected String SYSTEM_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/SystemService";
-	static protected String AIR_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/AirService";
+    static protected String AIR_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/AirService";
+    static protected String HOTEL_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/HotelService";
+    static protected String VEHICLE_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/VehicleService";
 
 	/**
 	 * Get access to the low fare object -- synchonous version.
@@ -131,6 +151,9 @@ public class WSDLService {
 		price = airService.getAirPricePort();
 		addParametersToProvider((BindingProvider) price,
 				AIR_ENDPOINT);
+		if (showXML) {
+			showXML(price);
+		}
 		return price;
 	}
 
@@ -222,6 +245,97 @@ public class WSDLService {
 		}
 		return retrieve;
 	}
+
+	/**
+	 * Get access to the port for creating reservations
+	 * 
+	 * @return the create reservation port
+	 */
+	public static AirCreateReservationPortType getCreateResv(boolean showXML) {
+		if (createResv != null) {
+			return createResv;
+		}
+		checkProperties();
+		if (airService==null) {
+			URL url = getURLForWSDL(AIR_WSDL);
+			airService = new AirService(url);
+		}
+		createResv = airService.getAirCreateReservationPort();
+		addParametersToProvider((BindingProvider) createResv,
+				AIR_ENDPOINT);
+		if (showXML) {
+			showXML(createResv);
+		}
+		return createResv;
+	}
+
+   /**
+     * Get access to the port for searching for hotels.
+     * 
+     * @return the create reservation port
+     */
+    public static HotelSearchServicePortType getHotelSearch(boolean showXML) {
+        if (hotelSearch != null) {
+            return hotelSearch;
+        }
+        checkProperties();
+        if (hotelService==null) {
+            URL url = getURLForWSDL(HOTEL_WSDL);
+            hotelService = new HotelService(url);
+        }
+        hotelSearch = hotelService.getHotelSearchServicePort();
+        addParametersToProvider((BindingProvider) hotelSearch,
+                HOTEL_ENDPOINT);
+        if (showXML) {
+            showXML(hotelSearch);
+        }
+        return hotelSearch;
+    }
+    /**
+     * Get access to the service that can provide the media for a hotel.
+     * 
+     * @return the create reservation port
+     */
+    public static HotelMediaLinksServicePortType getHotelMedia(boolean showXML) {
+        if (mediaLinks != null) {
+            return mediaLinks;
+        }
+        checkProperties();
+        if (hotelService==null) {
+            URL url = getURLForWSDL(HOTEL_WSDL);
+            hotelService = new HotelService(url);
+        }
+        mediaLinks = hotelService.getHotelMediaLinksServicePort();
+        addParametersToProvider((BindingProvider) mediaLinks,
+                HOTEL_ENDPOINT);
+        if (showXML) {
+            showXML(mediaLinks);
+        }
+        return mediaLinks;
+    }
+
+    /**
+     * Get access to the service that can look for a vehicle.
+     * 
+     * @return the create reservation port
+     */
+    public static VehicleSearchServicePortType getVehicleSearch(boolean showXML) {
+        if (vehicleSearch != null) {
+            return vehicleSearch;
+        }
+        checkProperties();
+        if (vehicleService==null) {
+            URL url = getURLForWSDL(VEHICLE_WSDL);
+            vehicleService = new VehicleService(url);
+        }
+        vehicleSearch = vehicleService.getVehicleSearchServicePort();
+        addParametersToProvider((BindingProvider) vehicleSearch,
+                VEHICLE_ENDPOINT);
+        if (showXML) {
+            showXML(vehicleSearch);
+        }
+        return vehicleSearch;
+    }
 
 
 	/**

@@ -43,6 +43,7 @@ import com.travelport.service.system_v8_0.SystemInfoPortType;
 import com.travelport.service.system_v8_0.SystemPingPortType;
 import com.travelport.service.system_v8_0.SystemService;
 import com.travelport.service.system_v8_0.SystemTimePortType;
+import com.travelport.tutorial.support.WSDLService;
 
 
 // Don't forget to add the -Dtravelport.username="AAA" and 
