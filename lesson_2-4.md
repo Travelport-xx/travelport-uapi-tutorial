@@ -1,15 +1,17 @@
 ---
 layout: page
-title: "Unit 2 Lesson 4: Hotel Searching"
+title: "Hotel Search"
 description: "Understanding hotel searches and how to search based on a point of interest rather than a city or airport."
 ---
 {% include JB/setup %}
+
+## Unit 2, Lesson 4
 
 ### Objective Of Unit 2
 
 After you have worked your way through the three lessons in this unit, you'll be able to do searching for multiple types travel-related items (hotels and cars) in addition to the transportation we covered in the last unit.  In addition, we are going to focus on creating bookings for hotels, air travel, etc. so you can complete the entire purchase cycle.  We'll finish by putting it all together with a "Universal Record" --- a part of the Universal API that pulls together all the information about trips and travellers.
 
-### Hotel Searching
+### Hotel search
 
 After deciding when, where, and how to travel (the subjects of [Unit 1](lesson1) of our tutorial), the next step is usually to try to find accomodation at the destination.  Hotels are the most common target in searching for accomodation.  When this lession is completed you'll have a program that can output information like this:
 

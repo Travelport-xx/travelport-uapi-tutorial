@@ -31,29 +31,29 @@ Lesson 1: [Setting up to work with the Travelport Universal API](lesson_1-1.html
 	
 Lesson 2: [Basic Air Travel Requests](lesson_1-2.html)
 	
-Lesson 3: [Complex Travel Shopping](lesson_1-3.html)
+Lesson 3: [Advanced Travel Shopping](lesson_1-3.html)
 	
 
 ### Unit 2
 
 The second lesson is about completing a booking for a passenger, using city and geocodes to refine search options, and finding accommodation in an area. With this section complete, you can build a complete flight and hotel booking application.
 
-Lesson 1: [Completing a booking]
+Lesson 4: [Completing a booking]
 
-Lesson 2: [uCode library and geocode mapping]
+Lesson 5: [uCode library and geocode mapping]
 	
-Lesson 3: [Hotel search]
+Lesson 6: [Hotel search]
 
 
 ### Unit 3
 
 The final unit will help you build a working [Facebook](http://www.facebook.com) application that uses the uAPI to determine things like, "How much would it cost for me to visit my friend Joe on his birthday next month?".
 
-Lesson 1: [Facebook application setup, showing a ping in Facebook]
+Lesson 7: [Facebook application setup, showing a ping in Facebook]
 	
-Lesson 2: [Using the Facebook social graph (interacting with friends)]
+Lesson 8: [Using the Facebook social graph (interacting with friends)]
 	
-Lesson 3: [Drawing maps in the Facebook app]
+Lesson 9: [Drawing maps in the Facebook app]
 
 
 ## Get started

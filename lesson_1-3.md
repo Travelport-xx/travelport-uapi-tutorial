@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Lesson 3 Complex travel shopping
+title: "Advanced travel shopping"
 description: "Understanding shopping and using LowFareSearch requests."
 ---
 {% include JB/setup %}
@@ -219,4 +219,7 @@ Congratulations! You've managed to get through all three of the lessons in this 
 
 ----------------------
 
-[Proceed To Unit 2, Lesson1](lesson_2-1.html)
+[< Return to Unit 1, Lesson 2](lesson_1-2.html) |
+[Proceed to Unit 2, Lesson 4 >](lesson_2-4.html)
+
+[Table of Contents](index.html)
