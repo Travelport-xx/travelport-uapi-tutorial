@@ -420,7 +420,7 @@ public static void displayItineraryPrice(AirItinerary itin) throws AirFaultMessa
 	AirReq.addPointOfSale(priceReq, "tutorial-unit1-lesson2");
 	
 	//make the request to tport
-	priceRsp = WSDLService.getPrice(false).service(priceReq);
+	priceRsp = WSDLService.airPrice.get().service(priceReq);
 {% endhighlight %}
 
 

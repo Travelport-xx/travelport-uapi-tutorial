@@ -141,8 +141,7 @@ public static void main(String[] argv) {
 
 	try {
 		//the actual search request
-		LowFareSearchAsynchRsp lowCostRsp = WSDLService
-				.getLowFareSearchAsynch(false).service(req);
+		LowFareSearchAsynchRsp lowCostRsp = WSDLService.airShopAsync.get().service(req);
 
 		[create a HashMap that knows about all the providers and how many 'parts' they have]
 
@@ -170,7 +169,7 @@ public static void main(String[] argv) {
 			retrieve.setPartNumber(BigInteger.valueOf(currentPart));
 
 			//request more data based on the currentPart and currentProvider
-			rsp = WSDLService.getRetrieve(false).service(retrieve);
+			rsp = WSDLService.airRetreive.get().service(retrieve);
 			
 			checkForErrorMessage(rsp);
 		}
