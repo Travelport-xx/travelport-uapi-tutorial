@@ -55,11 +55,35 @@ public class Lesson2 {
 				List<AirSegment> segments = itin.getAirSegment();
 				for (Iterator<AirSegment> iter = segments.iterator(); iter.hasNext();) {
 					AirSegment airSegment = (AirSegment) iter.next();
-					System.out.print(airSegment.getCarrier()+"#"+airSegment.getFlightNumber());
-					System.out.print(" from "+airSegment.getOrigin()+" to "+ 
-							airSegment.getDestination());
-					System.out.print(" at "+airSegment.getDepartureTime());
-					if (airSegment.getFlightTime()!=null) {
+					String carrier="??";
+					String flightNum="???";
+					if (airSegment!=null) {
+					    if (airSegment.getCarrier()!=null) {
+					        carrier = airSegment.getCarrier();
+					    }
+					    if (airSegment.getFlightNumber()!=null) {
+					        flightNum = airSegment.getFlightNumber();
+					    }
+					}
+					System.out.print(carrier+"#"+flightNum);
+					String o="???",d="???";
+					if (airSegment!=null) {
+                        if (airSegment.getOrigin()!=null) {
+                            o=airSegment.getOrigin();
+                        }
+                        if (airSegment.getDestination()!=null) {
+                            d=airSegment.getDestination();
+                        }
+					}
+					System.out.print(" from "+o+" to "+ d);
+					String dtime = "??:??";
+					if (airSegment!=null) {
+					    if (airSegment.getDepartureTime()!=null) {
+					        dtime = airSegment.getDepartureTime();
+					    }
+					}
+					System.out.print(" at "+dtime);
+					if ((airSegment!=null) && (airSegment.getFlightTime()!=null)) {
 							System.out.println(" (flight time "+airSegment.getFlightTime()+" mins)");
 					} else {
 						System.out.println();
@@ -250,7 +274,7 @@ public class Lesson2 {
 		AirReq.addPointOfSale(priceReq, "tutorial-unit1-lesson2");
 		
 		//make the request to tport
-		return WSDLService.getPrice(true).service(priceReq);
+		return WSDLService.airPrice.get().service(priceReq);
 }
 
 	/**
@@ -293,7 +317,7 @@ public class Lesson2 {
 		legs.add(ret);
 		
 		//to show the XML you are sendinging and receiving on this port
-		response = WSDLService.getAvailabilitySearch(true).service(request);
+		response = WSDLService.airAvailability.get().service(request);
 
 		//print out any messages that the GDS sends back
 		for (Iterator<ResponseMessage> iterator = response.getResponseMessage().iterator(); iterator.hasNext();) {

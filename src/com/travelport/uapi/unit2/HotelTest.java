@@ -21,7 +21,7 @@ public class HotelTest {
 
     @Test
     public void checkResultSequenc() throws DatatypeConfigurationException, HotelFaultMessage{
-        HotelSearchServicePortType port = WSDLService.getHotelSearch(true);
+        HotelSearchServicePortType port = WSDLService.hotelShop.get();
         HotelSearchAvailabilityReq req = new HotelSearchAvailabilityReq();
         
         //business trip, 2 travellers with own room

@@ -233,4 +233,14 @@ public class Helper {
         info.setOriginApplication("tutuorial-unit"+unit+"-lesson"+lesson);
         return info;
     }
+    /**
+     * Parse a number from something with a currency code on the front.  Aborts
+     * if the number cannot be understood.
+     */
+    public static double parseNumberWithCurrency(String numberWithCurrency) {
+        // first 3 chars are currency code
+        String price = numberWithCurrency.substring(3);
+        return Double.parseDouble(price);
+    }
+    
 }

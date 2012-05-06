@@ -67,7 +67,7 @@ public class SystemSvcTest {
 		
 		//use traceId for sanity
 		request.setTraceId(traceId1);
-		response = WSDLService.getTime(false).service(request);
+		response = WSDLService.sysTime.get().service(request);
 		
 		//check sanity
 		assertThat(traceId1, is(equalTo(response.getTraceId())));
@@ -81,7 +81,7 @@ public class SystemSvcTest {
 		
 		//second request
 		request.setTraceId(traceId2);
-		response = WSDLService.getTime(false).service(request);
+		response = WSDLService.sysTime.get().service(request);
 		//check sanity on second request
 		assertThat(traceId2, is(equalTo(response.getTraceId())));
 
@@ -104,7 +104,7 @@ public class SystemSvcTest {
 		SystemInfoReq request = new SystemInfoReq();
 		
 		//no parameters to set on this request! we can take all the defaults??
-		WSDLService.getInfo(true).service(request);
+		WSDLService.sysInfo.get().service(request);
 		fail("we are expecting the line above to fail.  but still... why is " +
 				"thi line above not allowed?");
 	}
@@ -122,7 +122,7 @@ public class SystemSvcTest {
 		request.setTraceId(myTraceId);
 		
 		//run request through ping service
-		response = WSDLService.getPing(false).service(request);
+		response = WSDLService.sysPing.get().service(request);
 		
 		//payload returned should be same as one sent
 		assertThat(myPayload, is(equalTo(response.getPayload())));

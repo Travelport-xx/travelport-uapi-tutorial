@@ -22,7 +22,7 @@ public class CreateResvSvcTest {
 	
 	@Test
 	public void createCancelTest() throws DatatypeConfigurationException, AirFaultMessage, AvailabilityFaultMessage {
-		AirCreateReservationPortType create = WSDLService.getCreateResv(true);
+		AirCreateReservationPortType create = WSDLService.airReserve.get();
 		
 		AirCreateReservationReq req = new AirCreateReservationReq();
 		req.setAuthorizedBy("TEST");
