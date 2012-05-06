@@ -6,15 +6,16 @@ exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
 auto: true
 pygments: true
 markdown: maruku
+safe: true
 
 # Themes are encouraged to use these universal variables 
 # so be sure to set them if your theme uses them.
 #
-title : Travelport Universal API Tutorial
-tagline: Making it easy to write travel apps
+title : "Travelport Universal API Tutorial"
+tagline: "Making it easy to write travel apps"
 author : 
-  name : Ian Smith
-  email : iansmith@acm.org
+  name : "Ian Smith"
+  email : "iansmith@acm.org"
   github : iansmith
   twitter : iansmith
 
@@ -98,16 +99,16 @@ JB :
   # Set 'provider' to the analytics provider you want to use.
   # Set 'provider' to false to turn analytics off globally.
   #        
-  #analytics :
-  #  provider : google 
-  #  google : 
-  #      tracking_id : 'UA-123-12'
+  analytics :
+    provider : google 
+    google : 
+        tracking_id : "UA-31476683-1"
   #  getclicky :
   #    site_id : 
   #  mixpanel :
   #      token : '_MIXPANEL_TOKEN_'
-  analytics :
-    provider : false
+  #analytics :
+  #  provider : false
 
   # Settings for sharing helper. 
   # Sharing is for things like tweet, plusone, like, reddit buttons etc.

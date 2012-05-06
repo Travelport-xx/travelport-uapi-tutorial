@@ -106,7 +106,7 @@ In this lesson, we are going to be searching for hotels that are located near so
 
 To do this, one must provide, obviously, the name of the landmark but also not provide a "location" with a city code as we have done previously.  For example, let's assume we are looking for accomodation for a family vacation to Paris, France.  With two adults and two children, we are going to need two hotel rooms and we are planning to spend a couple of days at [Disneyland Paris](http://www.disneylandparis.com/).
 
-For those unfamiliar with Paris' geography, Disneyland Paris _née EuroDisney_, is 32km east of the center of Paris.  Thus, a hotel search that used the city code "PAR" or any of the Paris airports (north and south of the city) will be unlikely to produce good results.  We need to do our search for this landmark.
+For those unfamiliar with Paris' geography, Disneyland Paris _neÃ© EuroDisney_, is 32km east of the center of Paris.  Thus, a hotel search that used the city code "PAR" or any of the Paris airports (north and south of the city) will be unlikely to produce good results.  We need to do our search for this landmark.
 
 >>>>I was surprised that the bedding option was not supported by 1G.  I left in some code, commented out, that actually set up the hotel search to be for 2 rooms with 2 twin beds in one and 1 queen in the other.
 
@@ -176,3 +176,6 @@ FORD ESCAPE OR SIMILAR  [Vendor: ZR]
 [Proceed to Unit 2, Lesson 5 >](lesson_2-5.html)
 
 [Table of Contents](index.html)
+
+{% include JB/comments %}
+{% include JB/analytics %}

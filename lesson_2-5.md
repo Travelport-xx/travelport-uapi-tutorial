@@ -5,3 +5,5 @@ description: "Understanding how to create a booking for air, hotel, or both with
 ---
 {% include JB/setup %}
 
+{% include JB/comments %}
+{% include JB/analytics %}

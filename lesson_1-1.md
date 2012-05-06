@@ -285,3 +285,6 @@ This is a helpful message provided by the CXF framework to tell you it is creati
 
 [Table of Contents](index.html)
 
+{% include JB/comments %}
+
+{% include JB/analytics %}

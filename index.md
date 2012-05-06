@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Welcome
+title: Welcome To The UAPI
 tagline: Making it easy to build travel applications
 ---
 {% include JB/setup %}
@@ -38,11 +38,11 @@ Lesson 3: [Advanced Travel Shopping](lesson_1-3.html)
 
 The second lesson is about completing a booking for a passenger, using city and geocodes to refine search options, and finding accommodation in an area. With this section complete, you can build a complete flight and hotel booking application.
 
-Lesson 4: [Hotel search](lesson_2-4.html)
+Lesson 4: [Hotel search, searching by landmarks](lesson_2-4.html)
 
-Lesson 5: [uCode library and geocode mapping]
+Lesson 5: [Making an Air Or Hotel Booking](lesson_2-5.html)
 	
-Lesson 6: [Completing a booking]
+Lesson 6: Managing Universal Records
 
 
 ### Unit 3
@@ -51,9 +51,9 @@ The final unit will help you build a working [Facebook](http://www.facebook.com)
 
 Lesson 7: [Building a travel app for Facebook](lesson_3-7.html)
 	
-Lesson 8: [Using the Facebook social graph (interacting with friends)]
+Lesson 8: Using the Facebook social graph (interacting with friends)
 	
-Lesson 9: [Drawing maps in the Facebook app]
+Lesson 9: Drawing maps in the Facebook app
 
 
 ## Get started
@@ -74,5 +74,7 @@ Proceed to Unit 1, Lesson 1: [Setting up to work with the Travelport Universal A
 This website is part of a larger system, [GitHub](http://www.github.com), that allows to make your own copy of this website and the tutorial code, raise issues or comment about the code or documentation, make your own changes and have the "pulled" into this tutorial by the authors, and read the work of many others who are using the site.
 
 -->
+{% include JB/comments %}
 
+{% include JB/analytics %}
 

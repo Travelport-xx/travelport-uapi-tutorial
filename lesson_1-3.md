@@ -260,3 +260,6 @@ Enjoy using the uAPI!
 [Proceed to Unit 2, Lesson 4 >](lesson_2-4.html)
 
 [Table of Contents](index.html)
+
+{% include JB/comments %}
+{% include JB/analytics %}
