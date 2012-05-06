@@ -32,6 +32,16 @@ IBIS AVRANCHES MONT ST MICHEL  [RT:23750]
 
 As we explored previously, you'll need to go through the process of generating the client-side code for the Hotel Service.  The `HotelService` has a number of ports, as did the `AirService` we covered before.  After you generate the client code from `Hotel.wsdl` (in the directory `wsdl/hotel_v17_0` in the provided code), you may want to examine the `HotelAvailabiltySearchReq` and `HotelAvailabilitySearchRsp` as these are the request/response pair of primary importance to the task ahead.
 
+When we work with the hotel availability search request, as with any request, there is the requirement for the `BillingPointOfSaleInfo` to be set to inform the uAPI what application is using the api; we have provided the method `Helper.tutorialBPOSInfo()` to create this object for you.   Similarly, one must always set the target branch and we do so based on the system property `travelport.targetBranch`.  In terms of the actual search parameters, the primary ones are
+
+* A `HotelStay` object representing check-in and check-out dates
+* A `HotelSearchModifiers` object which can have many parameters but the number of adults and number of room requested are of primary importance.
+* Either an option to the hotel modifiers to specify a point of interest or a city/airport code that tells the hotel search where the accommodation is desired.
+
+For each of the above, we've provided a helper function in lesson 4's code to make it easy to create these objects.
+
+The return value, `HotelAvailabilitySearchRsp` is substantially simpler than the return value for air travel searches, but in a similar form.  The critical elements of the returned object are the returned collection of `HotelSearchResult` objects and the children of these objects, the `HotelProperty` object.  The search result provides information about the pricing of the hotel and the latter object provides some details about the specific property such as the address and amenities.
+
 ### Getting "More" Data
 
 In the interest of clarity of exposition, we did not discuss in the previous lesson exactly how many search results were available, to be expected, and, perhaps most importantly, how to request more results if the provider of search results can deliver them.  In the case of any kind of search, the Universal API will signal in its responses if more results are available.  At the Java level, you use the method `getNextResultReference` to get access to a "token" that you can use later to tell Travelport what data you have already been returned.  
@@ -101,7 +111,7 @@ The main part of the fourth lesson's code, contained in [Lesson4.java](https://g
 
 As we go around the loop of reading bunches of results, we keep track of the hotel that has the lowest minimum price and the hotel that is closest (in kilometers) to our attraction.  After reading several screens of data, we display the lowest priced option and closest with some details from the response object, in particular the `HotelSearchResult` that represents these two "good" choices.  
 
-As we have done in the [previous lessons](lesson2.html) concerning decoding the results of air searches, we build a map that tracks the "key" to "value" mapping for items in the response.  In this lesson, the type of this object is the `Helper.VendorLocMap`; we construct this object as we read each screen of information but we were not able to find any cases where this map provided us needed information that was not present in either in the `HotelSearchResult` or `HotelProperty` objects that we were processing.  This may vary based on your choice of provider.
+As we have done in the [previous lessons](lesson2.html) concerning decoding the results of air searches, we build a map that tracks the "key" to "value" mapping for items in the response.  In this lesson, the type of this object is the `Helper.VendorLocMap`. We construct this object as we read each screen of information. We were not able to find any cases where this map provided us information that was not present in either in the `HotelSearchResult` or `HotelProperty` objects that we were processing, but this may vary based on your choice of provider.
 
 >>> I also wrote some code, now commented out, that tried to do a "media links" lookup. This appeared to be a way to get pictures and such from the hotel in question, but I got an error message that this was not supported.  I left the code in because it seemed pretty useful if some providers supported it.
 
