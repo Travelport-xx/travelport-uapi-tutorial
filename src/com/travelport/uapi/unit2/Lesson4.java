@@ -362,7 +362,7 @@ public class Lesson4 {
         cc.setType("VI");
         cc.setNumber("4012888888881881");
         //dec 2014
-        cc.setExpDate(factory.newXMLGregorianCalendarDate(2014, 12,
+        cc.setExpDate(getFactory().newXMLGregorianCalendarDate(2014, 12,
                 DatatypeConstants.FIELD_UNDEFINED, 
                 DatatypeConstants.FIELD_UNDEFINED));
         cc.setName("JOAN TEST");

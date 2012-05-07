@@ -84,26 +84,7 @@ public class CreateResvSvcTest {
 		
 		//payment
 		FormOfPayment fop = new FormOfPayment();
-		CreditCard cc = new CreditCard();
-		TypeStructuredAddress addr = new TypeStructuredAddress();
-		
-		cc.setType("MC");
-		cc.setNumber("5000000000000000");
-		//dec 2014
-		cc.setExpDate(factory.newXMLGregorianCalendarDate(2014, 12,
-				DatatypeConstants.FIELD_UNDEFINED, 
-				DatatypeConstants.FIELD_UNDEFINED));
-		cc.setName("Hugh Capet");
-		addr.setAddressName("Hugh Capet");
-		addr.setCity("Montpellier");
-		State vt = new State();
-		vt.setValue("VT");
-		addr.setState(vt);
-		addr.setCountry("USA");
-		addr.setPostalCode("05602");
-		addr.setAddressName("1 louvre street");
-		cc.setBillingAddress(addr);
-		
+		CreditCard cc = Lesson4.getFakeCreditCard(true);
 		fop.setCreditCard(cc);
 		fop.setKey(FORM_OF_PAYMENT_REF);
 		
