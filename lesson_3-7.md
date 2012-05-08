@@ -155,7 +155,7 @@ Uploading ssh public key /Users/you/.ssh/id_rsa.pub
 
 {% endhighlight %}
 
-#### Create The Application "Space" On Heroku
+#### Create the application "space" on Heroku
 
 A [stack](https://devcenter.heroku.com/articles/stack) in Heroku represents the machinery needed to run an application.  The current stack for running Java applications is called "Cedar".  (Cedar because C is the third letter of the alphabet: the two prior stacks were Aspen and Bamboo).
 
@@ -187,7 +187,7 @@ It's worth noting what has just happened here!
 
 Your application has been assigned to a server and can be reached on the public internet with the URL http://furious-ocean-1011.herokuapp.com/. This is it!
 
-### Register 'furious-ocean-1011' With Facebook
+### Register your application with Facebook
 
 By going to the Facebook Developer Program [Apps Tab](https://developers.facebook.com/apps/) you'll be presented with a list of all your existing facebook apps.  Whether you have done one before or not, you can use the "Create New App" in the upper right corner of the page to create a new app registration with Facebook.
 
@@ -209,7 +209,7 @@ The following screen will now appear so you can hook your application to [Canvas
  
 The red-circled part of the screenshot above is the URL where your application will be visible to users. This URL is "inside" facebook, but all the code will be hosted externally on your Java application running on Heroku.
 
-### Security Dialogs
+### Authentication dialogs
 
 Finally, you'll need to configure your [authentication dialog](https://developers.facebook.com/docs/opengraph/authentication/) for facebook.
 
@@ -223,7 +223,7 @@ The most critical settings are at the bottom of the page as shown here:
 
 These authentication settings are the ones we'll need in later lessons to get access to the necessary data to mix social networking and travel.  This would probably be a good time to click on the links "Preview Current Dialog" and "Preview Referral Dialog", so you can see how users will perceive your application.
 
-### Telling your Facebook configuration to your app
+### Setting your Facebook configuration into your app
 
 At the top of the screenshot above, showing how to register a new app in Facebook, there are two "blacked out" fields.  These are two bits of information that you need to "install" into your application, so it knows how to correctly respond to requests sent by Facebook.
 
