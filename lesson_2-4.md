@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Hotel search"
+title: "Hotel search, searching by landmark"
 description: "Understanding hotel searches and how to search based on a point of interest rather than a city or airport."
 ---
 {% include JB/setup %}
@@ -176,6 +176,7 @@ FORD ESCAPE OR SIMILAR  [Vendor: ZR]
 [Proceed to Unit 2, Lesson 5 >](lesson_2-5.html)
 
 [Table of Contents](index.html)
+<hr>
 
 {% include JB/comments %}
 {% include JB/analytics %}

@@ -29,20 +29,20 @@ The first unit will teach you how to setup and configure the Travelport Universa
 
 Lesson 1: [Setting up to work with the Travelport Universal API](lesson_1-1.html)
 	
-Lesson 2: [Basic Air Travel Requests](lesson_1-2.html)
+Lesson 2: [Basic air travel requests](lesson_1-2.html)
 	
-Lesson 3: [Advanced Travel Shopping](lesson_1-3.html)
+Lesson 3: [Advanced travel shopping](lesson_1-3.html)
 	
 
 ### Unit 2
 
-The second lesson is about completing a booking for a passenger, using city and geocodes to refine search options, and finding accommodation in an area. With this section complete, you can build a complete flight and hotel booking application.
+The second unit is about finding accommodation in an area, using city and geocodes to refine search options, and completing a booking for a passenger. With this section complete, you can build a complete flight and hotel booking application.
 
-Lesson 4: [Hotel search, searching by landmarks](lesson_2-4.html)
+Lesson 4: [Hotel search, searching by landmark](lesson_2-4.html)
 
-Lesson 5: [Making an Air Or Hotel Booking](lesson_2-5.html)
+Lesson 5: [Making an Air or Hotel booking](lesson_2-5.html)
 	
-Lesson 6: Managing Universal Records
+Lesson 6: Managing universal records
 
 
 ### Unit 3
