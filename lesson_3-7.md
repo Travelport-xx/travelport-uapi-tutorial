@@ -1,7 +1,7 @@
 ---
 layout: page
-title: "Building a travel app for Facebook"
-tagline:
+title: "Building Hello World for Facebook"
+tagline: It's not the code that's complex, it's the setup.
 description :
 ---
 {% include JB/setup %}
