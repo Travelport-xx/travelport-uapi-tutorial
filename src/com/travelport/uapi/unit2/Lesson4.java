@@ -32,6 +32,7 @@ public class Lesson4 {
         //This port ends up not being provided by some providers so it isn't
         //used by the lesson's code
         HotelMediaLinksServicePortType media = WSDLService.hotelMedia.get();
+        WSDLService.hotelMedia.showXML(true);
 
         //the hotel search parametrs
         int numAdults=2, numRooms=2, distanceInKm=25, maxScreens=4;
@@ -193,6 +194,8 @@ public class Lesson4 {
     public static void searchVehicle(String airportCode, int daysInFuturePickup, int daysInFutureReturn) throws VehicleFaultMessage {
         @SuppressWarnings("unused")
         VehicleSearchServicePortType port = WSDLService.vehicleSearch.get();
+        WSDLService.vehicleSearch.showXML(true);
+        
         VehicleSearchAvailabilityReq req = new VehicleSearchAvailabilityReq();
 
         req.setBillingPointOfSaleInfo(Helper.tutorialBPOSInfo(4, 2));
@@ -217,7 +220,7 @@ public class Lesson4 {
         searchMods.getVehicleModifier().add(mods);
         req.setVehicleSearchModifiers(searchMods);
 
-        /*VehicleSearchAvailabilityRsp rsp = port.service(req);*/
+        VehicleSearchAvailabilityRsp rsp = port.service(req);
     }
 
     /**
@@ -232,15 +235,15 @@ public class Lesson4 {
      * @throws HotelFaultMessage
      */
     public static void printHotel(HotelSearchResult r, 
-            String attractionName, HotelMediaLinksServicePortType IGNORED)
+            String attractionName, HotelMediaLinksServicePortType media)
             throws HotelFaultMessage {
 
-        /*
-         * not provided? HotelMediaLinksReq req = new HotelMediaLinksReq();
-         * req.setBillingPointOfSaleInfo(Helper.tutorialBPOSInfo(6, 2));
-         * req.getHotelProperty().add(r.getHotelProperty()); HotelMediaLinksRsp
-         * rsp = port.service(req);
-         */
+        
+         HotelMediaLinksReq req = new HotelMediaLinksReq();
+         req.setBillingPointOfSaleInfo(Helper.tutorialBPOSInfo(6, 2));
+         req.getHotelProperty().add(r.getHotelProperty()); 
+        // HotelMediaLinksRsp rsp = media.service(req);
+         
 
         // at the moment, it doesn't appear that there is any really useful
         // information in the vendor location map... that may vary by provider

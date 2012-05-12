@@ -170,7 +170,7 @@ public class Lesson4bad {
             //travelOrder++;
             seg.setETicketability(TypeEticketability.YES);
             seg.setEquipment("738");
-            seg.setParticipantLevel_0020("Secure Sell");
+            //seg.setParticipantLevel_0020("Secure Sell");
             seg.setGuaranteedPaymentCarrier("No");
             seg.setAvailabilitySource(TypeAvailabilitySource.STATUS_OVERLAID);
             seg.setLinkAvailability(Boolean.TRUE);

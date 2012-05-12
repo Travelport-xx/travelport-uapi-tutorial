@@ -27,8 +27,11 @@ public class Lesson5 {
 
         HotelSearchServicePortType port = WSDLService.hotelShop.get();
         HotelDetailsServicePortType det = WSDLService.hotelDetails.get();
+        WSDLService.hotelDetails.showXML(true);
         HotelReservationServicePortType resv = WSDLService.hotelReserve.get();
+        HotelMediaLinksServicePortType media = WSDLService.hotelMedia.get();
         
+        WSDLService.hotelReserve.showXML(true);
         try {
             
             HotelSearchResult[] result= 
@@ -43,7 +46,7 @@ public class Lesson5 {
             }
             
             HotelSearchResult cheapest = result[0];
-            Lesson4.printHotel(cheapest, pointOfInterestName, null);
+            Lesson4.printHotel(cheapest, pointOfInterestName, media);
             
             //note this is called on the WRAPPER not the object itself
             WSDLService.hotelDetails.showXML(true);

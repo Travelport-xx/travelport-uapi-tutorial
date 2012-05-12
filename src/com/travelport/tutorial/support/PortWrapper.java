@@ -69,7 +69,8 @@ public class PortWrapper<P,S> {
     
     /**
      * Add the necessary gunk to the BindingProvider to make it work right
-     * with an authenticated SOAP service.
+     * with an authenticated SOAP service.  Also turns on the schema 
+     * validation which you probably want since this is a tutorial.
      * 
      * @param provider
      *            the provider (usually this a port object also)
@@ -86,6 +87,9 @@ public class PortWrapper<P,S> {
                 System.getProperty("travelport.username"));
         provider.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY,
                 System.getProperty("travelport.password"));
+        
+        provider.getRequestContext().put("schema-validation-enabled", "true"); 
+
     }
 
     /**

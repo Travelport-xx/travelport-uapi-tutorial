@@ -1,5 +1,7 @@
 package com.travelport.uapi.unit2;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -23,6 +25,7 @@ public class CreateResvSvcTest {
 	@Test
 	public void createCancelTest() throws DatatypeConfigurationException, AirFaultMessage, AvailabilityFaultMessage {
 		AirCreateReservationPortType create = WSDLService.airReserve.get();
+		WSDLService.airReserve.showXML(true);
 		
 		AirCreateReservationReq req = new AirCreateReservationReq();
 		req.setAuthorizedBy("TEST");
@@ -49,7 +52,7 @@ public class CreateResvSvcTest {
 		phone.setCountryCode("33");
 		phone.setAreaCode("6");
 		phone.setNumber("42000000");
-		phone.setType("mobile");
+		phone.setType("Mobile");
 		traveller.getPhoneNumber().add(phone);
 		//name
 		BookingTravelerName name = new BookingTravelerName();
@@ -125,9 +128,17 @@ public class CreateResvSvcTest {
         calendar.setDay(javaCalendar.get(Calendar.DAY_OF_MONTH));
         calendar.setYear(javaCalendar.get(Calendar.YEAR));
 		
+        //convert to XML
+        XMLGregorianCalendar greg = factory.newXMLGregorianCalendar();
+        greg.setYear(calendar.getYear());
+        greg.setMonth(calendar.getMonth());
+        greg.setDay(calendar.getDay());
+        greg.setHour(calendar.getHour());
+        greg.setMinute(calendar.getMinute());
+        greg.setSecond(calendar.getSecond());
         //now get the string out and set that to the ticket TIME, even though
         //it says "date" in the name
-        actionStatus.setTicketDate(calendar.toString());
+        actionStatus.setTicketDate(greg.toString());
         
 		actionStatus.setProviderCode(System.getProperty("travelport.gds"));
 		actionStatus.setType("TAW");
