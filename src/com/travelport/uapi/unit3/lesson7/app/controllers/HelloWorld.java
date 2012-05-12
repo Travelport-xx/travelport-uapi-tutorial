@@ -126,7 +126,9 @@ public class HelloWorld extends Controller {
         User user = facebookClient.fetchObject("me", User.class);
 
         // ok indicates a sucessful HTTP request (status code 200)
-        return ok("your name is " + user.getName() + "<br/>" + "your hometown is " + user.getHometown());
+        return ok("your name is " + user.getName() + 
+                " and  your hometown is " + 
+                user.getHometown().getName());
 
     }
 
