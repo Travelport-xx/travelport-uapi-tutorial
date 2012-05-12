@@ -83,7 +83,7 @@ Just to be fully sure play is installed properly, let's go ahead and create a bo
 
 {% highlight console %}
 
-$ play new unit3
+$ play new deleteme
  _ __ | | __ _ _  _| |
 | '_ \| |/ _' | || |_|
 |  __/|_|\____|\__ (_)
@@ -109,6 +109,8 @@ OK, application deleteme is created.
 Have fun!
 
 {% endhighlight %}
+
+You can, of course, delete "deleteme" now.
 
 #### An aside about git
 
@@ -245,6 +247,124 @@ Adding config vars and restarting app... done, v5
 {% endhighlight %}
 
    Note that the `FBAPPNAMESPACE` should end with a '/' (slash) character after your app name.
+
+You can check that everything is set correctly with `heroko config --app furious-ocean-1011`
+
+{% highlight console %}
+$ heroku config --app furious-ocean-1011
+BUILDPACK_URL  => git@github.com:iansmith/heroku-buildpack-scala.git
+FBAPPID        => 306675786073601
+FBAPPNAMESPACE => furious_ocean
+FBSECRET       => 44ea55b78484b3274ff905cdef7d102b
+
+{% endhighlight %}
+
+
+### Setting up your eclipse
+
+The play command knows how to generate proper configuration files for projects that are developed with eclipse.  You can try this with:
+
+{% highlight console %}
+$ play eclipsify
+[info] Loading project definition from /Users/iansmith/tport-workspace/uapijava/src/com/travelport/uapi/unit3/lesson7/project
+[info] Set current project to lesson7 (in build file:/Users/iansmith/tport-workspace/uapijava/src/com/travelport/uapi/unit3/lesson7/)
+[info] About to create Eclipse project files for your project(s).
+[info] Successfully created Eclipse project files for project(s): lesson7
+{% endhighlight %}
+
+After you do this, you can use the `File > Import > General > Existing Projects into Workspace`, then "Next" and then selecting Lesson 7 as the root directory of this "new" project.  This makes your display a bit easier to understand with the lessons separated out at the top level of eclipse's project navigator.
+
+You can and should run `play eclipsify` any time you make significant changes to the application.  You can do `Refresh` on the project in eclipse to load the changes once you have the project established as above.
+
+### A tiny bit of git magic
+
+To prevent git from becoming confused about the different repos in use, here are two steps that will "separate" your unit3 lessons from the rest of the code--at least in git's mind.  You need to edit the .gitignore file at the top of the repository tree you got from [github](http://www.github.com).  Then we'll create a new repository just for our lessons. 
+
+Assuming you are in the `lesson7` directory of the source tree, you have edit the `.gitignore` file that it six levels above where you are! It's in the `uapijava` directory that is the top level of everything in this tutorial.  In the example we use `nano` as our editor, but you can use any editor you want to add the line `src/com/travelport/uapi/unit3/lesson*` to that file.
+
+{% highlight console %}
+
+$ nano ../../../../../../..//uapijava/.gitignore
+... add the line src/com/travelport/uapi/unit3/lesson* to this file ...
+$ # confirm that it is on the end 
+$ tail -2 ../../../../../../..//uapijava/.gitignore
+src/com/travelport/uapi/unit3/lesson*
+$ # tell git to put a temporary repository somewhere else... can be almost anywhere EXCEPT the source tree
+$ git init 
+$ git add -A
+$ # don't forget to change this to your application name...
+$ git remote add heroku git@heroku.com:furious-ocean-1011.git
+$ # confirm that this did what we wanted
+$ git remote -v
+heroku	git@heroku.com:furious-ocean-1011.git (fetch)
+heroku	git@heroku.com:furious-ocean-1011.git (push)
+{% endhighlight %}
+
+Now we have created a temporary repository that is holding our heroku-related files and we have told the primary git 
+repository to ignore lesson7.  Further, we've now got everything setup to push code to heroku _without_ needing to specify the application name all the time!
+
+## Heroku Love
+
+Let's get hello world working in facebook!  We need to commit our files to our new repository from the previous step
+and then "push" them to heroku.
+
+In the `lesson7` directory:
+
+{% highlight console %}
+
+$ git status
+# On branch master
+#
+# Initial commit
+... lots more information here about each file ...
+
+$ git commit -a -m "initial commit"
+[master (root-commit) 34d1086] initial commit
+ 13 files changed, 392 insertions(+), 0 deletions(-)
+ create mode 100644 .gitignore
+ create mode 100644 Procfile
+... lots more information here about each file...
+$ git push heroku master
+Counting objects: 25, done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (19/19), done.
+Writing objects: 100% (25/25), 39.12 KiB, done.
+Total 25 (delta 0), reused 0 (delta 0)
+
+-----> Heroku receiving push
+... lots more heroku information here about building and deploying your app...
+      
+       [info] Your application is ready to be run in place: target/start
+       [info] 
+ 	   [success] Total time: 0 s, completed May 12, 2012 3:51:29 PM
+-----> Discovering process types
+       Procfile declares types -> web
+-----> Compiled slug size is 77.1MB
+-----> Launching... done, v8
+       http://furious-ocean-1011.herokuapp.com deployed to Heroku
+
+{% endhighlight  %}
+
+    If you get a message about "unable to fetch buildpack" that is because sometimes the github servers are slow and heroku times out trying to fetch the build recipie that is called a "buildpack" by heroku.  Just try the push again; this error is irritating but harmless.
+
+Again, it's worth reflecting for just a moment what this capability means:  You can edit files on your workstation, commit them when you are ready (git commit), then push them to heroku  (git push) for a complete build and deploy cycle!
+
+
+## Facebook's Hello World
+
+Go to your application page on facebook: `http://apps.facebook.com/furious_ocean`
+
+You'll be given a dialog box saying what permissions this application has requested.  You should know, you set
+them above!  After saying "ok," then you'll receive a second dialog box about "extended permissions" requested by 
+this application: Again, this shouldn't be too scary for you since you configured the application.  After saying
+"ok," you should see something like this:
+
+<br/>
+<img src="images/fb-hello-world.png">
+<br/>
+
+
+It's a been a lot of configuration work, but the display above shows that we have correctly handled a facebook request and queried a very small amount of data from the facebook graph.  You should see your name and hometown.  "Hello" to the brave new facebook world, indeed!
 
 
 
