@@ -364,7 +364,7 @@ this application: Again, this shouldn't be too scary for you since you configure
 <br/>
 
 
-It's a been a lot of configuration work, but the display above shows that we have correctly handled a facebook request and queried a very small amount of data from the facebook graph.  You should see your name and hometown.  "Hello" to the brave new facebook world, indeed!
+It's a been a lot of configuration work, but the display above shows that we have correctly handled a facebook request and queried a very small amount of data from the facebook graph.   Tell a friend to try out your "hello world" by going to the facebook url!  Anyone hitting that page should see their name and hometown, as they gave it in their facebook user profile.  "Hello" to the brave new facebook world, indeed!
 
 
 
