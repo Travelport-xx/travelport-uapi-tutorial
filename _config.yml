@@ -4,8 +4,8 @@ permalink: /:categories/:year/:month/:day/:title
 
 exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
 
-server: false
-auto: false
+server: true
+auto: true
 pygments: true
 markdown: maruku
 safe: true

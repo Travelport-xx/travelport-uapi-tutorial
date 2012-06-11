@@ -161,11 +161,11 @@ Uploading ssh public key /Users/you/.ssh/id_rsa.pub
 
 A [stack](https://devcenter.heroku.com/articles/stack) in Heroku represents the machinery needed to run an application.  The current stack for running Java applications is called "Cedar".  (Cedar because C is the third letter of the alphabet: the two prior stacks were Aspen and Bamboo).
 
-You should create this stack while inside the directory containing the code for lesson 7, which is prepared for Heroku and Play development. In the next listing this is represented by `path/to/tutorial`:
+You should create this stack while inside the directory containing the code for unit 3 (_not lesson 7!_) is prepared for Heroku and Play development. In the next listing this is represented by `path/to/tutorial`:
 
 {% highlight console %}
 
-$ cd path/to/tutorial/src/com/travelport/uapi/unit3/lesson7
+$ cd path/to/tutorial/src/com/travelport/uapi/unit3
 $ heroku apps:create --buildpack git@github.com:iansmith/heroku-buildpack-scala.git --stack cedar
 Creating furious-ocean-1011... done, stack is cedar
 
@@ -266,13 +266,13 @@ The play command knows how to generate proper configuration files for projects t
 
 {% highlight console %}
 $ play eclipsify
-[info] Loading project definition from /Users/iansmith/tport-workspace/uapijava/src/com/travelport/uapi/unit3/lesson7/project
-[info] Set current project to lesson7 (in build file:/Users/iansmith/tport-workspace/uapijava/src/com/travelport/uapi/unit3/lesson7/)
+[info] Loading project definition from /Users/iansmith/tport-workspace/uapijava/src/com/travelport/uapi/unit3/project
+[info] Set current project to unit3 (in build file:/Users/iansmith/tport-workspace/uapijava/src/com/travelport/uapi/unit3/)
 [info] About to create Eclipse project files for your project(s).
-[info] Successfully created Eclipse project files for project(s): lesson7
+[info] Successfully created Eclipse project files for project(s): unit3
 {% endhighlight %}
 
-After you do this, you can use the `File > Import > General > Existing Projects into Workspace`, then "Next" and then selecting Lesson 7 as the root directory of this "new" project.  This makes your display a bit easier to understand with the lessons separated out at the top level of eclipse's project navigator.
+After you do this, you can use the `File > Import > General > Existing Projects into Workspace`, then "Next" and then selecting Unit 3 as the root directory of this "new" project.  This makes your display a bit easier to understand with the lessons separated out at the top level of eclipse's project navigator.
 
 You can and should run `play eclipsify` any time you make significant changes to the application.  You can do `Refresh` on the project in eclipse to load the changes once you have the project established as above.
 
@@ -280,15 +280,15 @@ You can and should run `play eclipsify` any time you make significant changes to
 
 To prevent git from becoming confused about the different repos in use, here are two steps that will "separate" your unit3 lessons from the rest of the code--at least in git's mind.  You need to edit the .gitignore file at the top of the repository tree you got from [github](http://www.github.com).  Then we'll create a new repository just for our lessons. 
 
-Assuming you are in the `lesson7` directory of the source tree, you have edit the `.gitignore` file that it six levels above where you are! It's in the `uapijava` directory that is the top level of everything in this tutorial.  In the example we use `nano` as our editor, but you can use any editor you want to add the line `src/com/travelport/uapi/unit3/lesson*` to that file.
+Assuming you are in the `unit3` directory of the source tree, you have edit the `.gitignore` file that it five levels above where you are! It's in the `uapijava` directory that is the top level of everything in this tutorial.  In the example we use `nano` as our editor, but you can use any editor you want to add the line `src/com/travelport/uapi/unit3/` to that file (or uncomment it if it is already there)
 
 {% highlight console %}
 
-$ nano ../../../../../../..//uapijava/.gitignore
-... add the line src/com/travelport/uapi/unit3/lesson* to this file ...
+$ nano ../../../../../..//uapijava/.gitignore
+... add the line src/com/travelport/uapi/unit3 to this file ...
 $ # confirm that it is on the end 
-$ tail -2 ../../../../../../..//uapijava/.gitignore
-src/com/travelport/uapi/unit3/lesson*
+$ tail -2 ../../../../../..//uapijava/.gitignore
+src/com/travelport/uapi/unit3
 $ # tell git to put a temporary repository somewhere else... can be almost anywhere EXCEPT the source tree
 $ git init 
 $ git add -A
@@ -301,14 +301,14 @@ heroku	git@heroku.com:furious-ocean-1011.git (push)
 {% endhighlight %}
 
 Now we have created a temporary repository that is holding our heroku-related files and we have told the primary git 
-repository to ignore lesson7.  Further, we've now got everything setup to push code to heroku _without_ needing to specify the application name all the time!
+repository to ignore unit3.  Further, we've now got everything setup to push code to heroku _without_ needing to specify the application name all the time!
 
 ## Heroku Love
 
 Let's get hello world working in facebook!  We need to commit our files to our new repository from the previous step
 and then "push" them to heroku.
 
-In the `lesson7` directory:
+In the `unit3` directory:
 
 {% highlight console %}
 
