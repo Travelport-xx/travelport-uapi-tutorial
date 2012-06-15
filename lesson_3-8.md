@@ -10,7 +10,7 @@ description :
 
 ### Objective of Lesson 8
 
-In this lesson, we'll use the TravelPort uAPI in ways that should be familiar to you from the previous units.  However, we are going to do this _inside_ our Yacebook application using the data from the end-user's Facebook account.  We'll be developing an "app" (really a page) that knows how to display the upcoming birthdays of your friends, and an airfare quote for each of the possible trips to go visit a friend on their birthday.
+In this lesson, we'll use the TravelPort uAPI in ways that should be familiar to you from the previous units.  However, we are going to do this _inside_ our Facebook application using the data from the end-user's Facebook account.  We'll be developing an "app" (really a page) that knows how to display the upcoming birthdays of your friends, and an airfare quote for each of the possible trips to go visit a friend on their birthday.
 
 This lesson runs in a "batch mode" (the interactive version is lesson 9) where all the processing work is done on the server. This processing can take some time if you have a lot of friends, so we are going to have to do it in "iterations" (rounds) so the user can see that we are making progress. On each iteration we send a batch of requests to Facebook or TravelPort for processing.  There is a trade-off here when using Facebook: the more requests in a batch, the more efficient the processing since you avoid networking penalty you would pay if you sent the requests individually.  However, the larger batches mean longer delays between "progress notifications" to the user.
 
@@ -196,7 +196,7 @@ public static String nearestAirport(FBNamedPlace town) {
          return null;
      }
 	//
-	// Compute an SQL query base on the fields of "town"
+	// Compute an SQL query based on the fields of "town"
 	//
      ExpressionList<Terminal> exp = finder.where().
              ilike("country_code", town.location.country);
