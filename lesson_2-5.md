@@ -206,7 +206,7 @@ In a real application, many checks will be made to verify with the credit card p
 ----------------------
 
 [< Return to Unit 2, Lesson 4](lesson_2-4.html) |
-[Proceed to Unit 2, Lesson 6 >](lesson_2-6.html) 
+[Proceed to Unit 3, Lesson 6 >](lesson_3-6.html) 
 
 [Table of Contents](index.html)
 <hr>
