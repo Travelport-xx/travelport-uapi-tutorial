@@ -1,7 +1,6 @@
 ---
 layout: page
 title: "Better mapping integration in Facebook"
-tagline: Making a more interactive Facebook API with uAPI.
 description :
 ---
 {% include JB/setup %}
