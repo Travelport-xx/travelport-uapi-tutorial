@@ -1,7 +1,6 @@
 ---
 layout: page
-title: "Building Hello World for Facebook"
-tagline: It's not the code that's complex, it's the setup.
+title: "Building a travel app for Facebook"
 description :
 ---
 {% include JB/setup %}
@@ -32,7 +31,7 @@ Because this lesson has a number of fairly complex moving parts, it's important 
 * Since Facebook applications need to be on the public internet, we are going to use an internet service called [Heroku](http://www.heroku.com) to host our Java application. At the time we write, Heroku is free when the usage of your application is light, so you should be able to the do the tutorial without incurring any costs.
 * Facebook makes use of a protocol called [OAuth](http://en.wikipedia.org/wiki/OAuth) to allow the user to control what information an application can receive about them.  [This protocol](http://oauth.net/) depends crucially on cryptography. Thus, we'll need to make use of some of the [deeper layers](http://docs.oracle.com/javase/6/docs/technotes/guides/security/crypto/CryptoSpec.html) of the Java platform.  These can be ignored by most tutorial readers because these tend to "just work, or they don't"; they are intended to _not_ be debuggable.
 
-### Notes on protocols
+### Notes on internet protocols and security
 
 For the truly interested in "how it works:"
 
@@ -46,7 +45,7 @@ Facebook's use of OAUTH means that the user must give consent before their data 
 
 By way of comparison, both applications use HTTP as the means of transmitting a set of bytes from one point to another, and use URLs as the way to identify with whom one wants to communicate.  The uAPI strategy of using WSDL, SOAP, and XML (as well as explicit versioning) is much safer than the relatively "loose" standard of REST which enforces... nothing --- it's just a set of conventions.
 
-The advantage of REST is the comparative simplicity and ease of implementation compared to the relatively thorough process of using a WSDL-based approach.  Both systems offer reasonable protection from eavesdropping from third-parties, because they are built on top of HTTPS.  Facebook is probably marginally more secure as it prevents impersonation since it requires that messages be "signed" in a way that cannot be forged (although the true risk of this type of attack is certainly very small).
+The advantage of REST is the comparative simplicity and ease of implementation compared to the thorough process of using a WSDL-based approach.  Both systems offer reasonable protection from eavesdropping from third-parties, because they are built on top of HTTPS.  Facebook is probably marginally more secure as it prevents impersonation since it requires that messages be "signed" in a way that cannot be forged (although the true risk of this type of attack is certainly very small).
 
 ### Play
 
@@ -191,7 +190,7 @@ Your application has been assigned to a server and can be reached on the public 
 
 ### Register your application with Facebook
 
-By going to the Facebook Developer Program [Apps Tab](https://developers.facebook.com/apps/) you'll be presented with a list of all your existing facebook apps.  Whether you have done one before or not, you can use the "Create New App" in the upper right corner of the page to create a new app registration with Facebook.
+By going to the Facebook Developer Program [Apps Tab](https://developers.facebook.com/apps/) you'll be presented with a list of all your existing Facebook apps.  Whether you have done one before or not, you can use the "Create New App" in the upper right corner of the page to create a new app registration with Facebook.
 
 **Be sure to *NOT* check the box on this dialog related to Heroku!**
 
@@ -209,11 +208,11 @@ The following screen will now appear so you can hook your application to [Canvas
 <img src="images/fb-config.png">
 <br/>
  
-The red-circled part of the screenshot above is the URL where your application will be visible to users. This URL is "inside" facebook, but all the code will be hosted externally on your Java application running on Heroku.
+The red-circled part of the screenshot above is the URL where your application will be visible to users. This URL is "inside" Facebook, but all the code will be hosted externally on your Java application running on Heroku.
 
 ### Authentication dialogs
 
-Finally, you'll need to configure your [authentication dialog](https://developers.facebook.com/docs/opengraph/authentication/) for facebook.
+Finally, you'll need to configure your [authentication dialog](https://developers.facebook.com/docs/opengraph/authentication/) for Facebook.
 
 Click on the "Auth Dialog" in the upper left of your app settings to edit this. You can ignore most of these  settings, unless you feel obligated or interested in setting them.
 
@@ -278,9 +277,9 @@ You can and should run `play eclipsify` any time you make significant changes to
 
 ### A tiny bit of git magic
 
-To prevent git from becoming confused about the different repos in use, here are two steps that will "separate" your unit3 lessons from the rest of the code--at least in git's mind.  You need to edit the .gitignore file at the top of the repository tree you got from [github](http://www.github.com).  Then we'll create a new repository just for our lessons. 
+To prevent git from becoming confused about the different repositories in use, here are two steps that will "separate" your `unit3` lessons from the rest of the code--at least in git's mind.  You need to edit the .gitignore file at the top of the repository tree you got from [github](http://www.github.com).  Then we'll create a new repository just for our lessons. 
 
-Assuming you are in the `unit3` directory of the source tree, you have edit the `.gitignore` file that it five levels above where you are! It's in the `uapijava` directory that is the top level of everything in this tutorial.  In the example we use `nano` as our editor, but you can use any editor you want to add the line `src/com/travelport/uapi/unit3/` to that file (or uncomment it if it is already there)
+Assuming you are in the `unit3` directory of the source tree, you have edit the `.gitignore` file that is five levels above where you are! It's in the `uapijava` directory that is the top level of everything in this tutorial.  In the example we use `nano` as our editor, but you can use any editor you want to add the line `src/com/travelport/uapi/unit3/` to that file (or uncomment it if it is already there)
 
 {% highlight console %}
 
@@ -300,12 +299,12 @@ heroku	git@heroku.com:furious-ocean-1011.git (fetch)
 heroku	git@heroku.com:furious-ocean-1011.git (push)
 {% endhighlight %}
 
-Now we have created a temporary repository that is holding our heroku-related files and we have told the primary git 
+Now we have created a temporary repository that is holding our heroku-related files, and we have told the primary git 
 repository to ignore unit3.  Further, we've now got everything setup to push code to heroku _without_ needing to specify the application name all the time!
 
 ## Heroku Love
 
-Let's get hello world working in facebook!  We need to commit our files to our new repository from the previous step
+Let's get hello world working in Facebook!  We need to commit our files to our new repository from the previous step
 and then "push" them to heroku.
 
 In the `unit3` directory:
@@ -352,11 +351,11 @@ Again, it's worth reflecting for just a moment what this capability means:  You 
 
 ## Facebook's Hello World
 
-Go to your application page on facebook: `http://apps.facebook.com/furious_ocean`
+Go to your application page on Facebook: `http://apps.facebook.com/furious_ocean`
 
-You'll be given a dialog box saying what permissions this application has requested.  You should know, you set
+You'll be given a dialog box saying what permissions this application has requested.  You should know, you just set
 them above!  After saying "ok," then you'll receive a second dialog box about "extended permissions" requested by 
-this application: Again, this shouldn't be too scary for you since you configured the application.  After saying
+this application. Again, this shouldn't be too scary for you since you configured the application.  After saying
 "ok," you should see something like this:
 
 <br/>
@@ -364,13 +363,13 @@ this application: Again, this shouldn't be too scary for you since you configure
 <br/>
 
 
-It's a been a lot of configuration work, but the display above shows that we have correctly handled a facebook request and queried a very small amount of data from the facebook graph.   Tell a friend to try out your "hello world" by going to the facebook url!  Anyone hitting that page should see their name and hometown, as they gave it in their facebook user profile.  "Hello" to the brave new facebook world, indeed!
+It's a been a lot of configuration work, but the display above shows that we have correctly handled a Facebook request and queried a very small amount of data from the Facebook graph.   Tell a friend to try out your "hello world" by going to the Facebook url!  Anyone hitting that page should see their name and hometown, as they gave it in their Facebook user profile.
 
 
 
 ----------------------
 
-[< Return to Unit 2, Lesson 6](lesson_2-6.html) | [Proceed to Unit 3, Lesson 8 >](lesson_3-8.html)
+[< Return to Unit 3, Lesson 6](lesson_3-6.html) | [Proceed to Unit 3, Lesson 8 >](lesson_3-8.html)
 
 [Table of Contents](index.html)
 <hr>
