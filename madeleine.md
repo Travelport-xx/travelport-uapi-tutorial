@@ -18,9 +18,13 @@ To build a real application at least these improvements must be delivered:
 
 * A "semi-booking" ability to submit an itinerary that ends up in the travel agents queue for ticketing and dealing with payment.  This should probably be connected automatically
 
-* Improved geographic knowledge for big countries like China, Brazil, and Australia.  Currently we don't handle provinces or states of these countries.
-
-* Better England county handling--we don't handle Scotland at all and there are many "county names" for England.
+* Improved geographic knowledge 
+** For big countries like China, Brazil, and Australia need province/state names.
+** Better England county handling--we don't handle Scotland at all and there are many "county names" for England.
+** List of city names globally might be good, just as a deep backup.  Sergio has this data.
+** Maybe a few alternate names for a few countries to deal with politics, e.g. "Korea" and "Taiwan"
 
 * Ability for either customer or agent to post on the user's timeline when booking travel.  Maybe when the travel agent confirms the purchase?
+
+* Need some of the fancy filtering of results---filter by airline, filter by air vs. rail
 
