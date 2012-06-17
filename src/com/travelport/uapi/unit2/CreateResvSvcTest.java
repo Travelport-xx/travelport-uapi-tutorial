@@ -119,7 +119,7 @@ public class CreateResvSvcTest {
 		javaCalendar.setTime(new Date());//right now
 		javaCalendar.add(Calendar.DAY_OF_MONTH, 2);//2 days from now
 		
-		calendar.setTime(0, 0, 0);//midnight day after tomorrow
+		calendar.setTime(23, 59, 0);//midnight day after tomorrow
 		calendar.setTimezone(60);//paris is +1 hour from GMT
 		
 		//copy date from java calendar where we did the arithmetic

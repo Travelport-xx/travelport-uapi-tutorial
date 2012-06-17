@@ -3,13 +3,6 @@ package com.travelport.tutorial.support;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.xml.ws.BindingProvider;
-
-import org.apache.cxf.endpoint.Client;
-import org.apache.cxf.frontend.ClientProxy;
-import org.apache.cxf.interceptor.LoggingInInterceptor;
-import org.apache.cxf.interceptor.LoggingOutInterceptor;
-
 import com.travelport.service.air_v18_0.*;
 import com.travelport.service.hotel_v17_0.*;
 import com.travelport.service.system_v8_0.*;
@@ -88,16 +81,42 @@ public class WSDLService {
     static protected String GDS_PROP = "travelport.gds";
     static protected String TARGET_BRANCH = "travelport.targetBranch";
 
+    static public String USERNAME_ENV = "TPUSERNAME";
+    static public String PASSWORD_ENV = "TPPASSWORD";
+    static public String GDS_ENV = "TPGDS";
+    static public String TARGET_BRANCH_ENV = "TPTARGETBRANCH";
+
     /**
      * Check that all the properties we get through the environment are at least
      * present.
      */
     public static void checkProperties() {
-        if ((System.getProperty(USERNAME_PROP) == null) || (System.getProperty(PASSWORD_PROP) == null)
-                || (System.getProperty(GDS_PROP) == null) || (System.getProperty(TARGET_BRANCH) == null)) {
+        String user = System.getProperty(USERNAME_PROP);
+        String pwd = System.getProperty(PASSWORD_PROP);
+        String gds = System.getProperty(GDS_PROP);
+        String tb  = System.getProperty(TARGET_BRANCH);
+        
+        if ((user==null) || (user.trim().length()==0)) {
+            user = System.getenv(USERNAME_ENV);
+        }
+        
+        if ((pwd==null) || (pwd.trim().length()==0)) {
+            pwd = System.getenv(PASSWORD_ENV);
+        }
+
+        if ((gds==null) || (gds.trim().length()==0)) {
+            gds = System.getenv(GDS_ENV);
+        }
+
+        if ((tb==null) || (tb.trim().length()==0)) {
+            tb = System.getenv(TARGET_BRANCH_ENV);
+        }
+
+        if ((user == null) || (pwd == null)
+                || (gds == null) || (tb == null)) {
             throw new RuntimeException("One or more of your properties " + "has not been set properly for you to access the travelport "
                     + "uAPI.  Check your command line arguments or eclipse " + "run configuration for these properties:" + USERNAME_PROP
-                    + "," + PASSWORD_PROP + "," + GDS_PROP + "," + TARGET_BRANCH);
+                    + "," + PASSWORD_PROP + "," + GDS_PROP + "," + TARGET_BRANCH +".  These can also be set via environment variables.");
         }
     }
 

@@ -67,17 +67,23 @@ public class ServiceWrapper<S> {
             service = constructor.newInstance(url);
 
         } catch (SecurityException e) {
-            throw new RuntimeException("You supplied a bad service/port pair!");
+            throw new RuntimeException("You supplied a bad *service*/port pair (Security):"+
+                    e.getMessage());
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException("You supplied a bad service/port pair!");
+            throw new RuntimeException("You supplied a bad *service*/port pair (NoSuchMethod):"+
+                    e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new RuntimeException("You supplied a bad service/port pair!");
+            throw new RuntimeException("You supplied a bad *service*/port pair (IllegalArgument):"+
+                    e.getMessage());
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("You supplied a bad service/port pair!");
+            throw new RuntimeException("You supplied a bad *service*/port pair (IllegalAccess):"+
+                    e.getMessage());
         } catch (InvocationTargetException e) {
-            throw new RuntimeException("You supplied a bad service/port pair!");
+            throw new RuntimeException("You supplied a bad *service*/port pair (InvocationTarget):"+
+                    e.getMessage());
         } catch (InstantiationException e) {
-            throw new RuntimeException("You supplied a bad service/port pair!");
+            throw new RuntimeException("You supplied a bad *service*/port pair (Instantiation):"+
+                    e.getMessage());
         }
         
     }

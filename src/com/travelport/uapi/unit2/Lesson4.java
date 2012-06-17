@@ -344,7 +344,7 @@ public class Lesson4 {
 
     public static void addDistanceModifier(HotelSearchModifiers mods, long km) {
         Distance distance = new Distance();
-        distance.setUnits("km");
+        distance.setUnits("KM");
         distance.setValue(BigInteger.valueOf(km));
         mods.setDistance(distance);
     }
