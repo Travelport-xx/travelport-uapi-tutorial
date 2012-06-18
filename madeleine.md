@@ -32,3 +32,4 @@ To build a real application at least these improvements must be delivered:
 
 * Need to handle events that change the size of the window and re-position the overlay in bottom right.
 
+* Need ability to change origin based on friends... to have somebody other than the current user be "origin".
