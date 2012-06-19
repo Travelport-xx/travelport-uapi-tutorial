@@ -13,7 +13,7 @@ After this lesson is completed, you should know how to search for available flig
 
 ### Workflow
 
-This lesson, building on [Lesson 1](lesson_1-1.html), will allow you to do what most travel agents did in the past and what many search engines still do today.  The objective is to book a trip for a customer, but to do that they need to do two basic tasks:
+This lesson, building on [Lesson 1](lesson_1-1.html), will allow you to do what most travel agents did in the past and what many search engines still do today.  The objective is to book a trip for a customer, but to do that, the agent needs to do two basic tasks:
 
 1. Find a set of available flights to get the traveller from origin to destination (and often back)
 
@@ -21,17 +21,17 @@ This lesson, building on [Lesson 1](lesson_1-1.html), will allow you to do what 
 
 Given the terminology we explained in [Lesson 1](lesson_1-1.html), there are two ports that are needed to accomplish this workflow: the "Availability Search" port and the "Price" port.  Both of these can be accessed from the `AirService` object.
 
-### Generating the client
+### Generating the Client-Side
 
-As with the `Service.wsdl` in the previous lesson, we will need to generate the Java code to access uAPI services, this time from `Air.wsdl` in the directory `wsdl/air_v18_0`.
+If you did not do so in the previous lesson, you'll need to make sure you have all the generated code necessary for Unit 1.   In this lesson, we'll be primarily  working with the "Air" service, but it is a good idea to now generate not just the "Air" service in `src/wsdl/air_v18_0/Air.wsdl`, but also the "Hotel" service in `src/wsdl/hotel_v17_0/Hotel.wsdl`, "System" service in `src/wsdl/system_v8_0/System.wsdl`, and the "Vehicle" service in `src/wsdl/vehicle_v17_0/Vehicle.wsdl`.
 
 After you have generated the code, you will have many more packages in your project (hitting "refresh" or "F5" on your `src` folder is probably a good idea).  The [AirService object's](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/service/air_v18_0/AirService.java) (generated) implementation is part of the package [com.travelport.service.air_v18_0]((https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/service/air_v18_0/).  
 
-### Why all the packages and code?
+### Why So Many Packages And Files?
 
-The reason for all the generated code (tens of thousands of lines of it) resulting from running "generate client" on `Air.wsdl`, is that WSDL files may reference other WSDL files as well as schema files (in XSD files). 
+The reason for all the generated code (tens of thousands of lines of it) resulting from running "generate client" on `Air.wsdl` and the other services, is that WSDL files may reference other WSDL files as well as external types, in XSD files, as we explained previously.  The WSDL code we have used to generate source code is the _complete_ interface to each of the named uAPI services.
 
-The `Air.wsdl` is the top of a large pyramid of different objects, and since they all can be referenced in a chain that starts from `Air.wsdl`, the CXF framework is obligated to generate code for them. CXF must generate Java code for all _reachable_ types starting at `Air.wsdl`, and proceeding through any number of requests and responses.
+The `Air.wsdl` file is the top of a large pyramid of different objects, and since they all can be referenced in a chain that starts from `Air.wsdl`, the CXF framework is obligated to generate code for them. CXF must generate Java code for all _reachable_ types starting at `Air.wsdl`, and proceeding through any number of requests and responses.
 
 In this specific case, the set of reachable types includes classes describing the amenities available in a particular hotel and the details of the taxes on a particular rail journey!
 
@@ -54,7 +54,7 @@ DL#8517 from ATL to CDG at 2012-06-29T17:55:00.000-04:00
 {% endhighlight %}
 
 
-This output is quite specific to the airline industry.
+This output is quite specific to the airline industry but probably familiar to many readers who travel frequently.
 
 Itineraries are separated by the dashed lines.  The first itinerary has a price of 941.70 Great Britain Pounds (GBP) and involves two Air France (AF) flights on June 22nd and two Delta (DL) flights on the way back to Paris on June 29th.  The next itinerary is (shocking!) about four times as expensive, 3594.70 GBP, and involves three carriers this time, UA (United Airlines), US (US Airways), and again Delta on the return.  Note that this outbound air journey has a connection in Charlotte, North Carolina, USA (CLT) instead of Atlanta, Georgia (ATL).
 
@@ -72,9 +72,57 @@ At a high level, the class [Lesson2](https://github.com/iansmith/travelport-uapi
   * Display the resulting price
   * Display the segments of the journey
 
-As we shall see, the first and third items require particular care, and can be more complex than most people would expect.
+As we shall see, the first and third items require particular care, and can be more complex than most readers would expect.
 
-### Preparing the search
+#### Purely uAPI
+
+In the case of the first item, the objective in uAPI terms is construct an `AvailabilitySearchReq` which is primarily composed of two `SearchAirLeg` components plus one or more `AirSearchModifiers`.  One `SearchAirLeg` is for the outbound and one is for the return journey.  All these parts can be seen in this XML request, sampled from `Lesson2`. As before, the origin point is Paris, France (airport is 'CDG') and the destination is 'CHA' or Chattanooga, Tennessee in the US.  
+
+{% highlight xml %}
+ 
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <ns2:AvailabilitySearchReq xmlns="http://www.travelport.com/schema/common_v15_0" xmlns:ns2="http://www.travelport.com/schema/air_v18_0" xmlns:ns3="http://www.travelport.com/schema/vehicle_v17_0" xmlns:ns4="http://www.travelport.com/schema/hotel_v17_0" xmlns:ns5="http://www.travelport.com/schema/passive_v14_0" xmlns:ns6="http://www.travelport.com/schema/rail_v12_0" xmlns:ns7="http://www.travelport.com/schema/universal_v16_0" TargetBranch="P105110">
+      <BillingPointOfSaleInfo OriginApplication="tutorial-unit1-lesson2"/>
+      <ns2:SearchAirLeg>
+        <ns2:SearchOrigin>
+          <Airport Code="CDG"/>
+        </ns2:SearchOrigin>
+        <ns2:SearchDestination>
+          <Airport Code="CHA"/>
+        </ns2:SearchDestination>
+        <ns2:SearchDepTime PreferredTime="2012-08-18"/>
+        <ns2:AirLegModifiers>
+          <ns2:PreferredCabins>
+            <ns2:CabinClass Type="Economy"/>
+          </ns2:PreferredCabins>
+        </ns2:AirLegModifiers>
+      </ns2:SearchAirLeg>
+      <ns2:SearchAirLeg>
+        <ns2:SearchOrigin>
+          <Airport Code="CHA"/>
+        </ns2:SearchOrigin>
+        <ns2:SearchDestination>
+          <Airport Code="CDG"/>
+        </ns2:SearchDestination>
+        <ns2:SearchDepTime PreferredTime="2012-08-25"/>
+        <ns2:AirLegModifiers>
+          <ns2:PreferredCabins>
+            <ns2:CabinClass Type="Economy"/>
+          </ns2:PreferredCabins>
+        </ns2:AirLegModifiers>
+      </ns2:SearchAirLeg>
+      <ns2:AirSearchModifiers>
+        <ns2:PreferredProviders>
+          <Provider Code="1V"/>
+        </ns2:PreferredProviders>
+      </ns2:AirSearchModifiers>
+    </ns2:AvailabilitySearchReq>
+  </soap:Body>
+</soap:Envelope>
+{% endhighlight %}
+
+### Preparing the Search
 
 At the beginning of `main()` in the `Lesson2` class are these lines:
 
@@ -112,7 +160,7 @@ AirReq.addEconomyPreferred(ret);
 {% endhighlight %}
 
 
-The code above creates two "legs" for the search to consider: one outbound from `origin` to `dest` and one for the reverse (`ret`) one week later.  Each leg also has a departure date and what type of seat should be searched for.
+The code above creates two "legs" for the search to consider: one outbound from `origin` to `dest` and one for the reverse (`ret`) one week later.  (When actually transmitted, the request results in XML similar to that shown above.) Each leg also has a departure date and what type of seat should be searched for.
 
 Each line of this snippet with code on it uses a method from the [AirReq](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/AirReq.java) helper object.  These helper methods have been provided to try to make it easier to understand the examples or write new code that does similar things.  
 
@@ -145,7 +193,7 @@ This is the code that creates a single `SearchAirLeg` object that is part of our
 
 You can see from the code above that locations are more complicated objects than one might expect... they _can_ be an airport code, as in this example, or they can be more complex entities such as "all locations near a given a city" as we will see in Lesson 3.
 
-It is worth the time looking at the implementation of `AirReq` so that you can see, even for the relatively simple searches we are doing here, the number of different options, and thus different classes and structures, that are used.
+It is worth the time looking at the implementation of `AirReq` and the XML sample above, so that you can see, even for the relatively simple searches we are doing here, the number of different options, and thus different Java classes and XML structures, that are used.
 
 ### Decoding the result
 
@@ -270,7 +318,7 @@ Despite the name, a single `air:ItinerarySolution` may encode many possible itin
 
 The large size of these messages and the complexity of encoding and decoding them is one of the more serious complaints about SOAP/XML as a transport mechanism in systems such as the uAPI.  We will not debate that point here, but it's important to highlight that the requests and responses sent to and from the Travelport system often end up being hundreds of lines of XML.  If you are concerned about the size of the data being passed from your client to the Travelport servers, you can enable the gzip compression algorithm in the headers of your web requests with `Accept-Encoding: gzip, deflate`.
 
-### Decoding part 1: building key maps
+### Decoding Part One: Building Key Maps
 
 For this tutorial, we have provided you with helper code to take a list, such as `air:FlightDetailsList`, and build a Java `HashMap` that maps all keys to the full `air:FlightDetails` objects.  This is handy to build first, so when your are decoding something like the `air:AirItinerarySolution` you can easily get to the "true" objects being worked with.
 
@@ -287,7 +335,7 @@ Helper.FlightDetailsMap allDetails = Helper.createFlightDetailsMap(
 {% endhighlight %}
 
 
-It's worth noting in this example that to get access to the list of `air:AirSegment` objects in the result, the Java code is `getAirSegments().getAirSegment()`.  This peculiarity is tied to the way that CXF encodes the types expressed in the `Air.wsdl` file into a Java representation.  
+It's worth noting in this example that to get access to the list of `air:AirSegment` objects in the result, the Java code is `getAirSegments().getAirSegment()`.  This peculiarity is tied to the way that CXF encodes the types expressed in the `Air.wsdl` file into a Java representation.  Other programming languages might use an array or other data structure to encode the list of air segments.
 
 ### Decoding part 2: air solutions
 
@@ -423,11 +471,134 @@ public static void displayItineraryPrice(AirItinerary itin) throws AirFaultMessa
 	priceRsp = WSDLService.airPrice.get().service(priceReq);
 {% endhighlight %}
 
+### AirPriceReq
 
+One of the most crucial functions of the uAPI is its ability to accurately price a given itinerary and display not only the total price to be paid, but also to break down all the pricing components as well. In addition, there is the complex issue of which taxes and from what jurisdiction should be applied.  Here is an example `AirPricingReq` in XML as sent from Lesson 2 to TravelPort:
+
+{% highlight xml %}
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <ns2:AirPriceReq xmlns="http://www.travelport.com/schema/common_v15_0" xmlns:ns2="http://www.travelport.com/schema/air_v18_0" xmlns:ns3="http://www.travelport.com/schema/rail_v12_0" xmlns:ns4="http://www.travelport.com/schema/vehicle_v17_0" xmlns:ns5="http://www.travelport.com/schema/hotel_v17_0" xmlns:ns6="http://www.travelport.com/schema/passive_v14_0" xmlns:ns7="http://www.travelport.com/schema/universal_v16_0" TargetBranch="P105110">
+      <BillingPointOfSaleInfo OriginApplication="tutorial-unit1-lesson2"/>
+      <ns2:AirItinerary>
+        <ns2:AirSegment Group="0" Carrier="AF" FlightNumber="682" ProviderCode="1V" Origin="CDG" Destination="ATL" DepartureTime="2012-08-18T10:55:00.000+02:00" ArrivalTime="2012-08-18T14:20:00.000-04:00" Key="36T">
+          <ns2:FlightDetails Key="4T" Equipment="77W" OriginTerminal="2E" DestinationTerminal="S" FlightTime="565" TravelTime="725" Origin="CDG" Destination="ATL" DepartureTime="2012-08-18T10:55:00.000+02:00" ArrivalTime="2012-08-18T14:20:00.000-04:00"/>
+        </ns2:AirSegment>
+        <ns2:AirSegment Group="0" Carrier="AF" FlightNumber="8468" ProviderCode="1V" Origin="ATL" Destination="CHA" DepartureTime="2012-08-18T16:15:00.000-04:00" ArrivalTime="2012-08-18T17:00:00.000-04:00" Key="37T">
+          <ns2:FlightDetails Key="5T" Equipment="CR7" OriginTerminal="S" FlightTime="45" TravelTime="725" Origin="ATL" Destination="CHA" DepartureTime="2012-08-18T16:15:00.000-04:00" ArrivalTime="2012-08-18T17:00:00.000-04:00"/>
+        </ns2:AirSegment>
+        <ns2:AirSegment Group="1" Carrier="DL" FlightNumber="5139" ProviderCode="1V" Origin="CHA" Destination="ATL" DepartureTime="2012-08-25T12:15:00.000-04:00" ArrivalTime="2012-08-25T13:05:00.000-04:00" Key="58T">
+          <ns2:FlightDetails Key="26T" Equipment="CRJ" OnTimePerformance="80" DestinationTerminal="S" FlightTime="50" TravelTime="715" Origin="CHA" Destination="ATL" DepartureTime="2012-08-25T12:15:00.000-04:00" ArrivalTime="2012-08-25T13:05:00.000-04:00"/>
+        </ns2:AirSegment>
+        <ns2:AirSegment Group="1" Carrier="DL" FlightNumber="28" ProviderCode="1V" Origin="ATL" Destination="CDG" DepartureTime="2012-08-25T15:15:00.000-04:00" ArrivalTime="2012-08-26T06:10:00.000+02:00" Key="59T">
+          <ns2:FlightDetails Key="27T" Equipment="767" OriginTerminal="S" DestinationTerminal="2E" FlightTime="535" TravelTime="715" Origin="ATL" Destination="CDG" DepartureTime="2012-08-25T15:15:00.000-04:00" ArrivalTime="2012-08-26T06:10:00.000+02:00"/>
+        </ns2:AirSegment>
+      </ns2:AirItinerary>
+      <SearchPassenger Code="ADT"/>
+      <ns2:AirPricingCommand CabinClass="Economy"/>
+    </ns2:AirPriceReq>
+  </soap:Body>
+</soap:Envelope>
+{% endhighlight %}
+
+As you can see, primarily the request consists of the details of the flights to be travelled on plus a few extra details such as the passenger type and cabin class.  The outbound journey is two `AirSegment` objects, but both in `Group` zero; the return segments are in `Group` one.  A careful reader might be wondering why the `FlightDetails` elements have the `Key` attribute on them, such as the "26T" associated with the flight from CHA to ATL.  These are not used in this request (and are ignored by uAPI) but are "leftovers" from re-using the some parts of the results provided as a response to our availability request done previously.
+
+### Pricing Response
+
+Below is a slightly-edited pricing response provided by TravelPort in response to an `AirPriceReq` from Lesson 2 as seen above. The optional services section has been removed as it is quite long and not within the scope of this tutorial.  
+
+The particular details of understanding all the aspects of this response are beyond what we can cover in this tutorial.  We do ask you to look at the two highlighted portions of the XML response, marked with highlight 1 and 2.  Highlight one shows the `AirPricingSolution` component of the XML, probably the one that most readers (and travellers!) are most interested in!  The second highlight comment shows the section related to taxes.  Each of the taxes specified, identified by its `Category` attribute such as `XF`, relates to a specific IATA-published tax.  In this case, a reader with access to the list of taxes could determine that the `XF` or "Passenger Facility Charge" tax is applied three times, twice in Atlanta and once in Chattanooga.  This is makes sense once realizes that this facility charge is charged only on flights _originating_ from a given airport.
+
+{% highlight xml %}
+ <SOAP:Envelope xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
+  <SOAP:Body>
+    <air:AirPriceRsp xmlns:air="http://www.travelport.com/schema/air_v18_0" xmlns:common_v15_0="http://www.travelport.com/schema/common_v15_0" TransactionId="054FA5650A076111010236618BFD0A08" ResponseTime="2262">
+      <air:AirItinerary>
+        <air:AirSegment Key="0T" Group="0" Carrier="DL" FlightNumber="8504" ProviderCode="1V" Origin="CDG" Destination="ATL" DepartureTime="2012-08-18T10:55:00.000+02:00" ArrivalTime="2012-08-18T14:20:00.000-04:00" FlightTime="565" TravelTime="565" Distance="4390" ClassOfService="K" ChangeOfPlane="false" OptionalServicesIndicator="false">
+          <air:FlightDetails Key="1T" Origin="CDG" Destination="ATL" DepartureTime="2012-08-18T10:55:00.000+02:00" ArrivalTime="2012-08-18T14:20:00.000-04:00" FlightTime="565" TravelTime="565"/>
+        </air:AirSegment>
+        <air:AirSegment Key="2T" Group="0" Carrier="DL" FlightNumber="5542" ProviderCode="1V" Origin="ATL" Destination="CHA" DepartureTime="2012-08-18T16:15:00.000-04:00" ArrivalTime="2012-08-18T17:00:00.000-04:00" FlightTime="45" TravelTime="45" Distance="107" ClassOfService="K" ChangeOfPlane="false" OptionalServicesIndicator="false">
+          <air:FlightDetails Key="3T" Origin="ATL" Destination="CHA" DepartureTime="2012-08-18T16:15:00.000-04:00" ArrivalTime="2012-08-18T17:00:00.000-04:00" FlightTime="45" TravelTime="45"/>
+        </air:AirSegment>
+        <air:AirSegment Key="4T" Group="1" Carrier="DL" FlightNumber="5139" ProviderCode="1V" Origin="CHA" Destination="ATL" DepartureTime="2012-08-25T12:15:00.000-04:00" ArrivalTime="2012-08-25T13:05:00.000-04:00" FlightTime="50" TravelTime="50" Distance="107" ClassOfService="Q" ChangeOfPlane="false" OptionalServicesIndicator="false">
+          <air:FlightDetails Key="5T" Origin="CHA" Destination="ATL" DepartureTime="2012-08-25T12:15:00.000-04:00" ArrivalTime="2012-08-25T13:05:00.000-04:00" FlightTime="50" TravelTime="50"/>
+        </air:AirSegment>
+        <air:AirSegment Key="6T" Group="1" Carrier="DL" FlightNumber="28" ProviderCode="1V" Origin="ATL" Destination="CDG" DepartureTime="2012-08-25T15:15:00.000-04:00" ArrivalTime="2012-08-26T06:10:00.000+02:00" FlightTime="535" TravelTime="535" Distance="4390" ClassOfService="Q" ChangeOfPlane="false" OptionalServicesIndicator="false">
+          <air:FlightDetails Key="7T" Origin="ATL" Destination="CDG" DepartureTime="2012-08-25T15:15:00.000-04:00" ArrivalTime="2012-08-26T06:10:00.000+02:00" FlightTime="535" TravelTime="535"/>
+        </air:AirSegment>
+      </air:AirItinerary>
+      <air:AirPriceResult>
+        <!--
+		  HIGHLIGHT 1: THE PRICE
+		-->
+        <air:AirPricingSolution Key="8T" TotalPrice="USD2019.90" BasePrice="EUR1155.00" ApproximateTotalPrice="USD2019.90" ApproximateBasePrice="USD1520.00" EquivalentBasePrice="USD1520.00" Taxes="USD499.90">
+          <air:AirSegmentRef Key="0T"/>
+          <air:AirSegmentRef Key="2T"/>
+          <air:AirSegmentRef Key="4T"/>
+          <air:AirSegmentRef Key="6T"/>
+          <air:AirPricingInfo Key="9T" TotalPrice="USD2019.90" BasePrice="EUR1155.00" ApproximateTotalPrice="USD2019.90" ApproximateBasePrice="USD1520.00" EquivalentBasePrice="USD1520.00" Taxes="USD499.90" LatestTicketingTime="2012-06-26T23:59:00.000-06:00" PricingMethod="Guaranteed" IncludesVAT="false" ETicketability="Yes" PlatingCarrier="DL" ProviderCode="1V">
+            <air:FareInfo Key="20T" FareBasis="KH4AFFR" PassengerTypeCode="ADT" Origin="CDG" Destination="CHA" EffectiveDate="2012-06-19T09:15:00.000-06:00" DepartureDate="2012-08-18" Amount="NUC714.81" PrivateFare="false" NegotiatedFare="false" NotValidBefore="2012-08-18" NotValidAfter="2012-08-18">
+              <common_v15_0:Endorsement Value="NON ENDO/"/>
+              <common_v15_0:Endorsement Value="FARE RSTR COULD APPLY"/>
+              <air:BaggageAllowance>
+                <air:NumberOfPieces>1</air:NumberOfPieces>
+                <air:MaxWeight/>
+              </air:BaggageAllowance>
+              <air:FareRuleKey FareInfoRef="20T" ProviderCode="1V">Uz2vJADyQ1L/G5z8j/CiSvIYR/AK2reE8hhH8Arat4TyGEfwCtq3hPIYR/AK2reE8hhH8Arat4SiBqSlMvperrFfUlC4CxwWHWbLEhhPHQUOzWQlBHOBwH6aJkxZm2pSdMUD5H0ZXQxSv+4yYUhi0GklyCSHoHtgoa3E3tIqGwA4hviVcNc8AFNV6KU7qYzRTc4ZKcCwL6Q8fKGGSfkQ3tNHpKreSvYcQMlheDAIJ/QTJ3mD70mQce4HMsZtq4i6fJvsGOhXgBinc5W6BdNIYvjmCnu36Wn4yXA/jzSwzCDJcD+PNLDMIMlwP480sMwgyXA/jzSwzCA/d7cR0af4Jmz733dVPxthVXaCeceV8PyM0ofhODC2r+XNPGmjUcssHSpnhoj1vQc/lmACoODWFHr0G1EBelYrwBYxnFOB370=</air:FareRuleKey>
+            </air:FareInfo>
+            <air:FareInfo Key="25T" FareBasis="QH3AFFR" PassengerTypeCode="ADT" Origin="CHA" Destination="CDG" EffectiveDate="2012-06-19T09:15:00.000-06:00" DepartureDate="2012-08-25" Amount="NUC807.10" PrivateFare="false" NegotiatedFare="false" NotValidBefore="2012-08-25" NotValidAfter="2012-08-25">
+              <common_v15_0:Endorsement Value="NON ENDO/"/>
+              <common_v15_0:Endorsement Value="FARE RSTR COULD APPLY"/>
+              <air:BaggageAllowance>
+                <air:NumberOfPieces>1</air:NumberOfPieces>
+                <air:MaxWeight/>
+              </air:BaggageAllowance>
+              <air:FareRuleKey FareInfoRef="25T" ProviderCode="1V">Uz2vJADyQ1L/G5z8j/CiSvIYR/AK2reE8hhH8Arat4TyGEfwCtq3hPIYR/AK2reE8hhH8Arat4SiBqSlMvperrFfUlC4CxwWHWbLEhhPHQVcgM/167Qccc2nSJVpEMZUzzW0/Nh6JtDkDe+lbgyuvFKNsqrjh6OkgwzQ8cWS/Ec4hviVcNc8AFNV6KU7qYzRTc4ZKcCwL6Q8fKGGSfkQ3tNHpKreSvYcQMlheDAIJ/QTJ3mD70mQce4HMsZtq4i634LK8khFI7gj2XoghSHdF/jmCnu36Wn4yXA/jzSwzCDJcD+PNLDMIMlwP480sMwgyXA/jzSwzCA/d7cR0af4Jmz733dVPxthVXaCeceV8PyM0ofhODC2r+XNPGmjUcssHSpnhoj1vQc/lmACoODWFHr0G1EBelYrwBYxnFOB370=</air:FareRuleKey>
+            </air:FareInfo>
+            <air:BookingInfo BookingCode="K" FareInfoRef="20T" SegmentRef="0T"/>
+            <air:BookingInfo BookingCode="K" FareInfoRef="20T" SegmentRef="2T"/>
+            <air:BookingInfo BookingCode="Q" FareInfoRef="25T" SegmentRef="4T"/>
+            <air:BookingInfo BookingCode="Q" FareInfoRef="25T" SegmentRef="6T"/>
+	        <!--
+			  HIGHLIGHT 2: TAXES
+			-->
+            <air:TaxInfo Category="AY" Amount="USD7.50" Key="10T"/>
+            <air:TaxInfo Category="US" Amount="USD33.40" Key="11T"/>
+            <air:TaxInfo Category="XA" Amount="USD5.00" Key="12T"/>
+            <air:TaxInfo Category="XF" Amount="USD13.50" Key="13T">
+              <air:TaxDetail Amount="USD4.50" OriginAirport="ATL"/>
+              <air:TaxDetail Amount="USD4.50" OriginAirport="CHA"/>
+              <air:TaxDetail Amount="USD4.50" OriginAirport="ATL"/>
+            </air:TaxInfo>
+            <air:TaxInfo Category="XY" Amount="USD7.00" Key="14T"/>
+            <air:TaxInfo Category="YC" Amount="USD5.50" Key="15T"/>
+            <air:TaxInfo Category="FR" Amount="USD26.80" Key="16T"/>
+            <air:TaxInfo Category="IZ" Amount="USD5.30" Key="17T"/>
+            <air:TaxInfo Category="QX" Amount="USD35.30" Key="18T"/>
+            <air:TaxInfo Category="YQ" Amount="USD360.60" Key="19T"/>
+            <air:FareCalc>PAR DL X/ATL DL CHA M714.81KH4AFFR DL X/ATL DL PAR M807.10QH3AFFR NUC1521.91END ROE0.758475</air:FareCalc>
+            <air:PassengerType Code="ADT"/>
+            <air:ChangePenalty>
+              <air:Amount>USD131.00</air:Amount>
+            </air:ChangePenalty>
+          </air:AirPricingInfo>
+          <air:FareNote Key="30T">RATE USED IN EQU TOTAL IS BSR 1EUR - 1.3157895USD</air:FareNote>
+          <air:FareNote Key="31T">LAST DATE TO PURCHASE TICKET: 26JUN12</air:FareNote>
+          <air:FareNote Key="32T">E-TKT REQUIRED</air:FareNote>
+          <air:FareNote Key="33T">TICKETING AGENCY 273L</air:FareNote>
+          <air:FareNote Key="34T">DEFAULT PLATING CARRIER DL</air:FareNote>
+        </air:AirPricingSolution>
+      </air:AirPriceResult>
+    </air:AirPriceRsp>
+  </SOAP:Body>
+</SOAP:Envelope>
+
+{% endhighlight %}
 ### Woot!
 
 We have now completed the basic workflow that must be done to find a way to travel between two points via Air!  You should be able to run Lesson 2 the same way you ran Lesson 1 and have Travelport price a few dozen or so possible itineraries for you.    As we will see in Lesson 3, there are other ways to do this work... and other ways to travel besides air!  
 
+    A slight word of warning is in order:  It is not recommended practice to price all possible combinations of possible itineraries via an `AirPriceReq` to the uAPI.  We have done so in this lesson because for clarity of exlpanation.  One either should apply some filtering logic to reduce the possible set of itineraries, or use the shopping capabilities explained in the next lesson to have the uAPI propose "reasonable and available" itineraries.
 
 ### Exercises for the reader
 
