@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.travelport.schema.common_v15_0.*;
 import com.travelport.schema.hotel_v17_0.*;
+import com.travelport.schema.universal_v16_0.UniversalRecord;
 import com.travelport.service.hotel_v17_0.*;
 import com.travelport.tutorial.support.ServiceWrapper;
 import com.travelport.tutorial.support.WSDLService;
@@ -23,15 +24,19 @@ public class Lesson5 {
         //the hotel search parametrs
         int numAdults=1, numRooms=1, distanceInKm=25, maxScreens=4;
         int daysToCheckin = 7, daysToDeparture = 9;
-        String pointOfInterestName="Staples Center";
+        String pointOfInterestName="GOLDEN GATE BRIDGE";
 
+        //again, normally this is hidden inside the WSDLService code, this is 
+        //just to show how it works
         HotelSearchServicePortType port = WSDLService.hotelShop.get();
         HotelDetailsServicePortType det = WSDLService.hotelDetails.get();
         WSDLService.hotelDetails.showXML(true);
+        
         HotelReservationServicePortType resv = WSDLService.hotelReserve.get();
         HotelMediaLinksServicePortType media = WSDLService.hotelMedia.get();
-        
         WSDLService.hotelReserve.showXML(true);
+        
+        //now for the real code...
         try {
             
             HotelSearchResult[] result= 
@@ -68,10 +73,13 @@ public class Lesson5 {
             mods.setHotelStay(stay);
             
             //no sense being on a twin when travelling alone
-            HotelBedding bedding = new HotelBedding();
+            /* not implemented by 1V and 1G , so commented out*/
+            /*HotelBedding bedding = new HotelBedding();
             bedding.setNumberOfBeds(1);
             bedding.setType(TypeBedding.QUEEN);
-            mods.getHotelBedding().add(bedding);
+            mods.getHotelBedding().add(bedding);*/
+            
+            
             mods.setRateRuleDetail(TypeRateRuleDetail.COMPLETE);
             
             //put the modifiers in place
@@ -128,15 +136,14 @@ public class Lesson5 {
                     System.err.println("Unable to find a price for this hotel!");
                     return;
                 }
+                //this can be used to filter out different kinds fo guarantee
+                //requirements, such a requiring depost, requiring CCard etc
+                //boolean g = hasGuaranteedComment(rateDetail); 
+                //g=false;
+
                 String description = getDescriptiveText(rateDetail);
-                //has to be the lowest that includes NON-SMOKING and does not
-                //require a credit card for a guarantee... note that it would
-                //be nice to use rateDetail.isDepositRequired but we can't
-                //because that property is DROPPED from the XML when in the
-                //false case so we get a NPE...
-                boolean g = hasGuaranteedComment(rateDetail); 
-                g=false;
-                if ((min<lowest) && (isNonSmoking(description)) && (!g)) {
+                //has to be the lowest that includes NON-SMOKING  
+                if ((min<lowest) && (isNonSmoking(description)) /*&& (!g)*/) {
                     lowestRate = rateDetail;
                     lowest = min;
                     lowestDescription = description;
@@ -196,8 +203,17 @@ public class Lesson5 {
             req.setBillingPointOfSaleInfo(Helper.tutorialBPOSInfo(2, 5));
             req.setTargetBranch(System.getProperty("travelport.targetBranch"));
 
-            resv.service(req, null);
-            
+            HotelCreateReservationRsp createRsp = resv.service(req, null);
+            UniversalRecord rec = createRsp.getUniversalRecord();
+            System.out.println("Universal Record Locator: "+rec.getLocatorCode());
+            HotelReservation rez = rec.getHotelReservation().get(0);
+            System.out.println("Hotel reservation Code  : "+rez.getLocatorCode());
+            System.out.println("Hotel Total Cost        : "+
+                    rez.getHotelRateDetail().getTotal());
+            for (String msg : rez.getSellMessage()) {
+                System.out.println("                        : "+msg);
+
+            }
         } catch (NumberFormatException e) {
             System.err.println("unable to parse hotel price: " + e.getMessage());
         } catch (HotelFaultMessage e) {
@@ -221,8 +237,9 @@ public class Lesson5 {
     public static boolean isNonSmoking(String descriptionString) {
         String d=descriptionString.toUpperCase();
         boolean result = false;
+        System.out.println("looking for non-smoking:"+descriptionString);
         if ((d.indexOf("NON SMOKING")!=-1) || (d.indexOf("NON-SMOKING")!=-1) ||
-                (d.indexOf("NO SMOKING")!=-1)) {
+                (d.indexOf("NO SMOKING")!=-1) || (d.indexOf("SMOKING PREFERENCE")==-1)) {
             result = true;
         }
         return result;

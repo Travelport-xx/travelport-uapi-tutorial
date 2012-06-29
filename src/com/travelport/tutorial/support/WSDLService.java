@@ -26,10 +26,19 @@ public class WSDLService {
 
     // these endpoint parameters vary based on which region you are
     // in...check your travelport sign up to see which url you should use...
-    static public String SYSTEM_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/SystemService";
-    static public String AIR_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/AirService";
-    static public String HOTEL_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/HotelService";
-    static public String VEHICLE_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/VehicleService";
+    //static public String SYSTEM_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/SystemService";
+    //static public String AIR_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/AirService";
+    //static public String HOTEL_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/HotelService";
+    //static public String VEHICLE_ENDPOINT = "https://emea.universal-api.travelport.com/B2BGateway/connect/uAPI/VehicleService";
+    
+    //
+    //For test credentials, use the ones with "copy" in the name
+    //
+    //https://emea.copy-webservices.travelport.com/B2BGateway/connect/uAPI/Service
+    static public String SYSTEM_ENDPOINT = "https://emea.copy-webservices.travelport.com/B2BGateway/connect/uAPI/SystemService";
+    static public String AIR_ENDPOINT = "https://emea.copy-webservices.travelport.com/B2BGateway/connect/uAPI/AirService";
+    static public String HOTEL_ENDPOINT = "https://emea.copy-webservices.travelport.com/B2BGateway/connect/uAPI/HotelService";
+    static public String VEHICLE_ENDPOINT = "https://emea.copy-webservices.travelport.com/B2BGateway/connect/uAPI/VehicleService";
 
     //the services... these are not normally useful to most developers
     public static ServiceWrapper<HotelService> hotel = new ServiceWrapper<HotelService>(WSDLService.HOTEL_WSDL, HotelService.class);

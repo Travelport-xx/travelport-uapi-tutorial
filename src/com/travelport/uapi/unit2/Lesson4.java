@@ -82,14 +82,17 @@ public class Lesson4 {
         HotelSearchModifiers mods = Lesson4.createModifiers(numAdults, numRooms);
 
         /*
-         * bedding requests can't be handled by 1G HotelBedding parents = new
-         * HotelBedding(); parents.setType(TypeBedding.QUEEN);
-         * parents.setNumberOfBeds(1); mods.getHotelBedding().add(parents);
-         * 
-         * HotelBedding kids = new HotelBedding();
-         * kids.setType(TypeBedding.TWIN); kids.setNumberOfBeds(2);
-         * mods.getHotelBedding().add(kids);
-         */
+         * bedding requests can't be handled by 1G or 1V
+         */ 
+        /*
+         HotelBedding parents = new
+         HotelBedding(); parents.setType(TypeBedding.QUEEN);
+         parents.setNumberOfBeds(1); mods.getHotelBedding().add(parents);
+          
+         HotelBedding kids = new HotelBedding();
+         kids.setType(TypeBedding.TWIN); kids.setNumberOfBeds(2);
+         mods.getHotelBedding().add(kids);
+       */  
 
         // have to give our branch id
         req.setTargetBranch(System.getProperty("travelport.targetBranch"));
@@ -283,8 +286,10 @@ public class Lesson4 {
                 BigInteger num = (BigInteger) numIter.next();
                 builder.append(num + " ");
             }
-            builder.append(" on scale of " + rating.getRatingRange().getMinimumRating() + " to "
+            if (rating.getRatingRange()!=null) {
+                builder.append(" on scale of " + rating.getRatingRange().getMinimumRating() + " to "
                     + rating.getRatingRange().getMaximumRating());
+            }
         }
         return builder.toString();
     }

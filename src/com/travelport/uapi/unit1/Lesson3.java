@@ -33,6 +33,7 @@ public class Lesson3 {
 
 		try {
 			System.out.println("waiting for first response from a provider...");
+			WSDLService.airShopAsync.showXML(true);
 			LowFareSearchAsynchRsp lowCostRsp = WSDLService.airShopAsync.get().service(req);
 			HashMap<String, Long> partMap = new HashMap<String, Long>();
 
@@ -101,6 +102,7 @@ public class Lesson3 {
 				retrieve.setProviderCode(currentProvider);
 				retrieve.setPartNumber(BigInteger.valueOf(currentPart));
 				AirReq.addPointOfSale(retrieve, MYAPP);
+				WSDLService.airRetrieve.get();
 				rsp = WSDLService.airRetrieve.get().service(retrieve);
 				checkForErrorMessage(rsp);
 			}

@@ -274,6 +274,7 @@ public class Lesson2 {
 		AirReq.addPointOfSale(priceReq, "tutorial-unit1-lesson2");
 		
 		//make the request to tport
+		//WSDLService.airPrice.showXML(true);
 		return WSDLService.airPrice.get().service(priceReq);
 }
 
@@ -317,6 +318,7 @@ public class Lesson2 {
 		legs.add(ret);
 		
 		//to show the XML you are sendinging and receiving on this port
+		//WSDLService.airAvailability.showXML(true);
 		response = WSDLService.airAvailability.get().service(request);
 
 		//print out any messages that the GDS sends back
