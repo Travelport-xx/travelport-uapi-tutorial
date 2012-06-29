@@ -17,22 +17,26 @@ You will also understand how to get data from the low cost shopping APIs _asynch
 
 In the [previous lesson](lesson_1-2.html) we explained that a typical, perhaps even the archetypal, travel industry workflow was to search for availability of flights - the possible itineraries from origin to destination - and then price one or more itineraries that were interesting to the traveller.
 
-Our code for `Lesson 2` wasn't particularly efficient about choosing what flights to price: it tried them all. There are many metrics that a program could use to evaluate itineraries prior to calling the air price port, and improve efficiency.
+Our code for `Lesson 2` wasn't particularly efficient about choosing what flights to price: it tried them all.  
 
-The Low Fare Search port, yet another port on the `AirService` object, allows you to combine these two steps by doing a search and having the search results come back already priced. Further, the Low Fare Search does the work of narrowing down the set of returned itineraries to those that are the least expensive, since searching for the lowest price is the most common case.
+    Again, we don't recommend pricing all the itinaries returned to you as available!  This was done is lesson 2 for clarity of explanation and far better options will be discussed in this and future lessons.
 
-Note that the Low Fare Search algorithm does not guarantee that the price shown is still available. It is advised that you follow-up a few "good looking" result returned from the Low Fare Search with an additional `AirPricingRequest` to ensure that the itinerary's price is still up to date.  
+There are many metrics that a program could use to evaluate itineraries prior to calling the air price port, and improve efficiency. For example, one could choose the shortest amount of time spent travelling, fewest number of stops, or, of course, the lowest priced option.
+
+The Low Fare Search port, yet another port on the `AirService` object, allows you to combine these two steps (Availability, Pricing) by doing a search and having the search results come back already priced. Further, the Low Fare Search can do the work of narrowing down the set of returned itineraries to those that are the least expensive, since searching for the lowest price is a common case.
+
+    Note that the Low Fare Search algorithm does not guarantee that the price shown is still available. It is advised that you follow-up a few "good looking" result returned from the Low Fare Search with an additional `AirPricingRequest` to ensure that the itinerary's price is still up to date.  
 
 ### Air, Rail, and Low Cost Carriers
 
 The Travelport uAPI supports three different types of providers.
 
-1. The first is the one we have been using previously, the "GDS" provider(s) of Travelport such as Galileo("1G"), Apollo("1V") and Worldspan("1P").  These provide you with capabilities that one would expect in online shopping and booking of air travel; Lesson 2 was designed to work with this type of provider.
+1. The first is the one we have been using previously, the "GDS" provider(s) of Travelport such as Galileo("1G"), Apollo("1V") and Worldspan("1P").  These provide you with capabilities that one would expect in online shopping and booking of air travel; Lesson 2 was designed to work solely with this type of provider.
 
 2. The uAPI also includes the ability to search for train travel with several different companies, called "suppliers" in the uAPI terminology.  The functionality for rail-based travel is accessed in the same general way as we have already seen with air travel, but naturally starting with the `RailService` that is defined in `Rail.wsdl` (in the directory `wsdl/rail_v12_0` in the supplied files with this tutorial).  
 
 3. The other type of provider that can be accessed through the uAPI is the traditionally-named "Low-Cost Carrier" provider. In fact, a "Low Cost Carrier" in this terminology is a carrier that does not participate in "global distribution system" agreements for their inventory of seats - and that is the 'g' and 'd' in the acronym G-D-S.  So, GDSes (like Galileo, Apollo, and Worldspan) typically do not distribute the fares or availability of seats of these airlines to their networks.  Often these airlines sell exclusively via the internet on their own websites.  We mention this type of provider here for completeness. We will focus primarily on the GDS and rail providers as there are numerous special areas to be addressed when working with the "Low Cost provider".
-  
+
 ### The goal of Lesson 3
 
 The goal of this lesson is to produce output to compare prices across different means of transport between two locations.  
@@ -81,20 +85,27 @@ Because some of the results from providers can take some time to be returned, th
 1. Send `LowCostSearchAsyncReq` via the low cost search async port's `service()` method
 2. Consume `LowCostSearchAsyncRsp` response object to determine what providers have what data
 3. Looping over all the providers that have results
-	** Send a `RetrieveLowFareSearchReq` to retrieve results from the above search, from a specific provider
-	** Consume the `RetrieveLowFareSearchRsp` object to get results
+	
+	- Send a `RetrieveLowFareSearchReq` to retrieve results from the above search, from a specific provider
+	- Consume the `RetrieveLowFareSearchRsp` object to get results
 
 As we have seen in *Lesson 1* and *Lesson 2*, a _particular_ request/response pair should be handled synchronously with the uAPI.  However, because of the structure above, it is possible to proceed with other actions in between requesting, say, the air results and the rail results of a particular search.
 
-### Java typing, uAPI, and Low Fare search responses
+### Java Typing, uAPI, and Low Fare Search Responses
 
-There are two basic Java types that are used in the asynchronous approach to handling responses:  `LowFareSearchAsyncRsp` and `RetrieveLowFareSearchRsp`.  These are the appropriate types returned by the search and "get me more data" ports, respectively.
+There are two basic Java types that are used in the asynchronous approach to handling responses:  `LowFareSearchAsyncRsp` and `RetrieveLowFareSearchRsp`.  These are the appropriate types returned by the "asynchronous search" and "get me more data" ports, respectively.
 
-Thoughtfully, the designers of the uAPI planned ahead for this and made these two types share a common base type (a Java superclass), `AirSearchRsp`.  This means that your code can be written, of course with some care, to consume results from the `AirSearchRsp` class and then it can handle either immediate or later-retrieved results.
+Thoughtfully, the designers of the uAPI planned ahead for this and made these two types share a common base type (a Java superclass), `AirSearchRsp`.  This means that your code can be written, of course with some care, to consume results from the `AirSearchRsp` class and then it can handle either immediate or later-retrieved results.  
 
-With this in mind, the result of the availability requests in [Lesson 2](lesson_1-2.html) can _also_ be treated as an `AirSearchRsp` object, as the class `AvailabilitySearchReq` also inherits from this base class.  These types of relationships are present in many places in the uAPI, and it is often very useful to use Eclipse's "Go To Definition" feature (typically bound to the F3 key) to investigate the parent classes in the class hierarchy generated by the uAPI's WSDL.
+Similarly, the result of the availability requests in [Lesson 2](lesson_1-2.html) can _also_ be treated as an `AirSearchRsp` object, as the class `AvailabilitySearchReq` also inherits from this base class. Looking further up the heirarchy, for example, reveals that all search requests also share a common base class (`AirSearchReq` and its parent `BaseSearchReq`).  All requests, without regard to their type, share the base class `BaseReq` (with the notable exception of ping).  In `BaseReq` you find those fields that are common to any request, such as "TraceId".
 
-Looking further up the heirarchy, for example, reveals that all search requests also share a common base class (`AirSearchReq` and its parent `BaseSearchReq`).  All requests, without regard to their type, share the base class `BaseReq` (with the notable exception of ping).  In `BaseReq` you find those fields that are common to any request, such as "TraceId".
+#### XML -> Java Types
+
+Of course, really the Java "types" are just a convenience for creating XML objects that are actually transmitted or received over the network to or from TravelPort.  One can actually take this "commonality" one step farther and discover that _different_ responses have parts that similar.  For example, both `LowFareSearchRsp` and `LowFareSearchAsynchRsp` share elements in the XML representation (and thus the Java type system) with the results contained in of `AvailabilitySeachRsp` and `AirPriceRsp`.  In many different areas of both requests and response one may either need to create or understand a list of `AirSegment` objects, for example, because the WSDL (via XSD files, via a generator, via XML, and finally via your programming language) is defined to have a list of AirSegment objects in the same way.
+
+#### Go To Definition
+
+With this in mind, the these types of relationships are present in many places in the uAPI, and it is often very useful to use Eclipse's "Go To Definition" feature (typically bound to the F3 key) to investigate the parent classes in the class hierarchy generated by the uAPI's WSDL.
 
 ### A small amount of nomenclature
 
@@ -117,7 +128,7 @@ public PrintableItinerary(RailPricingSolution solution, Helper.RailJourneyMap jo
 
 {% endhighlight %}
 
-These two constructors are the air and rail versions of this class. Once constructed, it is possible to simply call "toString()" on the `PrintableItinerary` object and have something reasonably understandable to a human being printed out. 
+These two constructors are the air and rail versions of this class. Once constructed, it is possible to simply call "toString()" on the `PrintableItinerary` object and have something reasonably understandable to a human printed out. 
 
 A couple of things to note about `PrintableItinerary` constructors:
 

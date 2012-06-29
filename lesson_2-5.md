@@ -15,7 +15,7 @@ We will discuss Hotel bookings in some depth, and refer to the similarities with
 
 ### Shopping and reality
 
-For air travel, [Lesson 3](lesson_1-3.html) discussed how to perform a _low fare search_, usually just called _shopping_. [Lesson 4](lesson_2_4.html) did something similar for hotel rooms shopping.
+For air travel, [Lesson 3](lesson_1-3.html) discussed how to perform a _low fare search_, usually just called _shopping_. [Lesson 4](lesson_2_4.html) did something similar for hotel room shopping.
 
 Shopping differs from [availability and pricing](lesson_1-2.html) not only because it combines the two processes in one step, but also because the technology underlying it is quite different.
 
@@ -32,7 +32,6 @@ The endgame of managing live inventory is the booking step.
 When doing a booking request, all possible checks are done to the requested item to be reserved: this is to ensure that the object is still available, has been priced correctly with the provided fares, and any taxes are added correctly.
 
 Further, the system must also know _who_ is making the booking, and how the traveler will pay for the booking.  The uAPI will validate all of the values provided very carefully, to ensure that a final booking is only made when all the data are correct.
-
 
 ### Hotel details
 
@@ -100,7 +99,7 @@ This is far from all the `hotel:HotelRateDetail` entities encoded in this single
 
 The early part of this snippet shows some of the detailed data about the property, and the marketing message sent from the hotel's owner.  Further, there are many possible _rates_ that can be identified by the `RatePlanType` attribute.  The prices are shown with descriptive text about each option.  As we shall see, the `Name="Guarantee"` attribute of a `RoomRateDescription` element (child of a `HotelRateDetail` object), will be critical at a later stage in booking, as such a rate typically requires a credit card to hold the reservation.
 
-The output of the code for `lesson5` is to show the user the selected hotel, some details about it, and the information about room rates.  The search result above and the result below are done based on the point of interest "Staples Center" (in the center of Los Angeles, California).  We have selected the cheapest hotel from our shopping search, then asked for details, and chosen the lowest rate found in the details (2 nights in LA for about 170 USD!), for a non-smoking room, with a queen-sized bed.
+The output of the code for `lesson5` is to show the user the selected hotel, some details about it, and the information about room rates.  The search result above and the result below are done based on the point of interest "Staples Center" (a multi-purpose event center in downtown Los Angeles, California).  We have selected the cheapest hotel from our shopping search, then asked for details, and chosen the lowest rate found in the details (2 nights in LA for about 170 USD!), for a non-smoking room, with a queen-sized bed.
 
 {% highlight console %}
 HOWARD JOHNSON LOS ANGELES
@@ -118,7 +117,7 @@ Total Price: USD171.90
 
 ### Reserving the room
 
-For the third step in the hotel booking sequence, we must construct a new request with the key hotel parameters such as the number of rooms, number of adults, check-in and out dates, and choices that might affect price or availability such as `HotelBedding`. 
+For the third step in the hotel booking sequence, we must construct a new request with the key hotel parameters such as the number of rooms, number of adults, check-in and out dates, and choices that might affect price or availability such as `HotelBedding` or the travelers desire for a non-smoking room.
 
 The two objects for making bookings are called `AirCreateReservationPortType` and `HotelReservationServicePortType`, with the naturally named requests `AirCreateReservationReq` and `HotelCreateReservationReq` and the matching response (`Rsp`) types for getting results.
 
@@ -202,6 +201,153 @@ public static CreditCard getFakeCreditCard(boolean withAddress) {
 If you are implementing this tutorial using "testing" credentials issued by Travelport, the actual values in the credit card fields will not be validated.
 
 In a real application, many checks will be made to verify with the credit card provider if this card number is associated with this owner, and to check if the CCV code (the code on the back of the card) is correct.
+
+### Making The Final Reservation
+
+As has been the case in most of the lessons, we use a request/response pair to actually make the reservation.  This results in the following request and response to be transmitted to and received from TravelPort. (This exmaple is for a hotel that is near the 'GOLDEN GATE BRIDGE' attraction in San Francisco, California):
+
+{% highlight xml %}
+<?xml version="1.0" encoding="UTF-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <ns2:HotelCreateReservationReq xmlns="http://www.travelport.com/schema/common_v15_0" xmlns:ns2="http://www.travelport.com/schema/hotel_v17_0" xmlns:ns3="http://www.travelport.com/schema/vehicle_v17_0" xmlns:ns4="http://www.travelport.com/schema/passive_v14_0" xmlns:ns5="http://www.travelport.com/schema/air_v18_0" xmlns:ns6="http://www.travelport.com/schema/universal_v16_0" xmlns:ns7="http://www.travelport.com/schema/rail_v12_0" TargetBranch="P105110">
+      <BillingPointOfSaleInfo OriginApplication="tutuorial-unit2-lesson5"/>
+      <BookingTraveler TravelerType="ADT">
+        <BookingTravelerName First="Hugh" Last="Capet"/>
+        <PhoneNumber Location="home" CountryCode="1" AreaCode="212" Number="555-1212"/>
+      </BookingTraveler>
+      <ns2:HotelRateDetail RatePlanType="TLGT78B" DepositRequired="true" Base="USD519.76" Total="USD519.76">
+        <ns2:RoomRateDescription Name="Total Includes">
+          <ns2:Text>The Total includes taxes, surcharges, fees.</ns2:Text>
+        </ns2:RoomRateDescription>
+        <ns2:RoomRateDescription Name="Description">
+          <ns2:Text>ADVANCE PURCHASE NO REFUNDS.2 DOUBLE BEDS CLASSIC VIEW CLASSIC VIEW DOUBLE.BED ROOMS ARE 330 SQ FT IN SIZE AND LOCATED.</ns2:Text>
+        </ns2:RoomRateDescription>
+        <ns2:RoomRateDescription Name="Rate Change Indicator">
+          <ns2:Text>No</ns2:Text>
+        </ns2:RoomRateDescription>
+        <ns2:RoomRateDescription Name="Guarantee">
+          <ns2:Text>Deposit Required</ns2:Text>
+        </ns2:RoomRateDescription>
+        <ns2:HotelRateByDate EffectiveDate="2012-08-13" ExpireDate="2012-08-15" Base="USD225.00"/>
+      </ns2:HotelRateDetail>
+      <ns2:HotelProperty HotelChain="IC" HotelCode="12753" HotelLocation="SFO" Name="INTERCONTINENTAL">
+        <ns2:PropertyAddress>
+          <ns2:Address>888 HOWARD STREET </ns2:Address>
+          <ns2:Address>SAN FRANCISCO CA 94103 US </ns2:Address>
+        </ns2:PropertyAddress>
+        <PhoneNumber Type="Business" Number="1 415-616-6500"/>
+        <PhoneNumber Type="Fax" Number="1 415-616-6621"/>
+        <Distance Value="1" Direction="SW"/>
+        <ns2:HotelRating RatingProvider="AAA">
+          <ns2:Rating>4</ns2:Rating>
+        </ns2:HotelRating>
+      </ns2:HotelProperty>
+      <ns2:HotelStay>
+        <ns2:CheckinDate>2012-08-13</ns2:CheckinDate>
+        <ns2:CheckoutDate>2012-08-15</ns2:CheckoutDate>
+      </ns2:HotelStay>
+      <Guarantee Type="Deposit">
+        <CreditCard Type="VI" Number="4012888888881881" ExpDate="2014-12" Name="JOAN TEST" CVV="111"/>
+      </Guarantee>
+    </ns2:HotelCreateReservationReq>
+  </soap:Body>
+</soap:Envelope>
+{% endhighlight %}
+
+{% highlight xml %}
+<?xml version="1.0" encoding="UTF-8"?><SOAP:Envelope xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
+  <SOAP:Body>
+    <hotel:HotelCreateReservationRsp xmlns:hotel="http://www.travelport.com/schema/hotel_v17_0" xmlns:common_v15_0="http://www.travelport.com/schema/common_v15_0" TransactionId="3882E10D0A076114004561A6ED3C9786" ResponseTime="4756">
+<universal:UniversalRecord xmlns:universal="http://www.travelport.com/schema/universal_v16_0" LocatorCode="H9M6J6" Version="0" Status="Active">
+        <common_v15_0:BookingTraveler Key="86293" TravelerType="ADT">
+          <common_v15_0:BookingTravelerName First="Hugh" Last="Capet"/>
+          <common_v15_0:PhoneNumber Key="86603" Type="None" Location="home" CountryCode="1" Number="555-1212" AreaCode="212"/>
+          <common_v15_0:PhoneNumber Key="86604" Type="None" Location="HOM" Number="1 212 555-1212">
+            <common_v15_0:ProviderReservationInfoRef Key="60521"/>
+          </common_v15_0:PhoneNumber>
+        </common_v15_0:BookingTraveler>
+        <common_v15_0:OSI Key="22934" Carrier="1V" Text="-IC12753ARR13AUG CXL:ADVANCE PURCHASE ENTIRE STAY NONREFUNDABLE" ProviderReservationInfoRef="60521"/>
+        <universal:ProviderReservationInfo Key="60521" ProviderCode="1V" LocatorCode="S79ZZY" CreateDate="2012-06-29T13:51:43.350+00:00" ModifiedDate="2012-06-29T13:51:43.367+00:00" HostCreateDate="2012-06-29"/>
+<hotel:HotelReservation Status="HK" BookingConfirmation="66541697" LocatorCode="00LGSRYL" CreateDate="2012-06-29T13:51:43.169+00:00" ModifiedDate="2012-06-29T13:51:43.367+00:00" ProviderReservationInfoRef="60521" TravelOrder="1">
+          <common_v15_0:BookingTravelerRef Key="86293"/>
+          <common_v15_0:ReservationName>
+            <common_v15_0:BookingTravelerRef Key="86293"/>
+          </common_v15_0:ReservationName>
+          <hotel:HotelProperty HotelChain="IC" HotelCode="12753" HotelLocation="SFO" Name="INTERCONTINENTAL">
+            <hotel:PropertyAddress>
+              <hotel:Address>888 HOWARD STREET</hotel:Address>
+              <hotel:Address>SAN FRANCISCO US 94103 CA</hotel:Address>
+            </hotel:PropertyAddress>
+            <common_v15_0:PhoneNumber Type="Hotel" Number="1-1-1"/>
+            <common_v15_0:PhoneNumber Type="Fax" Number="1-1-1"/>
+            <common_v15_0:Distance Value="1" Direction="SW"/>
+            <hotel:HotelRating RatingProvider="AAA">
+              <hotel:Rating>4</hotel:Rating>
+            </hotel:HotelRating>
+          </hotel:HotelProperty>
+          <hotel:HotelRateDetail RatePlanType="TLGT78B" Base="USD450.00" Total="USD519.76" RateGuaranteed="true">
+            <hotel:RoomRateDescription Name="Total Includes">
+              <hotel:Text>Total includes taxes, surcharges and fees</hotel:Text>
+            </hotel:RoomRateDescription>
+            <hotel:HotelRateByDate EffectiveDate="2012-08-13" ExpireDate="2012-08-15" Base="USD225.00"/>
+          </hotel:HotelRateDetail>
+          <hotel:HotelStay>
+            <hotel:CheckinDate>2012-08-13</hotel:CheckinDate>
+            <hotel:CheckoutDate>2012-08-15</hotel:CheckoutDate>
+          </hotel:HotelStay>
+          <common_v15_0:Guarantee Type="Deposit" Key="48488" Reusable="true">
+            <common_v15_0:CreditCard Type="VI" Number="************1881" ExpDate="2014-12" Name="JOAN TEST" CVV="***"/>
+          </common_v15_0:Guarantee>
+          <common_v15_0:BookingSource Type="IataNumber" Code="00000000"/>
+          <hotel:GuestInformation NumberOfRooms="1">
+            <hotel:NumberOfAdults>1</hotel:NumberOfAdults>
+          </hotel:GuestInformation>
+          <common_v15_0:SellMessage>EFFECTIVE DATE:13AUG</common_v15_0:SellMessage>
+          <common_v15_0:SellMessage>GUARANTEE REQUIREMENTS:ENTIRE STAY NONREFUNDABLE DPST DUE AT</common_v15_0:SellMessage>
+          <common_v15_0:SellMessage>BKNG</common_v15_0:SellMessage>
+          <common_v15_0:SellMessage>CXL:ADVANCE PURCHASE ENTIRE STAY NONREFUNDABLE</common_v15_0:SellMessage>
+          <common_v15_0:SellMessage>THANK YOU FOR BOOKING INTERCONTINENTAL *</common_v15_0:SellMessage>
+        </hotel:HotelReservation>
+        <common_v15_0:AgencyInfo>
+          <common_v15_0:AgentAction ActionType="Created" AgentCode="UAPI4438208500" BranchCode="P105110" AgencyCode="S30276" EventTime="2012-06-29T13:51:38.723+00:00"/>
+        </common_v15_0:AgencyInfo>
+      </universal:UniversalRecord>
+    </hotel:HotelCreateReservationRsp>
+  </SOAP:Body>
+</SOAP:Envelope>
+{% endhighlight %}
+
+And our program (lesson5.java) prints out a few fields for people who don't want to dig around in the XML:
+
+{% highlight console %}
+Universal Record Locator: H9M6J6
+Hotel reservation Code  : 00LGSRYL
+Hotel Total Cost        : USD519.76
+                        : EFFECTIVE DATE:13AUG
+                        : GUARANTEE REQUIREMENTS:ENTIRE STAY NONREFUNDABLE DPST DUE AT
+                        : BKNG
+                        : CXL:ADVANCE PURCHASE ENTIRE STAY NONREFUNDABLE
+                        : THANK YOU FOR BOOKING INTERCONTINENTAL *
+
+{% endhighlight %}
+
+A few things to note about the request and response above.  First, the credit card information is obviously something that most real applications will need to improve. Be sure that you verify any of your practices with this sensitive data with your credit card company.  For example, it is normally not recommended for a website to "hold onto" credit card information but rather utilize it (once) for communication with TravelPort and then discard it.  
+
+There are a number of "human readable" segments to the response.  Some of these are displayed in our program's output but there are many text "blobs" that may be interesting to users.  The number of these to display depends on what level of detail your application is working with.  For application's that target travel agents or other professionals, it is recommended to err on the side of too much detail rather than too little.
+
+### Universal Record
+
+There are two record locators show in the output.  The first one is for the TravelPort concept of the Universal Record and the second one for the Hotel reservation system.  A Universal Record is created for you anytime you book travel, a hotel, or a car through the Universal API.  However, you can programmatically create and manipulate Universal Records as well.  
+
+A Universal Record can be thought of as a wrapper around other records.  A single Universal Record can have air travel, a vehicle reservation, a hotel reservation, and even tours or other activities associated with it.  The objective is to have all the details about a single journey for a specific customer in one place.  The details of the Universal Record API is beyond the scope of this tutorial, but suffice it to say that this "container" should be used by application's that wish to have all of a traveler's data together... and this means almost all of them!
+
+### Thanks
+
+Thanks for working through all of Unit 2 and our discussion of hotel reservations, booking, and searching by landmarks.  If you continue on to the next unit, we'll be discussing how to embed TravelPort's uAPI inside a Facebook app and the issues that arise from that.
+
+
+
+
 
 ----------------------
 
