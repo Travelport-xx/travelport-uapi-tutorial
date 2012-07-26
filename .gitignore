@@ -7,6 +7,10 @@ build
 src/com/travelport/schema
 src/com/travelport/service
 .DS_Store
-src/com/travelport/uapi/unit3
+unit3/project/project
+unit3/logs
+unit3/tmp
+unit3/target
+unit3/development-bundle
 
 
