@@ -73,6 +73,10 @@ One critical thing about creating a project inside Eclipse that is each "type" o
 <img src="images/newproject.png"/>
 <br/>
 
+##### Juno v. Indigo
+
+On [June 27, 2012](http://www.eclipse.org/org/press-release/20120627_junorelease.php), the [Eclipse project](http://www.eclipse.org/eclipse/) released [version 4.2](http://www.eclipse.org/downloads/) of Eclipse, named ['Juno'](http://www.eclipse.org/juno/).  If you are using this version of Eclipse, you  want to use the [Java for J2EE Developers Bundle](http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/junor) and then verify that you have enabled the WTP, or [Web Tools Platform](http://www.eclipse.org/webtools/), version 3.4.
+
 ### Generating a Java Client for the uAPI
 
 We now need to generate Java code from the WSDL and XSD files supplied by Travelport's uAPI.
@@ -255,7 +259,7 @@ The only unexpected part of this simple example is the call to `WSDLService.sysP
 
 You will need to configure your copy of the class `WSDLService` slightly to allow you to use the uAPI. You should not need to do this again!
 
-If you look inside [WSDLService](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/WSDLService.Java) in the package [com.travelport.uapi.unit1](https://github.com/iansmith/travelport-uapi-tutorial/tree/master/src/com/travelport/uapi/unit1) you will see the things you might need to change.  
+If you look inside [WSDLService](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/tutorial/support/ServiceWrapper.java) in the package [com.travelport.tutorial.support](https://github.com/iansmith/travelport-uapi-tutorial/tree/master/src/com/travelport/tutorial/support) you will see the things you might need to change.  
 
 Anyone doing the lessons in this tutorial will need to change this:
 {% highlight java %}
@@ -269,18 +273,15 @@ If you want to use endpoints other than the ones that are the default for test c
 
 {% highlight java %}
 
-//
-//For test credentials, use the ones with "copy" in the name
-//
-//https://emea.copy-webservices.travelport.com/B2BGateway/connect/uAPI/Service
-static public String SYSTEM_ENDPOINT = "https://emea.copy-webservices.travelport.com/B2BGateway/connect/uAPI/SystemService";
-static public String AIR_ENDPOINT = "https://emea.copy-webservices.travelport.com/B2BGateway/connect/uAPI/AirService";
-static public String HOTEL_ENDPOINT = "https://emea.copy-webservices.travelport.com/B2BGateway/connect/uAPI/HotelService";
-static public String VEHICLE_ENDPOINT = "https://emea.copy-webservices.travelport.com/B2BGateway/connect/uAPI/VehicleService";
+// these endpoint parameters vary based on which region you are
+// in...check your travelport sign up to see which url you should use...
+// use the version with copy in the name for test credentials... 
+// note trailing slash!
+static public String ENDPOINT_PREFIX="https://emea.copy-webservices.travelport.com/B2BGateway/connect/uAPI/";
 
 {% endhighlight %}
 
-The URLs above, called "endpoints" in the parlance of WSDL, may need to be changed if you are not in the EMEA (_Europe, Middle East, Africa_) geography.  The functionality is the same from any endpoint, the only difference are which servers are used to provide the functionality.
+The URLs derived from the prefix above are called "endpoints" in the parlance of WSDL.  This prefix may need to be changed if you are not in the EMEA (_Europe, Middle East, Africa_) geography.  The functionality is the same from any endpoint, the only difference are which servers are used to provide the functionality.
 
 If you try to run the `Lesson1` code either from the command line or from Eclipe's Run menu you'll get an error like this:
 
@@ -299,7 +300,7 @@ The red boxes show you the tab you need to use to get to this configuration opti
 
 The values are included in your sign-up documents from the Travelport website.  Note that each of the parameters is of the form -Dxxx="yyy" and are separated by spaces.  The values are always quoted and the names always begin with "travelport".
 
-After you have made the adjustments necessary for your account to this panel, return to the [WSDLService](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/WSDLService.Java) file one last time.  You'll see the `URLPrefix` value is set like this near the top of the file:
+After you have made the adjustments necessary for your account to this panel, return to the [WSDLService](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/tutorial/support/WSDLService.java) file one last time.  You'll see the `URLPrefix` value is set like this near the top of the file:
 
 {% highlight java %}
 static protected String URLPREFIX = "file:///Users/iansmith/tport-workspace/uapiJava/";
@@ -330,6 +331,8 @@ Caused by: Javax.wsdl.WSDLException: WSDLException: faultCode=PARSER_ERROR: Prob
 
 
 Then you have misconfigured the `URLPREFIX` above and you should re-check the value you gave for it. It should point to the directory that is the _parent_ of the `wsdl` and `src` directories in your project.
+
+	Some may be curious how the `WSDLService` object works.  This class depends critically on the fact that there is a common, regularized naming scheme for entities in the uAPI. Because of this fact, it can use Java's reflection capabilities to essentially "guess" what the name of a given service and port will be. It guesses the name, then verifies that it's guess is correct and returns the appropriate object to the caller.  This avoids the problem that new uAPI developers might have navigating through all the objects in the uAPI to find the appropriate services.
 
 ### The pay-off
 

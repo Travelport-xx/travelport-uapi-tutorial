@@ -9,7 +9,9 @@ description: "Making requests to find schedules and prices."
 
 ### Objective of Lesson 2
 
-After this lesson is completed, you should know how to search for available flights, and price itineraries using the Travelport Universal API.
+After this lesson is completed, you should know how to search for available flights, and price itineraries using the Travelport Universal API.   
+
+    If you are using "test" credentials you should be aware that the test environment is based on a "copy" of activity on the primary (non-test) system at Travelport.  For this reason, there are sometimes situations where specific data/requests cannot be served from the test environment, since data must have been "recently" seen in the production environment to be visible in test.  It's a good idea to try a request that has a timeout, for example, again in a minute or two.
 
 ### Workflow
 
@@ -594,11 +596,11 @@ The particular details of understanding all the aspects of this response are bey
 </SOAP:Envelope>
 
 {% endhighlight %}
-### Woot!
+### Woot! 
 
 We have now completed the basic workflow that must be done to find a way to travel between two points via Air!  You should be able to run Lesson 2 the same way you ran Lesson 1 and have Travelport price a few dozen or so possible itineraries for you.    As we will see in Lesson 3, there are other ways to do this work... and other ways to travel besides air!  
 
-    A slight word of warning is in order:  It is not recommended practice to price all possible combinations of possible itineraries via an `AirPriceReq` to the uAPI.  We have done so in this lesson because for clarity of exlpanation.  One either should apply some filtering logic to reduce the possible set of itineraries, or use the shopping capabilities explained in the next lesson to have the uAPI propose "reasonable and available" itineraries.
+![Warning](images/warning.png) A slight word of warning is in order:  It is not recommended practice to price all possible combinations of possible itineraries via an `AirPriceReq` to the uAPI.  We have done so in this lesson because for clarity of exlpanation.  One either should apply some filtering logic to reduce the possible set of itineraries, or use the shopping capabilities explained in the next lesson to have the uAPI propose "reasonable and available" itineraries.
 
 ### Exercises for the reader
 

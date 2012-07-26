@@ -25,7 +25,7 @@ There are many metrics that a program could use to evaluate itineraries prior to
 
 The Low Fare Search port, yet another port on the `AirService` object, allows you to combine these two steps (Availability, Pricing) by doing a search and having the search results come back already priced. Further, the Low Fare Search can do the work of narrowing down the set of returned itineraries to those that are the least expensive, since searching for the lowest price is a common case.
 
-    Note that the Low Fare Search algorithm does not guarantee that the price shown is still available. It is advised that you follow-up a few "good looking" result returned from the Low Fare Search with an additional `AirPricingRequest` to ensure that the itinerary's price is still up to date.  
+![Warning](images/warning.png) Note that the Low Fare Search algorithm does not guarantee that the price shown is still available. It is advised that you follow-up a few "good looking" result returned from the Low Fare Search with an additional `AirPricingRequest` to ensure that the itinerary's price is still up to date.  
 
 ### Air, Rail, and Low Cost Carriers
 
