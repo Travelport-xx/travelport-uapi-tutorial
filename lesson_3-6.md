@@ -27,7 +27,7 @@ The "From" field is populated with the location based on the value in your Faceb
 
 ### Destinations
 
-The "To" field in the screen capture above allows you to type a location in, as you would expect.  However, you'll notice that the system auto-completes both on locations _and_ on your friends names, as in "Blaine" here:
+The "To" field in the screen capture above allows you to type a location in, as you would expect.  However, you'll notice that the system auto-completes both on locations _and_ on your friends names, as in "B--" here:
 
 <br/>
 <img src="images/completion.png"/>
@@ -99,7 +99,7 @@ By using the Universal Record portion of the uAPI you can even combine these rai
 
 ### A little bit more Facebook
 
-Up to this point, this Facebook has used features of the uAPI and that are quite similar to those we have used in our previous lessons.  In addition, the E-volve application has used the UCode date to determine better search targets.   The UCode database, though, is provided by TravelPort not Facebook.  About the only part of this app, to this point, that truly is tied to Facebook is the ability to filter your origin and destination by Facebook friends and other Facebook entities, such as places.  
+Up to this point, this Facebook app has used features of the uAPI and that are quite similar to those we have used in our previous lessons.  In addition, the E-volve application has used the UCode data to determine better search targets.   The UCode database, though, is provided by TravelPort not Facebook.  About the only part of this app, to this point, that truly is tied to Facebook is the ability to filter your origin and destination by Facebook friends and other Facebook entities, such as places.  
 
 We can also post events to the Facebook timeline of the user since the application runs "inside" Facebook.  We have highlighted the "Share" button on the screen capture of the details section of the E-Volve app.  
 

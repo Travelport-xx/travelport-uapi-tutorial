@@ -21,7 +21,7 @@ Shopping differs from [availability and pricing](lesson_1-2.html) not only becau
 
 In particular, almost all providers of search services --- from internet search engines like [Google](http://google.com) to comparison shopping tools for consumer goods like [PriceGrabber](http://www.pricegrabber.com) --- take some shortcuts in an effort to produce the lowest-priced result as quickly as possible.  Although the techniques are different by both industry and shopping provider, typically there is a need to use caching techniques so the shopping provider does not have to do live queries for all of the items that it might propose as results. 
 
-In the particular case of buying travel-related _live_ inventory, a particular result from a shopping request (`LowFareSearchReq` producing a `LowFareSearchRsp`) may be "out of date".  For this reason, you were cautioned in the previous lesson that it is good practice with the uAPI to follow up a result gained from a shopping request with an additional `AirPricingReq` to insure that the inventory is still available and that the price has not changed.
+![Warning](images/warning.png)  In the particular case of buying travel-related _live_ inventory, a particular result from a shopping request (`LowFareSearchReq` producing a `LowFareSearchRsp`) may be "out of date".  For this reason, you were cautioned in the previous lesson that it is good practice with the uAPI to follow up a result gained from a shopping request with an additional `AirPricingReq` to insure that the inventory is still available and that the price has not changed.
 
 A deeper reason than caching, for this need to "verify" that a particular price is available or has not changed, is because the uAPI is a truly real-time system with thousands of concurrent users.  It is more than likely that during the time your program spends processing results from a shopping requests, many other pieces of software are connected to Travelport and actively changing the inventory that is available.
 
@@ -164,7 +164,7 @@ A credit card number is needed to reserve a room in most cases.
 
 Generally speaking, the card simply holds the reservation, and is not charged immediately. Later on, the property might charge penalties to the card in case of late cancellations or no-show.
 
-Because the card is not being charged, many providers do not validate the address of the cardholder against the credit card account --- and the uAPI might generate error if you provide this detail.
+![Warning](images/warning.png)  Because the card is not being charged, many providers do not validate the address of the cardholder against the credit card account --- and the uAPI might generate error if you provide this detail.
 
 In `lesson4` we have a helper routine called `getFakeCreditCard()` that will return a bogus credit card object and, optionally, attach a billing address as well.
 

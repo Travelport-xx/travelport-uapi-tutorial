@@ -240,6 +240,8 @@ Total number solutions: 0 air and 0 rail
 
 This is a bit more "real" than the idealized output shown at the beginning of this lesson, that included just the itineraries.
 
+![Warning](images/warning.png)  A brief warning is needed here.  Depending on your test credentials, the rail, vehicle, and low-cost carrier providers may not be available.  If you see an error message such as 'No provider configured' or similar, that is because you are using test credentials and you need to upgrade to "real" credentials to access the provider.
+
 A couple of things that the reader be interested in:
 
 * The `RCH` provider is the rail provider and two of its suppliers (Benelux and Deutsche Bahn) have no train service in the United Kingdom, so we get the warnings from "RCH\[BN\]" and "RCH\[DB\]" when doing a Glasgow to London search.

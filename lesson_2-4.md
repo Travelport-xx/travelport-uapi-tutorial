@@ -40,7 +40,11 @@ You probably should have done so already, but you'll need to go through the proc
 
 Once you have the client code from `Hotel.wsdl` (in the directory `wsdl/hotel_v17_0` in the provided code), you may want to examine the `HotelAvailabiltySearchReq` and `HotelAvailabilitySearchRsp` as these are the request/response pair of primary importance to the task ahead.
 
-When we work with the hotel availability search request, as with any request, there is the requirement for the `BillingPointOfSaleInfo` to be set to inform the uAPI what application is using the api; we have provided the method `Helper.tutorialBPOSInfo()` to create this object for you.   Similarly, one must always set the target branch and we do so based on the system property `travelport.targetBranch` (or the environment variable `TPTARGETBRANCH`).  In terms of the actual search parameters, the primary ones are
+When we work with the hotel availability search request, as with any request, there is the requirement for the `BillingPointOfSaleInfo` to be set to inform the uAPI what application is using the api; we have provided the method `Helper.tutorialBPOSInfo()` to create this object for you.   Similarly, one must always set the target branch and we do so based on the system property `travelport.targetBranch` (or the environment variable `TPTARGETBRANCH`).  
+
+![Warning](images/warning.png) For any API request other than "ping", the billing point of sale and the target branch parameters are needed.  These are required so that the uAPI can do the proper accounting of what services are being accessed and by whom.
+
+In terms of the actual search parameters, the primary ones are
 
 * A `HotelStay` object representing check-in and check-out dates
 * A `HotelSearchModifiers` object which can have many parameters but the number of adults and number of room requested are of primary importance.
@@ -213,7 +217,7 @@ In the interest of simplicity, we did not discuss in the previous lesson exactly
 
 The Universal API will signal in its responses if more results are available for any kind of search.  At the Java level, you use the method `getNextResultReference` to get access to a "token" that you can use later to tell Travelport what data you have already been returned.  You can see the token in the `common_v15_0:NextResultReference` tag at the top of the XML response.
 
-Historically, the GDSes provided data on "green-screen", character-based terminals. These systems had the notion of a screenful of information--the number of lines of text that the user could see before the top lines scrolled off-screen.  Some APIs to various GDSes have also used, or perhaps "kept", the notion of a "screenful" of information to represent a partial list of results.  In homage to this tradition, we will keep the nomenclature of "a screen" to indicate one _burst_ of information returned.
+![Warning](images/warning.png)  Historically, the GDSes provided data on "green-screen", character-based terminals. These systems had the notion of a screenful of information--the number of lines of text that the user could see before the top lines scrolled off-screen.  Some APIs to various GDSes have also used, or perhaps "kept", the notion of a "screenful" of information to represent a partial list of results.  In homage to this tradition, we will keep the nomenclature of "a screen" to indicate one _burst_ of information returned.
 
 The typical construction in code for pulling multiple screens of information from a search request looks something like the following Java code.  We are using a hotel search here, but it applies to other searches.
 
@@ -315,9 +319,9 @@ Distance distance = new Distance();
 distance.setUnits("KM");
 {% endhighlight %}
 
-This a good time to talk about XML schema validation.  Although it appears that "any old string will do" for the units in the `setUnits` call above, actually only two are valid, "KM" and "MI" in uppercase letters. The XML schemas provided by TravelPort for the uAPI correctly list the valid values, but the transformation to Java code has chosen to allow you to supply this value as a string.  
+This a good time for a warning about XML schema validation.  Although it appears that "any old string will do" for the units in the `setUnits` call above, actually only two are valid, "KM" and "MI" in uppercase letters. The XML schemas provided by TravelPort for the uAPI correctly list the valid values, but the transformation to Java code has chosen to allow you to supply this value as a string.  
 
-It is good practice to turn on "full validation" when developing your application, no matter the programming language you are using.  This means that your system will not attempt to transmit XML sequences that are invalid, and thus likely to be rejected anyway by TravelPort's system when it receives them.  There are a few places where TravelPort's system is forgiving, but it is far better to correct your errors, such as using "km" as a unit instead of "KM", before-hand and not depend on anything working not provided in the WSDL and XSD files defining the API.  
+![Warning](images/warning.png)  It is good practice to turn on "full validation" when developing your application, no matter the programming language you are using.  This means that your system will not attempt to transmit XML sequences that are invalid, and thus likely to be rejected anyway by TravelPort's system when it receives them.  There are a few places where TravelPort's system is forgiving, but it is far better to correct your errors, such as using "km" as a unit instead of "KM", before-hand and not depend on anything working not provided in the WSDL and XSD files defining the API.  
 
 Our supplied helper code for creating the instances of the uAPI's ports turns on the checking for you like this in `PortWrapper.java`
 

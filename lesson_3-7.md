@@ -111,6 +111,8 @@ Have fun!
 
 You can, of course, delete "deleteme" now.
 
+You will not need to create an application via play--we've created one already and you can get it from our source code repository; we'll full explain this below.
+
 #### An aside about git
 
 [Git](http://en.wikipedia.org/wiki/Git_software) is a distributed version control system, originally developed by [Linus Torvalds](http://en.wikipedia.org/wiki/Linus_Torvalds) for the Linux kernel.
@@ -156,6 +158,26 @@ Uploading ssh public key /Users/you/.ssh/id_rsa.pub
 
 {% endhighlight %}
 
+#### Get the unit3 source code
+
+For the rest of the tutorial, we'll be using a single play project that we have already created for you.  To obtain this project, you'll probably want to delete (or move) your old copy of the tutorial source code for unit1 and unit2.
+
+Then, you can copy the unit3 source code to your machine from github:
+
+{% highlight console %}
+
+$ git clone git@github.com:iansmith/travelport-uapi-tutorial.git -b unit3
+
+Cloning into 'travelport-uapi-tutorial'...
+remote: Counting objects: 2209, done.
+remote: Compressing objects: 100% (667/667), done.
+remote: Total 2209 (delta 1602), reused 2067 (delta 1460)
+Receiving objects: 100% (2209/2209), 10.81 MiB | 384 KiB/s, done.
+Resolving deltas: 100% (1602/1602), done.
+{% endhighlight %}
+
+The exact values of the number of objects or their sizes may vary, but when you are done you will see that the directory `travelport-uapi-tutorial` has been created.  Inside that directory, you'll find the `unit3` directory that is a play project.  You can go into th
+
 #### Create the application "space" on Heroku
 
 A [stack](https://devcenter.heroku.com/articles/stack) in Heroku represents the machinery needed to run an application.  The current stack for running Java applications is called "Cedar".  (Cedar because C is the third letter of the alphabet: the two prior stacks were Aspen and Bamboo).
@@ -165,7 +187,7 @@ You should create this stack while inside the directory containing the code for 
 {% highlight console %}
 
 $ cd path/to/tutorial/src/com/travelport/uapi/unit3
-$ heroku apps:create --buildpack git@github.com:iansmith/heroku-buildpack-scala.git --stack cedar
+$ heroku apps:create --stack cedar
 Creating furious-ocean-1011... done, stack is cedar
 
 {% endhighlight %}
@@ -192,7 +214,7 @@ Your application has been assigned to a server and can be reached on the public 
 
 By going to the Facebook Developer Program [Apps Tab](https://developers.facebook.com/apps/) you'll be presented with a list of all your existing Facebook apps.  Whether you have done one before or not, you can use the "Create New App" in the upper right corner of the page to create a new app registration with Facebook.
 
-**Be sure to *NOT* check the box on this dialog related to Heroku!**
+![Warning](images/warning.png)  Be sure to *NOT* check the box on this dialog related to Heroku!
 
 <br/>
 <img src="images/fb-create.png">
@@ -200,7 +222,9 @@ By going to the Facebook Developer Program [Apps Tab](https://developers.faceboo
 
 As of 2012, this feature of Facebook will force you to use languages other than Java, such as Python, PHP, or Ruby. When Java becomes supported via this method, it will of course be better than setting up Heroku by hand as we have done above.
 
-Although it is not required that your application name and application namespace be constructed as we have done in this screenshot, this is how we will assume you have done this in the rest of this lesson.
+Although it is not required that your application name and application namespace be constructed as we have done in this screenshot, this is how we will assume you have done this in the rest of this lesson.  
+
+![Warning](images/warning.png)  Namespaces in Facebook's configuration panel must end with a '/' (slash) character.
 
 The following screen will now appear so you can hook your application to [Canvas Pages](http://developers.facebook.com/docs/guides/canvas/) in Facebook.  Fill in the fields as shown below:
 
@@ -273,7 +297,7 @@ $ play eclipsify
 
 After you do this, you can use the `File > Import > General > Existing Projects into Workspace`, then "Next" and then selecting Unit 3 as the root directory of this "new" project.  This makes your display a bit easier to understand with the lessons separated out at the top level of eclipse's project navigator.
 
-You can and should run `play eclipsify` any time you make significant changes to the application.  You can do `Refresh` on the project in eclipse to load the changes once you have the project established as above.
+![Warning](images/warning.png)  You can and should run `play eclipsify` any time you make significant changes to the application.  You should run this command from the root of the play project (the directory `unit3`).  You can do `Refresh` on the project in eclipse to load the changes once you have the project established as above.
 
 ### A tiny bit of git magic
 
