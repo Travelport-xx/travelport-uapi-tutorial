@@ -1,4 +1,4 @@
-This is a tutorial for the [Travelport Universal API](http://developer.travelport.com/app/developer-network/universal-api) and is written in the Java language.  You can read the [tutorial online via Github](http://iansmith.github.com/travelport-uapi-tutorial/) or you can clone the repository and examine the branch 'gh-pages'.
+This is a tutorial for the [Travelport Universal API](http://developer.travelport.com/app/developer-network/universal-api) and is written in the Java language.  You can read the [tutorial online via Github](http://travelport.github.com/travelport-uapi-tutorial/) or you can clone the repository and examine the branch 'gh-pages'.
 
 If you have questions or comments, please post them to the [issue tracker in Github](https://github.com/iansmith/travelport-uapi-tutorial/issues).
 
