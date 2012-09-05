@@ -51,7 +51,7 @@ Because this lesson will make extensive use of [Google Maps](https://developers.
 
 #### Environment
 
-Via heroku, you must have all the following variables defined in your environment.  These are the various parameters for Facebook, TravelPort and Google Maps that we would rather put into the source code of an application.   You can check these with `heroku status`:
+Via heroku, you must have all the following variables defined in your environment.  These are the various parameters for Facebook, Travelport and Google Maps that we would rather put into the source code of an application.   You can check these with `heroku status`:
 
 {% highlight console %}
 FBAPPID             => YOUR_FACEBOOK_APP_ID_
@@ -89,13 +89,13 @@ You can see the results of the UCode queries by using right-click or control-cli
 
 #### Selecting a friend to visit
 
-In the lower right corner, you see an "semi-transparent" overlay with the icon of the author, pulled from Facebook, and the TravelPort logo.  This is where results are displayed when you click on a friend.  Here's a screen capture of that area after clicking on a friend from Des Moines, Iowa.
+In the lower right corner, you see an "semi-transparent" overlay with the icon of the author, pulled from Facebook, and the Travelport logo.  This is where results are displayed when you click on a friend.  Here's a screen capture of that area after clicking on a friend from Des Moines, Iowa.
 
 <br/>
 <img src="images/screencap-results.png">
 <br/>
 
-When showing results of a `LowFareSearch` query to the TravelPort "Air" service on LowFareSearch port, the display becomes less transparent and displays the lowest priced results. The "links" on the far right of the display in blue are clickable and generate detailed information about either the outbound or return trip.
+When showing results of a `LowFareSearch` query to the Travelport "Air" service on LowFareSearch port, the display becomes less transparent and displays the lowest priced results. The "links" on the far right of the display in blue are clickable and generate detailed information about either the outbound or return trip.
 
 Below is a screen capture after clicking on an itinerary shown above, outbound from Paris.
 
@@ -267,7 +267,7 @@ For each location we can find in the list of friends of the current user, we end
 
 #### go()
 
-In concept, the `go` method of `Lesson9` functions similarly to the nearestTerminal() method.  It is called from the javascript, client-side code and returns JSON-encoded results.  `Go()` however is responsible for calling the TravelPort uAPI to get the pricing results.  `Go()` takes parameters like this:
+In concept, the `go` method of `Lesson9` functions similarly to the nearestTerminal() method.  It is called from the javascript, client-side code and returns JSON-encoded results.  `Go()` however is responsible for calling the Travelport uAPI to get the pricing results.  `Go()` takes parameters like this:
 
 {% highlight java %}
 public static Result go(String outboundDate ,String returnDate,
@@ -432,7 +432,7 @@ This more complex version allows a bit more flexibility in the search requests, 
 
 ### Thanks!
 
-Thanks so much for working through this tutorial and for using the TravelPort uAPI!  We really appreciate you spending your time with us in this tutorial.  If you have questions or comments, you can post them to the [issues tracker](https://github.com/iansmith/travelport-uapi-tutorial/issues) of this website.  We look forward to your feedback!
+Thanks so much for working through this tutorial and for using the Travelport uAPI!  We really appreciate you spending your time with us in this tutorial.  If you have questions or comments, you can post them to the [issues tracker](https://github.com/iansmith/travelport-uapi-tutorial/issues) of this website.  We look forward to your feedback!
 
 ### Exercises for the reader
 

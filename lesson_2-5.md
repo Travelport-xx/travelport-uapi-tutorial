@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "Making an Air or Hotel booking"
-description: "Understanding how to create a booking for air, hotel, or both with the Universal API."
+description: "Understanding how to create a booking for air, hotel, or both with the Universal API&trade;."
 ---
 {% include JB/setup %}
 
@@ -204,7 +204,7 @@ In a real application, many checks will be made to verify with the credit card p
 
 ### Making The Final Reservation
 
-As has been the case in most of the lessons, we use a request/response pair to actually make the reservation.  This results in the following request and response to be transmitted to and received from TravelPort. (This exmaple is for a hotel that is near the 'GOLDEN GATE BRIDGE' attraction in San Francisco, California):
+As has been the case in most of the lessons, we use a request/response pair to actually make the reservation.  This results in the following request and response to be transmitted to and received from Travelport. (This example is for a hotel that is near the 'GOLDEN GATE BRIDGE' attraction in San Francisco, California):
 
 {% highlight xml %}
 <?xml version="1.0" encoding="UTF-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
@@ -331,19 +331,19 @@ Hotel Total Cost        : USD519.76
 
 {% endhighlight %}
 
-A few things to note about the request and response above.  First, the credit card information is obviously something that most real applications will need to improve. Be sure that you verify any of your practices with this sensitive data with your credit card company.  For example, it is normally not recommended for a website to "hold onto" credit card information but rather utilize it (once) for communication with TravelPort and then discard it.  
+A few things to note about the request and response above.  First, the credit card information is obviously something that most real applications will need to improve. Be sure that you verify any of your practices with this sensitive data with your credit card company.  For example, it is normally not recommended for a website to "hold onto" credit card information but rather utilize it (once) for communication with Travelport and then discard it.  
 
 There are a number of "human readable" segments to the response.  Some of these are displayed in our program's output but there are many text "blobs" that may be interesting to users.  The number of these to display depends on what level of detail your application is working with.  For application's that target travel agents or other professionals, it is recommended to err on the side of too much detail rather than too little.
 
 ### Universal Record
 
-There are two record locators show in the output.  The first one is for the TravelPort concept of the Universal Record and the second one for the Hotel reservation system.  A Universal Record is created for you anytime you book travel, a hotel, or a car through the Universal API.  However, you can programmatically create and manipulate Universal Records as well.  
+There are two record locators show in the output.  The first one is for the Travelport concept of the Universal Record and the second one for the Hotel reservation system.  A Universal Record is created for you anytime you book travel, a hotel, or a car through the Universal API&trade;.  There are additional APIs provided to allow various types of changes to be made to Universal Records.
 
 A Universal Record can be thought of as a wrapper around other records.  A single Universal Record can have air travel, a vehicle reservation, a hotel reservation, and even tours or other activities associated with it.  The objective is to have all the details about a single journey for a specific customer in one place.  The details of the Universal Record API is beyond the scope of this tutorial, but suffice it to say that this "container" should be used by application's that wish to have all of a traveler's data together... and this means almost all of them!
 
 ### Thanks
 
-Thanks for working through all of Unit 2 and our discussion of hotel reservations, booking, and searching by landmarks.  If you continue on to the next unit, we'll be discussing how to embed TravelPort's uAPI inside a Facebook app and the issues that arise from that.
+Thanks for working through all of Unit 2 and our discussion of hotel reservations, booking, and searching by landmarks.  If you continue on to the next unit, we'll be discussing how to embed Travelport's uAPI inside a Facebook app and the issues that arise from that.
 
 
 

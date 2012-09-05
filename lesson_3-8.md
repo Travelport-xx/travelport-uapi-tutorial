@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Universal API from inside a Facebook app"
+title: "Universal API&trade; from inside a Facebook app"
 description :
 ---
 {% include JB/setup %}

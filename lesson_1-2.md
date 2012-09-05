@@ -9,7 +9,7 @@ description: "Making requests to find schedules and prices."
 
 ### Objective of Lesson 2
 
-After this lesson is completed, you should know how to search for available flights, and price itineraries using the Travelport Universal API.   
+After this lesson is completed, you should know how to search for available flights, and price itineraries using the Travelport Universal API&trade;.   
 
     If you are using "test" credentials you should be aware that the test environment is based on a "copy" of activity on the primary (non-test) system at Travelport.  For this reason, there are sometimes situations where specific data/requests cannot be served from the test environment, since data must have been "recently" seen in the production environment to be visible in test.  It's a good idea to try a request that has a timeout, for example, again in a minute or two.
 
@@ -475,7 +475,7 @@ public static void displayItineraryPrice(AirItinerary itin) throws AirFaultMessa
 
 ### AirPriceReq
 
-One of the most crucial functions of the uAPI is its ability to accurately price a given itinerary and display not only the total price to be paid, but also to break down all the pricing components as well. In addition, there is the complex issue of which taxes and from what jurisdiction should be applied.  Here is an example `AirPricingReq` in XML as sent from Lesson 2 to TravelPort:
+One of the most crucial functions of the uAPI is its ability to accurately price a given itinerary and display not only the total price to be paid, but also to break down all the pricing components as well. In addition, there is the complex issue of which taxes and from what jurisdiction should be applied.  Here is an example `AirPricingReq` in XML as sent from Lesson 2 to Travelport:
 
 {% highlight xml %}
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
@@ -507,7 +507,7 @@ As you can see, primarily the request consists of the details of the flights to 
 
 ### Pricing Response
 
-Below is a slightly-edited pricing response provided by TravelPort in response to an `AirPriceReq` from Lesson 2 as seen above. The optional services section has been removed as it is quite long and not within the scope of this tutorial.  
+Below is a slightly-edited pricing response provided by Travelport in response to an `AirPriceReq` from Lesson 2 as seen above. The optional services section has been removed as it is quite long and not within the scope of this tutorial.  
 
 The particular details of understanding all the aspects of this response are beyond what we can cover in this tutorial.  We do ask you to look at the two highlighted portions of the XML response, marked with highlight 1 and 2.  Highlight one shows the `AirPricingSolution` component of the XML, probably the one that most readers (and travellers!) are most interested in!  The second highlight comment shows the section related to taxes.  Each of the taxes specified, identified by its `Category` attribute such as `XF`, relates to a specific IATA-published tax.  In this case, a reader with access to the list of taxes could determine that the `XF` or "Passenger Facility Charge" tax is applied three times, twice in Atlanta and once in Chattanooga.  This is makes sense once realizes that this facility charge is charged only on flights _originating_ from a given airport.
 

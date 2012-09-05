@@ -9,7 +9,7 @@ description: "Understanding shopping and using LowFareSearch requests."
 
 ### Objective of Lesson 3
 
-After this lesson is completed, you should know how to use the "shopping" facility of Travelport's Universal API to find the lowest cost transport between two cities, including using rail and low cost airlines as a means of travel. 
+After this lesson is completed, you should know how to use the "shopping" facility of Travelport's Universal API&trade; to find the lowest cost transport between two cities, including using rail and low cost airlines as a means of travel. 
 
 You will also understand how to get data from the low cost shopping APIs _asynchronously_.
 
@@ -101,7 +101,7 @@ Similarly, the result of the availability requests in [Lesson 2](lesson_1-2.html
 
 #### XML -> Java Types
 
-Of course, really the Java "types" are just a convenience for creating XML objects that are actually transmitted or received over the network to or from TravelPort.  One can actually take this "commonality" one step farther and discover that _different_ responses have parts that similar.  For example, both `LowFareSearchRsp` and `LowFareSearchAsynchRsp` share elements in the XML representation (and thus the Java type system) with the results contained in of `AvailabilitySeachRsp` and `AirPriceRsp`.  In many different areas of both requests and response one may either need to create or understand a list of `AirSegment` objects, for example, because the WSDL (via XSD files, via a generator, via XML, and finally via your programming language) is defined to have a list of AirSegment objects in the same way.
+Of course, really the Java "types" are just a convenience for creating XML objects that are actually transmitted or received over the network to or from Travelport.  One can actually take this "commonality" one step farther and discover that _different_ responses have parts that similar.  For example, both `LowFareSearchRsp` and `LowFareSearchAsynchRsp` share elements in the XML representation (and thus the Java type system) with the results contained in of `AvailabilitySeachRsp` and `AirPriceRsp`.  In many different areas of both requests and response one may either need to create or understand a list of `AirSegment` objects, for example, because the WSDL (via XSD files, via a generator, via XML, and finally via your programming language) is defined to have a list of AirSegment objects in the same way.
 
 #### Go To Definition
 

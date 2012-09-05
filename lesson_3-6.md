@@ -33,7 +33,7 @@ The "To" field in the screen capture above allows you to type a location in, as 
 <img src="images/completion.png"/>
 <br/>
 
-In the image you can see some locations in France as well as 'Blaine Stanga', a friend of the author. You can use this app to either travel to locations like Pernes Camblain in France or to the location registered in Blaine's Facebook profile as his "location" or his "hometown".   
+In the image you can see some locations in France as well as 'Bob Smith', a friend of the author. You can use this app to either travel to locations like Pernes Camblain in France or to the location registered in Blaine's Facebook profile as his "location" or his "hometown".   
 
 In Lessons 8 and 9, we'll cover how to find these location in more detail, but in general these locations are products of the Travelport "UCode" database.  You will notice the "U87XXXX" numbers to the right of the locations in France.  This indicates the number of a particular train station in the UCode database.  The E-volve application is querying the UCode data with a search that says, in simple terms, "if any part of the name of the city of a train station or airport has the letters B-L-A-I-N in it, show it to the user."  (If you are familiar with SQL, this is an 'like' query with wildcards.)
 
@@ -80,7 +80,7 @@ As we discussed when we covered mixed rail and air searches in Lesson 3, the uAP
 <h4>Air From London To Edinburgh, Outbound From Gatwick, Return to Heathrow</h4>
 <br/>
 
-There are two things to note about these solution images: 1) In the lower left, the TravelPort E-Volve app has an icon indicating the type of solution (air or rail) and by clicking on it you can filter for a particular type of transport.   2) These searches were not done from London on departure, but rather from the suburban stop of Windsor/Eton Central.  This is indicated in the titling at the top of the screen captures.
+There are two things to note about these solution images: 1) In the lower left, the Travelport E-Volve app has an icon indicating the type of solution (air or rail) and by clicking on it you can filter for a particular type of transport.   2) These searches were not done from London on departure, but rather from the suburban stop of Windsor/Eton Central.  This is indicated in the titling at the top of the screen captures.
 
 We have explored previously that a low-fare search can search for results that include "nearby" stations.  This is done by using the `setMaxDistance` option and providing a distance (in KM or MI) when creating the "TypeSearchLocation" portion of an XML request.  Although E-volve produced nice results, we could clearly improve this itinerary.
 
@@ -99,7 +99,7 @@ By using the Universal Record portion of the uAPI you can even combine these rai
 
 ### A little bit more Facebook
 
-Up to this point, this Facebook app has used features of the uAPI and that are quite similar to those we have used in our previous lessons.  In addition, the E-volve application has used the UCode data to determine better search targets.   The UCode database, though, is provided by TravelPort not Facebook.  About the only part of this app, to this point, that truly is tied to Facebook is the ability to filter your origin and destination by Facebook friends and other Facebook entities, such as places.  
+Up to this point, this Facebook app has used features of the uAPI and that are quite similar to those we have used in our previous lessons.  In addition, the E-volve application has used the UCode data to determine better search targets.   The UCode database, though, is provided by Travelport not Facebook.  About the only part of this app, to this point, that truly is tied to Facebook is the ability to filter your origin and destination by Facebook friends and other Facebook entities, such as places.  
 
 We can also post events to the Facebook timeline of the user since the application runs "inside" Facebook.  We have highlighted the "Share" button on the screen capture of the details section of the E-Volve app.  
 
@@ -139,7 +139,7 @@ function postToFeed() {
 
 ### The Future
 
-To summarize what is coming up in the tutorial, we have three more lessons coming up about Facebook and integrating it with the uAPI.  We'll first detail how to build a Facebook application more generally (this is required!), then we'll discuss how to make calls to the TravelPort uAPI from inside a Facebook app, and finally we create new, non-blocking UI that is a bit more "map-centric" than the E-Volve app.
+To summarize what is coming up in the tutorial, we have three more lessons coming up about Facebook and integrating it with the uAPI.  We'll first detail how to build a Facebook application more generally (this is required!), then we'll discuss how to make calls to the Travelport uAPI from inside a Facebook app, and finally we create new, non-blocking UI that is a bit more "map-centric" than the E-Volve app.
 
 ----------------------
 
