@@ -210,7 +210,7 @@ As has been the case in most of the lessons, we use a request/response pair to a
 <?xml version="1.0" encoding="UTF-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
     <ns2:HotelCreateReservationReq xmlns="http://www.travelport.com/schema/common_v15_0" xmlns:ns2="http://www.travelport.com/schema/hotel_v17_0" xmlns:ns3="http://www.travelport.com/schema/vehicle_v17_0" xmlns:ns4="http://www.travelport.com/schema/passive_v14_0" xmlns:ns5="http://www.travelport.com/schema/air_v18_0" xmlns:ns6="http://www.travelport.com/schema/universal_v16_0" xmlns:ns7="http://www.travelport.com/schema/rail_v12_0" TargetBranch="P105110">
-      <BillingPointOfSaleInfo OriginApplication="tutuorial-unit2-lesson5"/>
+      <BillingPointOfSaleInfo OriginApplication="UAPI"/>
       <BookingTraveler TravelerType="ADT">
         <BookingTravelerName First="Hugh" Last="Capet"/>
         <PhoneNumber Location="home" CountryCode="1" AreaCode="212" Number="555-1212"/>

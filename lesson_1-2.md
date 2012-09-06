@@ -85,7 +85,7 @@ In the case of the first item, the objective in uAPI terms is construct an `Avai
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
     <ns2:AvailabilitySearchReq xmlns="http://www.travelport.com/schema/common_v15_0" xmlns:ns2="http://www.travelport.com/schema/air_v18_0" xmlns:ns3="http://www.travelport.com/schema/vehicle_v17_0" xmlns:ns4="http://www.travelport.com/schema/hotel_v17_0" xmlns:ns5="http://www.travelport.com/schema/passive_v14_0" xmlns:ns6="http://www.travelport.com/schema/rail_v12_0" xmlns:ns7="http://www.travelport.com/schema/universal_v16_0" TargetBranch="P105110">
-      <BillingPointOfSaleInfo OriginApplication="tutorial-unit1-lesson2"/>
+      <BillingPointOfSaleInfo OriginApplication="UAPI"/>
       <ns2:SearchAirLeg>
         <ns2:SearchOrigin>
           <Airport Code="CDG"/>
@@ -481,7 +481,7 @@ One of the most crucial functions of the uAPI is its ability to accurately price
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
     <ns2:AirPriceReq xmlns="http://www.travelport.com/schema/common_v15_0" xmlns:ns2="http://www.travelport.com/schema/air_v18_0" xmlns:ns3="http://www.travelport.com/schema/rail_v12_0" xmlns:ns4="http://www.travelport.com/schema/vehicle_v17_0" xmlns:ns5="http://www.travelport.com/schema/hotel_v17_0" xmlns:ns6="http://www.travelport.com/schema/passive_v14_0" xmlns:ns7="http://www.travelport.com/schema/universal_v16_0" TargetBranch="P105110">
-      <BillingPointOfSaleInfo OriginApplication="tutorial-unit1-lesson2"/>
+      <BillingPointOfSaleInfo OriginApplication="UAPI"/>
       <ns2:AirItinerary>
         <ns2:AirSegment Group="0" Carrier="AF" FlightNumber="682" ProviderCode="1V" Origin="CDG" Destination="ATL" DepartureTime="2012-08-18T10:55:00.000+02:00" ArrivalTime="2012-08-18T14:20:00.000-04:00" Key="36T">
           <ns2:FlightDetails Key="4T" Equipment="77W" OriginTerminal="2E" DestinationTerminal="S" FlightTime="565" TravelTime="725" Origin="CDG" Destination="ATL" DepartureTime="2012-08-18T10:55:00.000+02:00" ArrivalTime="2012-08-18T14:20:00.000-04:00"/>

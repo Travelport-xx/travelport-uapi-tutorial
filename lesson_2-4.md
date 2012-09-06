@@ -65,7 +65,7 @@ If you using another programming language, or just curious, you may want to see 
  <?xml version="1.0" encoding="UTF-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
     <ns2:HotelSearchAvailabilityReq xmlns="http://www.travelport.com/schema/common_v15_0" xmlns:ns2="http://www.travelport.com/schema/hotel_v17_0" xmlns:ns3="http://www.travelport.com/schema/vehicle_v17_0" xmlns:ns4="http://www.travelport.com/schema/passive_v14_0" xmlns:ns5="http://www.travelport.com/schema/air_v18_0" xmlns:ns6="http://www.travelport.com/schema/rail_v12_0" xmlns:ns7="http://www.travelport.com/schema/universal_v16_0" TargetBranch="P105110">
-      <BillingPointOfSaleInfo OriginApplication="tutuorial-unit2-lesson4"/>
+      <BillingPointOfSaleInfo OriginApplication="UAPI"/>
       <ns2:HotelSearchModifiers NumberOfAdults="2" NumberOfRooms="2">
         <Distance Units="KM" Value="25"/>
         <ReferencePoint>Mall of America</ReferencePoint>
@@ -267,7 +267,7 @@ The XML used to request "more information", aka "next screen", looks like this f
 <?xml version="1.0" encoding="UTF-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
   <soap:Body>
     <ns2:HotelSearchAvailabilityReq xmlns="http://www.travelport.com/schema/common_v15_0" xmlns:ns2="http://www.travelport.com/schema/hotel_v17_0" xmlns:ns3="http://www.travelport.com/schema/vehicle_v17_0" xmlns:ns4="http://www.travelport.com/schema/passive_v14_0" xmlns:ns5="http://www.travelport.com/schema/air_v18_0" xmlns:ns6="http://www.travelport.com/schema/rail_v12_0" xmlns:ns7="http://www.travelport.com/schema/universal_v16_0" TargetBranch="P105110">
-      <BillingPointOfSaleInfo OriginApplication="tutuorial-unit2-lesson4"/>
+      <BillingPointOfSaleInfo OriginApplication="UAPI"/>
       <NextResultReference ProviderCode="1V">k2UqRqGv/uGTZSpGoa/+4XFUHxaT56Vv+TQNVk6nh9vs5DAVQD2dUzEZbeAcrKSIAUUYScOi8pcQeLU1Xww207/30A1eaXfw</NextResultReference>
       <ns2:HotelSearchModifiers NumberOfAdults="2" NumberOfRooms="2">
         <Distance Units="KM" Value="25"/>
