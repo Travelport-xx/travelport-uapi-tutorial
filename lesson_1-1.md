@@ -37,7 +37,7 @@ You can download the tutorial code using *github* to clone the repository. You c
 {% highlight console %}
 > mkdir learn-tport
 > cd learn-tport
-> git clone git@github.com:iansmith/travelport-uapi-tutorial.git
+> git clone git@github.com:travelport/travelport-uapi-tutorial.git
 {% endhighlight %}
 
 This last command will create the directory `travelport-uapi-tutorial`. Within that directory you will find the a few files that we will discuss later, plus the directories `src` and `wsdl`.  If you explore the `wsdl` directory, you'll see many WSDL files as well as a number of [XML schemas](http://en.wikipedia.org/wiki/XSD), as `xsd` files.  All of these files have been supplied by Travelport, and the latest version of the uAPI can be downloaded from [the developer site](http://developer.travelport.com).
@@ -214,7 +214,7 @@ With very few exceptions, all the features and functions of the uAPI follow this
 
 ### Lesson 1 proper
 
-The file  [Lesson1.Java](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/Lesson1.Java) is in the Java package [com.travelport.uapi.unit1](https://github.com/iansmith/travelport-uapi-tutorial/tree/master/src/com/travelport/uapi/unit1).  You'll notice that in the web-viewable version of this tutorial, we often make the names of files and packages direct links into the github repository for the tutorial.  This makes it easy for those that just want to read the tutorial without "playing along at home" by compiling/running all the examples.
+The file  [Lesson1.Java](https://github.com/travelport/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/Lesson1.Java) is in the Java package [com.travelport.uapi.unit1](https://github.com/travelport/travelport-uapi-tutorial/tree/master/src/com/travelport/uapi/unit1).  You'll notice that in the web-viewable version of this tutorial, we often make the names of files and packages direct links into the github repository for the tutorial.  This makes it easy for those that just want to read the tutorial without "playing along at home" by compiling/running all the examples.
 
 Let's examine the `main` method of Lesson 1:
 
@@ -259,7 +259,7 @@ The only unexpected part of this simple example is the call to `WSDLService.sysP
 
 You will need to configure your copy of the class `WSDLService` slightly to allow you to use the uAPI. You should not need to do this again!
 
-If you look inside [WSDLService](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/tutorial/support/ServiceWrapper.java) in the package [com.travelport.tutorial.support](https://github.com/iansmith/travelport-uapi-tutorial/tree/master/src/com/travelport/tutorial/support) you will see the things you might need to change.  
+If you look inside [WSDLService](https://github.com/travelport/travelport-uapi-tutorial/blob/master/src/com/travelport/tutorial/support/ServiceWrapper.java) in the package [com.travelport.tutorial.support](https://github.com/travelport/travelport-uapi-tutorial/tree/master/src/com/travelport/tutorial/support) you will see the things you might need to change.  
 
 Anyone doing the lessons in this tutorial will need to change this:
 {% highlight java %}
@@ -300,7 +300,7 @@ The red boxes show you the tab you need to use to get to this configuration opti
 
 The values are included in your sign-up documents from the Travelport website.  Note that each of the parameters is of the form -Dxxx="yyy" and are separated by spaces.  The values are always quoted and the names always begin with "travelport".
 
-After you have made the adjustments necessary for your account to this panel, return to the [WSDLService](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/tutorial/support/WSDLService.java) file one last time.  You'll see the `URLPrefix` value is set like this near the top of the file:
+After you have made the adjustments necessary for your account to this panel, return to the [WSDLService](https://github.com/travelport/travelport-uapi-tutorial/blob/master/src/com/travelport/tutorial/support/WSDLService.java) file one last time.  You'll see the `URLPrefix` value is set like this near the top of the file:
 
 {% highlight java %}
 static protected String URLPREFIX = "file:///Users/iansmith/tport-workspace/uapiJava/";
@@ -324,7 +324,7 @@ Caused by: org.apache.cxf.service.factory.ServiceConstructionException: Failed t
 	at org.apache.cxf.jaxws.ServiceImpl.initializePorts(ServiceImpl.Java:204)
 	at org.apache.cxf.jaxws.ServiceImpl.<init>(ServiceImpl.Java:148)
 	... 5 more
-Caused by: Javax.wsdl.WSDLException: WSDLException: faultCode=PARSER_ERROR: Problem parsing 'file:/Users/iansmith/tport-workspace/uapiJava/wsdl/system_v8_0/System.wsdl'.: Java.io.FileNotFoundException: /xUsers/iansmith/tport-workspace/uapiJava/wsdl/system_v8_0/System.wsdl (No such file or directory)
+Caused by: Javax.wsdl.WSDLException: WSDLException: faultCode=PARSER_ERROR: Problem parsing 'file:/Users/iansmith/tport-workspace/uapiJava/wsdl/system_v8_0/System.wsdl'.: Java.io.FileNotFoundException: /Users/iansmith/tport-workspace/uapiJava/wsdl/system_v8_0/System.wsdl (No such file or directory)
 	at com.ibm.wsdl.xml.WSDLReaderImpl.getDocument(Unknown Source)
 	...
 {% endhighlight %}
@@ -358,7 +358,7 @@ INFO: Creating Service {http://www.travelport.com/service/system_v8_0}SystemServ
 {% endhighlight %}
 
 
-This is a helpful message provided by the CXF framework to tell you it is creating a service based on a WSDL file and giving you some information about the endpoint it is using.  You can control the "chattiness" of the CXF infrastructure by adjusting the values in the [logging.properties](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/logging.properties) file, just as with most other Java applications.  Most people can safely ignore these messages, unless they are printed out to the `Warning` or `Error` logging levels.
+This is a helpful message provided by the CXF framework to tell you it is creating a service based on a WSDL file and giving you some information about the endpoint it is using.  You can control the "chattiness" of the CXF infrastructure by adjusting the values in the [logging.properties](https://github.com/travelport/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/logging.properties) file, just as with most other Java applications.  Most people can safely ignore these messages, unless they are printed out to the `Warning` or `Error` logging levels.
 
 ### Seeing The XML Exchanged
 
@@ -390,7 +390,7 @@ This `showXML` function is available for any port used in this tutorial.  Settin
 
 ### Exercises for the reader
 
- * Create a run configuration as above but for the [SystemSvcTest](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/SystemServiceTest.Java) test code.  This is a JUnit4 style test suite so will require the appropriate configuration type in the Run Configurations menu.
+ * Create a run configuration as above but for the [SystemSvcTest](https://github.com/travelport/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/SystemServiceTest.Java) test code.  This is a JUnit4 style test suite so will require the appropriate configuration type in the Run Configurations menu.
 
  * Change the ping values in `Lesson1` and prove to yourself that the values being returned are the values you supplied.
 

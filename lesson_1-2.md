@@ -27,7 +27,7 @@ Given the terminology we explained in [Lesson 1](lesson_1-1.html), there are two
 
 If you did not do so in the previous lesson, you'll need to make sure you have all the generated code necessary for Unit 1.   In this lesson, we'll be primarily  working with the "Air" service, but it is a good idea to now generate not just the "Air" service in `src/wsdl/air_v18_0/Air.wsdl`, but also the "Hotel" service in `src/wsdl/hotel_v17_0/Hotel.wsdl`, "System" service in `src/wsdl/system_v8_0/System.wsdl`, and the "Vehicle" service in `src/wsdl/vehicle_v17_0/Vehicle.wsdl`.
 
-After you have generated the code, you will have many more packages in your project (hitting "refresh" or "F5" on your `src` folder is probably a good idea).  The [AirService object's](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/service/air_v18_0/AirService.java) (generated) implementation is part of the package [com.travelport.service.air_v18_0]((https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/service/air_v18_0/).  
+After you have generated the code, you will have many more packages in your project (hitting "refresh" or "F5" on your `src` folder is probably a good idea).  The [AirService object's](https://github.com/travelport/travelport-uapi-tutorial/blob/master/src/com/travelport/service/air_v18_0/AirService.java) (generated) implementation is part of the package [com.travelport.service.air_v18_0]((https://github.com/travelport/travelport-uapi-tutorial/blob/master/src/com/travelport/service/air_v18_0/).  
 
 ### Why So Many Packages And Files?
 
@@ -39,7 +39,7 @@ In this specific case, the set of reachable types includes classes describing th
 
 ### Goal
 
-The class [Lesson2](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/Lesson2.java) can output itineraries for a given city pair, in this case Paris to Chattanooga Tennessee, USA, in a form like this:
+The class [Lesson2](https://github.com/travelport/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/Lesson2.java) can output itineraries for a given city pair, in this case Paris to Chattanooga Tennessee, USA, in a form like this:
 
 {% highlight console %}
 Price:GBP941.70 [BasePrice EUR760.00, Taxes GBP315.70]
@@ -64,7 +64,7 @@ When run, the code `Lesson2` will produce a number of these itineraries, plus pr
 
 ### Outline 
 
-At a high level, the class [Lesson2](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/Lesson2.java) must perform these logical operations:
+At a high level, the class [Lesson2](https://github.com/travelport/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/Lesson2.java) must perform these logical operations:
 
 1. Construct the necessary parameters for an availability search, such as the origin and destination city as well as the travel dates
 2. Send the availability search request
@@ -164,7 +164,7 @@ AirReq.addEconomyPreferred(ret);
 
 The code above creates two "legs" for the search to consider: one outbound from `origin` to `dest` and one for the reverse (`ret`) one week later.  (When actually transmitted, the request results in XML similar to that shown above.) Each leg also has a departure date and what type of seat should be searched for.
 
-Each line of this snippet with code on it uses a method from the [AirReq](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/AirReq.java) helper object.  These helper methods have been provided to try to make it easier to understand the examples or write new code that does similar things.  
+Each line of this snippet with code on it uses a method from the [AirReq](https://github.com/travelport/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit1/AirReq.java) helper object.  These helper methods have been provided to try to make it easier to understand the examples or write new code that does similar things.  
 
 The `AirReq` class has no magic, of course.  This class is building various structures from the classes that were generated as part of our work with `Air.wsdl`.  For example:
 

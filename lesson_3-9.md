@@ -432,7 +432,7 @@ This more complex version allows a bit more flexibility in the search requests, 
 
 ### Thanks!
 
-Thanks so much for working through this tutorial and for using the Travelport uAPI!  We really appreciate you spending your time with us in this tutorial.  If you have questions or comments, you can post them to the [issues tracker](https://github.com/iansmith/travelport-uapi-tutorial/issues) of this website.  We look forward to your feedback!
+Thanks so much for working through this tutorial and for using the Travelport uAPI!  We really appreciate you spending your time with us in this tutorial.  If you have questions or comments, you can post them to the [issues tracker](https://github.com/travelport/travelport-uapi-tutorial/issues) of this website.  We look forward to your feedback!
 
 ### Exercises for the reader
 

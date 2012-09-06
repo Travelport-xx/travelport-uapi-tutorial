@@ -41,7 +41,7 @@ The Travelport uAPI supports three different types of providers.
 
 The goal of this lesson is to produce output to compare prices across different means of transport between two locations.  
 
-This is a snippet from the [Lesson3](https://github.com/iansmith/Travelport-uapi-tutorial/blob/master/src/com/Travelport/uapi/unit1/Lesson3.java) program, showing two different itineraries from Glasgow, Scotland, to London's Gatwick Airport:
+This is a snippet from the [Lesson3](https://github.com/travelport/Travelport-uapi-tutorial/blob/master/src/com/Travelport/uapi/unit1/Lesson3.java) program, showing two different itineraries from Glasgow, Scotland, to London's Gatwick Airport:
 
 {% highlight console %}
 
@@ -115,7 +115,7 @@ It may seem strange, at first, that an "Air" search response contains *rail* jou
 
 ### PrintableItinerary
 
-The class [PrintableItinerary](https://github.com/iansmith/Travelport-uapi-tutorial/blob/master/src/com/Travelport/uapi/unit1/PrintableItinerary.java) is included with the code for this unit.  It is intended to be used as part of this lesson.
+The class [PrintableItinerary](https://github.com/travelport/Travelport-uapi-tutorial/blob/master/src/com/Travelport/uapi/unit1/PrintableItinerary.java) is included with the code for this unit.  It is intended to be used as part of this lesson.
 
 Instances of this class can be constructed in one of two ways:
 

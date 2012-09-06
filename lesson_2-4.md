@@ -334,7 +334,7 @@ If you have an application finished and ready for deployment to a production sys
 
 ### Key elements of Lesson 4
 
-The main part of the code for this lesson, contained in [Lesson4.java](https://github.com/iansmith/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit2/Lesson4.java) is a loop, as described above in the section about retrieving multiple screens of results. Prior to the loop entry, we set up a `HotelSearchAvailabilityRequest` with the key parameters based on destination attraction and the dates of travel.  
+The main part of the code for this lesson, contained in [Lesson4.java](https://github.com/travelport/travelport-uapi-tutorial/blob/master/src/com/travelport/uapi/unit2/Lesson4.java) is a loop, as described above in the section about retrieving multiple screens of results. Prior to the loop entry, we set up a `HotelSearchAvailabilityRequest` with the key parameters based on destination attraction and the dates of travel.  
 
 As we go around the loop of reading bunches of results, we keep track of the hotel that has the lowest minimum price and the hotel that is closest (in kilometers) to our attraction.  After reading several screens of data, we display the lowest priced and the closest option with some details from the response object, in particular the `HotelSearchResult` that represents these two "good" choices.  
 
