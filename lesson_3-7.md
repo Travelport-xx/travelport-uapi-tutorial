@@ -166,7 +166,7 @@ Then, you can copy the unit3 source code to your machine from github:
 
 {% highlight console %}
 
-$ git clone git@github.com:travelport/travelport-uapi-tutorial.git -b unit3
+$ git clone git@github.com:Travelport/travelport-uapi-tutorial.git -b unit3
 
 Cloning into 'travelport-uapi-tutorial'...
 remote: Counting objects: 2209, done.
@@ -275,7 +275,7 @@ You can check that everything is set correctly with `heroko config --app furious
 
 {% highlight console %}
 $ heroku config --app furious-ocean-1011
-BUILDPACK_URL  => git@github.com:travelport/heroku-buildpack-scala.git
+BUILDPACK_URL  => git@github.com:Travelport/heroku-buildpack-scala.git
 FBAPPID        => 306675786073601
 FBAPPNAMESPACE => furious_ocean
 FBSECRET       => 44ea55b78484b3274ff905cdef7d102b
