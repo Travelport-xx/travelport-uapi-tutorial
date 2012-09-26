@@ -37,7 +37,7 @@ You can download the tutorial code using *github* to clone the repository. You c
 {% highlight console %}
 mkdir learn-tport
 cd learn-tport
-git clone git@github.com:travelport/travelport-uapi-tutorial.git
+git clone git@github.com:Travelport/travelport-uapi-tutorial.git
 {% endhighlight %}
 
 This last command will create the directory `travelport-uapi-tutorial`. Within that directory you will find the a few files that we will discuss later, plus the directories `src` and `wsdl`.  If you explore the `wsdl` directory, you'll see many WSDL files as well as a number of [XML schemas](http://en.wikipedia.org/wiki/XSD), as `xsd` files.  All of these files have been supplied by Travelport, and the latest version of the uAPI can be downloaded from [the developer site](http://developer.travelport.com).
