@@ -138,9 +138,6 @@ You'll need to provide your email address during this process. From here on we'l
 
 In terms of your local workstation, the first step in Heroku development is to install the [Heroku Toolbelt](https://toolbelt.herokuapp.com/) as appropriate for your operating system.  This installs the necessary tools so you can interact with heroku from the command line.
 
->>>> Does this really install git also?
-
-
 #### Match your credentials to your email
 
 Then you need to set up your heroku credentials, including an [SSL](http://en.wikipedia.org/wiki/Secure_Socket_Layer) [private key](http://en.wikipedia.org/wiki/Private_key).  If you are not familiar with this process, just allow heroku to create a new key for you and you can ignore this issue in the future.
