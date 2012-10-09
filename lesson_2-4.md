@@ -32,8 +32,6 @@ IBIS AVRANCHES MONT ST MICHEL  [RT:23750]
            RESERVATION REQUIREMENT IS OTHER
 {% endhighlight %}
 
->>> The API for hotel results has a latitude and longitude component.  However, it appears some providers (such as 1V) return the value with their results and others do not.  The code to display a google maps link is checked into the code for Lesson4 and  if any results have the latitude and longitude, the google maps link will appear in the text.
-
 ### WSDL for hotel search
 
 You probably should have done so already, but you'll need to go through the process of generating the client-side code for the Hotel Service if you haven't done that yet.  Building the Air and Vehicle support is also recommended to avoid linker problems. The `HotelService` has a number of ports, as did the `AirService` we covered before.
@@ -257,8 +255,6 @@ A few things are worth talking about from this snippet.
 
 * Finally, the loop here keeps track of how many screens have been read and it stops when `MAX_REQUESTS` has been reached.  This is both good policy and safe.  It is good policy because the total list of results may be _far_ larger than you might expect: search for any hotel in Paris, France, can yield a great many results! It is also safe because this protects you from launching a large, or even infinite, number of requests if you have a bug in your program.
 
->>>>It's not clear why there can be more than one next result reference in a response or a request.  Some experimentation with the API did not reveal it be used by responses or useful in requests.
-
 #### The Resulting XML
 
 The XML used to request "more information", aka "next screen", looks like this for a follow-up to the response shown in the previous XML listing:
@@ -291,8 +287,6 @@ If you read the XML carefully above for the requests, you'll have realized that 
 To do this, one must provide, obviously, the name of the landmark but also *not* provide a "location" with a city code as we have done previously.  For example, let's assume we are looking for accomodation for a family vacation to Paris, France.  With two adults and two children, we are going to need two hotel rooms and we are planning to spend a couple of days at [Disneyland Paris](http://www.disneylandparis.com/).
 
 For those unfamiliar with Paris' geography, Disneyland Paris _neé EuroDisney_, is 32km east of the center of Paris.  Thus, a hotel search that used the city code "PAR" or any of the Paris airports (north and south of the city) will be unlikely to produce good results.  We need to do our search for this landmark.
-
->>>> Providers 1G and 1V do not support bedding options.  There is code in lesson4, commented out, that improves the set up of the hotel search to be for 2 rooms, one with 2 twin beds in one and 1 queen in the other.
 
 The key idea for doing a location of search is to use a search modifier with the location's name contained in it.  You do that with Java code like this example from `Lesson4`:
 
