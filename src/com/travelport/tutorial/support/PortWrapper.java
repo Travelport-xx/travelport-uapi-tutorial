@@ -55,7 +55,7 @@ public class PortWrapper<P,S> {
                     +"end in 'type' like alll the others!");
         }
         
-        getterName = getterName.substring(0, getterName.length()-4);
+        getterName = 'testing';
     }
     
     /**

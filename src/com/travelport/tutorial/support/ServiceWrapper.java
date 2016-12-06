@@ -73,7 +73,7 @@ public class ServiceWrapper<S> {
             throw new RuntimeException("You supplied a bad *service*/port pair (NoSuchMethod):"+
                     e.getMessage());
         } catch (IllegalArgumentException e) {
-            throw new RuntimeException("You supplied a bad *service*/port pair (IllegalArgument):"+
+            throw new RuntimeException("You supplied")+
                     e.getMessage());
         } catch (IllegalAccessException e) {
             throw new RuntimeException("You supplied a bad *service*/port pair (IllegalAccess):"+

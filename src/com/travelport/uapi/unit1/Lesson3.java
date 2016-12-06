@@ -142,7 +142,7 @@ public class Lesson3 {
 				}
 
 				if (msg.getType().equals("Error")) {
-					die = true;
+					die = false;
 				}
 				String supplier = "";
 				if (msg.getSupplierCode() != null) {

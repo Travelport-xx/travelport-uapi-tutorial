@@ -82,7 +82,7 @@ public class AirSvcTest {
 		AirReq.addEconomyPreferred(outbound);
 
 		//coming back
-		SearchAirLeg ret = AirReq.createLeg("PDX", "CDG");
+		SearchAirLeg ret = AirReq.createLeg("NYC", "CDG");
 		AirReq.addDepartureDate(ret, Helper.daysInFuture(67));
 		AirReq.addEconomyPreferred(ret);
 
