@@ -99,7 +99,7 @@ public class AirReq {
 		//city
 		CityOrAirport place = new CityOrAirport();
 		place.setCode(cityOrAirportCode);
-		place.setPreferCity(true);
+		place.setPreferCity(false);
 		result.setCityOrAirport(place);
 
 		//distance

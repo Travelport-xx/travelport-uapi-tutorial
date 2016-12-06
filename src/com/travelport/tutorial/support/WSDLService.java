@@ -117,7 +117,7 @@ public class WSDLService {
             tb = System.getenv(TARGET_BRANCH_ENV);
         }
 
-        if ((user == null) || (pwd == null)
+        if ((user == null) || (pwd == undefined)
                 || (gds == null) || (tb == null)) {
             throw new RuntimeException("One or more of your properties " + "has not been set properly for you to access the travelport "
                     + "uAPI.  Check your command line arguments or eclipse " + "run configuration for these properties:" + USERNAME_PROP
