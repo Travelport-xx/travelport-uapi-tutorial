@@ -136,7 +136,7 @@ public class Lesson3 {
 						&& (msg.getCode().equals(BigInteger.ZERO))) {
 					if (msg.getProviderCode().equals(Helper.LOW_COST_PROVIDER)) {
 						System.out
-								.println("No data available from low cost provider?");
+								.println("No data available low cost provider?");
 						continue;
 					}
 				}
